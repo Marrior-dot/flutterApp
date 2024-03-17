@@ -1,24 +1,65 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    List<String> perguntas = ["pergunas1", "pergunta2"];
     return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(title: Text("Perguntas")),
-            body: Column(children: [
-              Text("Olá FLutter"),
-              Text("Olá FLutter2"),
-              Text("Olá FLutter3"),
-              ElevatedButton(onPressed: null, child: Text("Resposta 1"))
-            ])));
+      title: 'Login Page',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: LoginPage(),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Bem-vindo ao (Nome da Aplicação)'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Senha',
+                  prefixIcon: Icon(Icons.lock),
+                ),
+                obscureText: true,
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Handle login button press
+                },
+                child: Text('Login'),
+              ),
+              TextButton(
+                  onPressed: null, child: Text("Não tem Cadastro? Clique aqui"))
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
