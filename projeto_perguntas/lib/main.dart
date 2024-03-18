@@ -63,3 +63,17 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
+
+class FirstRoute extends StatelessWidget {
+
+  const FirstRoute({super.key})
+
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar,
+    )
+  }
+
+}
