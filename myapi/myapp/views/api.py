@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-#fro 
+from myapp.serializers import UserSerializer 
 
 from myapp.models import User
 
@@ -16,19 +16,19 @@ def usersOverview(req):
     return Response(api_urls)
 
 @api_view(["GET"])
-def clienteList(req):
+def userList(req):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
 @api_view(["GET"])
-def clienteDetail(req, pk):
+def userDetail(req, pk):
     users = User.objects.get(id=pk)
     serializer = UserSerializer(users, many=False)
     return Response(serializer.data)
 
 @api_view(["POST"])
-def clienteCreate(req):
+def userCreate(req):
     serializer = UserSerializer(data=req.data)
 
     if serializer.is_valid():
@@ -37,7 +37,7 @@ def clienteCreate(req):
     return Response(serializer.data)
 
 @api_view(["PATCH"])
-def clienteUpdate(req, pk):
+def userUpdate(req, pk):
     user = User.objects.get(id=pk)
     serializer = UserSerializer(instance=user, data=req.data)
 
@@ -47,7 +47,7 @@ def clienteUpdate(req, pk):
     return Response(serializer.data)
 
 @api_view(["DELETE"])
-def clienteDelete(req, pk):
+def userDelete(req, pk):
     user = User.objects.get(id=pk)
     user.delete()
 
