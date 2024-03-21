@@ -1,17 +1,18 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from myapp.serializers import UserSerializer 
+from myapp.serializers import UserSerializer, PostagemSerializer 
 
-from myapp.models import User
+from myapp.models import User, Postagem
 
+#-----User------
 @api_view(["GET"])
 def usersOverview(req):
     api_urls = {
-        "User":"/user_list/",
-        "Detail":"/user_detail",
-        "Create":"/user_create",
-        "Update":"user_update/<str:pk>",
-        "Delete":"/user_delete/<str:pk>"
+        "User":"/userlist/",
+        "Detail":"/userdetail",
+        "Create":"/usercreate",
+        "Update":"userupdate/<str:pk>",
+        "Delete":"/userdelete/<str:pk>"
     }
     return Response(api_urls)
 
@@ -52,3 +53,55 @@ def userDelete(req, pk):
     user.delete()
 
     return Response("Item successfully deleted!")
+#-----User------
+
+#-----Postagem------
+@api_view(["GET"])
+def postagensOverview(req):
+    api_urls = {
+        "Postagem":"/postagemlist/",
+        "PostagemDetail":"/postagemdetail",
+        "PostagemCreate":"/postagemcreate",
+        "PostagemUpdate":"postagemupdate/<str:pk>",
+        "PostagemDelete":"/postagemdelete/<str:pk>"
+    }
+    return Response(api_urls)
+
+@api_view(["GET"])
+def postagensList(req):
+    users = Postagem.objects.all()
+    serializer = PostagemSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def postagensDetail(req, pk):
+    users = Postagem.objects.get(id=pk)
+    serializer = PostagemSerializer(users, many=False)
+    return Response(serializer.data)
+
+@api_view(["POST"])
+def postagensCreate(req):
+    serializer = PostagemSerializer(data=req.data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(["PATCH"])
+def postagensUpdate(req, pk):
+    user = Postagem.objects.get(id=pk)
+    serializer = PostagemSerializer(instance=user, data=req.data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(["DELETE"])
+def postagensDelete(req, pk):
+    user = Postagem.objects.get(id=pk)
+    user.delete()
+
+    return Response("Item successfully deleted!")
+#-----Postagem------

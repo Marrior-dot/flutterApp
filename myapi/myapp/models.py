@@ -10,6 +10,7 @@ class User(models.Model):
 
 class Postagem(models.Model):
     isTextQuestion = models.BooleanField()
+    arquivo = models.FileField()
     content = models.CharField(max_length=500)
     likes = models.IntegerField()
     dislikes = models.IntegerField()
