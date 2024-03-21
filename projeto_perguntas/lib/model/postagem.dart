@@ -1,4 +1,4 @@
-class Postagem{
+class Postagem {
   final String arquivo;
   final String content;
   final int likes;
@@ -20,12 +20,11 @@ class Postagem{
         'content': String content
       } =>
         Postagem(
-        likes: likes,
-        dislikes: dislikes,
-        arquivo:  arquivo,
-        content: content
-        ),
-      _ => throw const FormatException('Failed to load album.'),
+            likes: likes,
+            dislikes: dislikes,
+            arquivo: arquivo,
+            content: content),
+      _ => throw const FormatException('Falha ao carregar postagens'),
     };
   }
 }
