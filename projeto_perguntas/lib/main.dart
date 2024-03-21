@@ -1,6 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:projeto_perguntas/model/postagem.dart' as postagem;
+import 'package:projeto_perguntas/services/fetch.dart' as fetch;
 
 void main() {
   runApp(MyApp());
@@ -9,6 +10,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("Aq começam as postagens");
+    print(fetch.fetchPostagem());
     return MaterialApp(
       title: 'Login Page',
       theme: ThemeData(
@@ -25,7 +28,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bem-vindo ao (Nome da Aplicação)'),
+        //title: Text('Bem-vindo ao (Nome da Aplicação)'),
       ),
       body: Center(
         child: Padding(
@@ -64,7 +67,7 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-
+/*
 class FirstRoute extends StatelessWidget {
 
   const FirstRoute({super.key})
@@ -76,4 +79,4 @@ class FirstRoute extends StatelessWidget {
     )
   }
 
-}
+}*/
