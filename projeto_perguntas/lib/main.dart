@@ -1,17 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
+import 'package:projeto_perguntas/model/user.dart' as user;
 import 'package:projeto_perguntas/services/fetch.dart' as fetch;
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget /*StatelessWidget */ {
   @override
+  State<MyApp> createState() => _MyAppState();
+  /*@override
   Widget build(BuildContext context) {
-    print("Aq começam as postagens");
-    print(fetch.fetchPostagem());
     return MaterialApp(
       title: 'Login Page',
       theme: ThemeData(
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       home: LoginPage(),
     );
-  }
+  }*/
 }
 
 class LoginPage extends StatelessWidget {
@@ -28,8 +29,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //title: Text('Bem-vindo ao (Nome da Aplicação)'),
-      ),
+          //title: Text('Bem-vindo ao (Nome da Aplicação)'),
+          ),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(16.0),
@@ -66,6 +67,47 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
+class _MyAppState extends State<MyApp> {
+  late Future<postagem.Postagem> futureFetch;
+
+  @override
+  void initState() {
+    super.initState();
+    futureFetch = fetch.fetchPostagem();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Fetch Data Example',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Fetch Data Example'),
+        ),
+        body: Center(
+          child: FutureBuilder<postagem.Postagem>(
+            future: futureFetch,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data!.content);
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 /*
 class FirstRoute extends StatelessWidget {
