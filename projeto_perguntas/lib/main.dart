@@ -1,7 +1,7 @@
-import 'dart:io';
+//import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
-import 'package:projeto_perguntas/model/user.dart' as user;
+//import 'package:projeto_perguntas/model/user.dart' as user;
 import 'package:projeto_perguntas/services/fetch.dart' as fetch;
 
 void main() {

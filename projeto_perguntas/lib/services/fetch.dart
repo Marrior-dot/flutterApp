@@ -5,7 +5,8 @@ import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 
 Future<postagem.Postagem> fetchPostagem() async {
   final response =
-      await http.get(Uri.parse('http://127.0.0.1:8000/api/postagemlist/'));
+      //await http.get(Uri.parse('http://localhost:8000/api/postagemlist/'));
+      await http.get(Uri.parse('http://10.54.2.110:8000/api/postagemlist'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
