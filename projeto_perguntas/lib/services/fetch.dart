@@ -12,7 +12,7 @@ Future<postagem.Postagem> fetchPostagem() async {
     // then parse the JSON.
     return postagem.Postagem.fromJson(
         //jsonDecode(response.body) as Map<String, dynamic>);
-        jsonDecode(response.body) as Map<dynamic>);
+        jsonDecode(response.body) as Map<String, String>);
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
