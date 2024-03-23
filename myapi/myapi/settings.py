@@ -25,20 +25,21 @@ SECRET_KEY = 'django-insecure-%*^1bcwhx=r=se3xhz+34-7xrznfzyh@jdyjwli^t8d1*m3akm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.15.6']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'myapp.apps.MyappConfig',
+    'rest_framework',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp.apps.MyappConfig',
-    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -70,6 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'myapi.wsgi.application'
+ASGI_APPLICATION = 'myapi.asgi.application'
 
 
 # Database

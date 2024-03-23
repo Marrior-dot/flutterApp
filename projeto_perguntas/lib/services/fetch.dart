@@ -5,14 +5,14 @@ import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 
 Future<postagem.Postagem> fetchPostagem() async {
   final response =
-      //await http.get(Uri.parse('http://localhost:8000/api/postagemlist/'));
-      await http.get(Uri.parse('http://10.54.2.110:8000/api/postagemlist'));
+      await http.get(Uri.parse('http://192.168.15.6:8000/api/postagemlist'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     return postagem.Postagem.fromJson(
-        jsonDecode(response.body) as Map<String, dynamic>);
+        //jsonDecode(response.body) as Map<String, dynamic>);
+        jsonDecode(response.body) as Map<dynamic>);
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
