@@ -9,7 +9,7 @@ class User(models.Model):
     username = models.CharField(max_length=100)
 
 class Postagem(models.Model):
-    isTextQuestion = models.BooleanField()
+    #isTextQuestion = models.BooleanField()
     arquivo = models.FileField()
     content = models.CharField(max_length=500)
     likes = models.IntegerField()

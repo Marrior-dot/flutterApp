@@ -8,4 +8,5 @@ class UserSerializer(serializers.ModelSerializer):
 class PostagemSerializer(serializers.ModelSerializer):
     class Meta:
         model=Postagem
+        #fields=["isTextQuestion","content","arquivo", "likes", "dislikes"]
         fields=["isTextQuestion","content","arquivo", "likes", "dislikes"]
