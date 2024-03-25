@@ -69,14 +69,16 @@ def postagensOverview(req):
 
 @api_view(["GET"])
 def postagensList(req):
-    users = Postagem.objects.all()
-    serializer = PostagemSerializer(users, many=True)
+    post = Postagem.objects.all()
+    serializer = PostagemSerializer(post, many=True)
+    #print(Response(serializer.data[0]))
     return Response(serializer.data)
+    #return serializer.data
 
 @api_view(["GET"])
 def postagensDetail(req, pk):
-    users = Postagem.objects.get(id=pk)
-    serializer = PostagemSerializer(users, many=False)
+    post = Postagem.objects.get(id=pk)
+    serializer = PostagemSerializer(post, many=False)
     return Response(serializer.data)
 
 @api_view(["POST"])
@@ -90,8 +92,8 @@ def postagensCreate(req):
 
 @api_view(["PATCH"])
 def postagensUpdate(req, pk):
-    user = Postagem.objects.get(id=pk)
-    serializer = PostagemSerializer(instance=user, data=req.data)
+    post = Postagem.objects.get(id=pk)
+    serializer = PostagemSerializer(instance=post, data=req.data)
 
     if serializer.is_valid():
         serializer.save()
@@ -100,8 +102,7 @@ def postagensUpdate(req, pk):
 
 @api_view(["DELETE"])
 def postagensDelete(req, pk):
-    user = Postagem.objects.get(id=pk)
-    user.delete()
-
+    post = Postagem.objects.get(id=pk)
+    post.delete()
     return Response("Item successfully deleted!")
 #-----Postagem------

@@ -1,7 +1,5 @@
-//import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
-//import 'package:projeto_perguntas/model/user.dart' as user;
 import 'package:projeto_perguntas/services/fetch.dart' as fetch;
 
 void main() {
@@ -92,6 +90,7 @@ class _MyAppState extends State<MyApp> {
           child: FutureBuilder<postagem.Postagem>(
             future: futureFetch,
             builder: (context, snapshot) {
+              print(snapshot.data!.content);
               if (snapshot.hasData) {
                 return Text(snapshot.data!.content);
               } else if (snapshot.hasError) {
@@ -107,18 +106,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
-/*
-class FirstRoute extends StatelessWidget {
-
-  const FirstRoute({super.key})
-
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar,
-    )
-  }
-
-}*/

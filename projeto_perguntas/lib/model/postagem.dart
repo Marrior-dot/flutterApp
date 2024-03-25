@@ -11,9 +11,7 @@ class Postagem {
     required this.dislikes,
   });
 
-  //factory Postagem.fromJson(Map<String, dynamic> json) {
-  //factory Postagem.fromJson(Map<dynamic, List<dynamic>> json) {
-  factory Postagem.fromJson(Map<dynamic, List<dynamic>> json) {
+  factory Postagem.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
         'likes': int likes,

@@ -10,14 +10,19 @@ Future<postagem.Postagem> fetchPostagem() async {
       //ip do estágio
       await http.get(Uri.parse('http://10.54.2.110:8000/api/postagemlist'));
   if (response.statusCode == 200) {
-    //print(response.body);
-
+    String nResponseBody=trimColchetes(response.body);
     return postagem.Postagem.fromJson(
-    //jsonDecode(response.body) as Map<dynamic, List<dynamic>>);
-    jsonDecode(response.body) as Map<String, dynamic>);
-    //jsonDecode(response.body) as Map<String, Object>);
-    //jsonDecode(response.body) as Map<String, String>);
+    jsonDecode(nResponseBody) as Map<String, dynamic>);
   } else {
     throw Exception('Failed to load album');
   }
+}
+
+String trimColchetes(String oldResponse) {
+  String newResponseBody = "";
+  RegExp exp = RegExp(r'(^\[)|(\]*)');
+  if (exp.hasMatch(oldResponse) == true){
+    newResponseBody = oldResponse.replaceAll(exp, '').trim();
+  }
+  return newResponseBody;
 }
