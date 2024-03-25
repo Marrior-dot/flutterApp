@@ -1,80 +1,68 @@
-//import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:projeto_perguntas/model/postagem.dart' as postagem;
-//import 'package:projeto_perguntas/model/user.dart' as user;
-import 'package:projeto_perguntas/services/fetch.dart' as fetch;
+import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(MyApp());
-}
+Future<Album> fetchAlbum() async {
+  final response = await http
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
 
-class MyApp extends StatefulWidget /*StatelessWidget */ {
-  @override
-  State<MyApp> createState() => _MyAppState();
-  /*@override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Login Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: LoginPage(),
-    );
-  }*/
-}
-
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          //title: Text('Bem-vindo ao (Nome da Aplicação)'),
-          ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Senha',
-                  prefixIcon: Icon(Icons.lock),
-                ),
-                obscureText: true,
-              ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Handle login button press
-                },
-                child: Text('Login'),
-              ),
-              TextButton(
-                  onPressed: null, child: Text("Não tem Cadastro? Clique aqui"))
-            ],
-          ),
-        ),
-      ),
-    );
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
   }
 }
 
+class Album {
+  final int userId;
+  final int id;
+  final String title;
+
+  const Album({
+    required this.userId,
+    required this.id,
+    required this.title,
+  });
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return switch (json) {
+      {
+        'userId': int userId,
+        'id': int id,
+        'title': String title,
+      } =>
+        Album(
+          userId: userId,
+          id: id,
+          title: title,
+        ),
+      _ => throw const FormatException('Failed to load album.'),
+    };
+  }
+}
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
 class _MyAppState extends State<MyApp> {
-  late Future<postagem.Postagem> futureFetch;
+  late Future<Album> futureAlbum;
 
   @override
   void initState() {
     super.initState();
-    futureFetch = fetch.fetchPostagem();
+    futureAlbum = fetchAlbum();
   }
 
   @override
@@ -89,11 +77,11 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Fetch Data Example'),
         ),
         body: Center(
-          child: FutureBuilder<postagem.Postagem>(
-            future: futureFetch,
+          child: FutureBuilder<Album>(
+            future: futureAlbum,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data!.content);
+                return Text(snapshot.data!.title);
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
@@ -107,18 +95,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
-/*
-class FirstRoute extends StatelessWidget {
-
-  const FirstRoute({super.key})
-
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar,
-    )
-  }
-
-}*/
