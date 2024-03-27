@@ -8,6 +8,9 @@ class User(models.Model):
     email = models.EmailField()
     username = models.CharField(max_length=100)
 
+    class Meta:
+        ordering = ['email']
+
 class Postagem(models.Model):
     #isTextQuestion = models.BooleanField()
     arquivo = models.FileField()
@@ -15,8 +18,14 @@ class Postagem(models.Model):
     likes = models.IntegerField()
     dislikes = models.IntegerField()
 
+    class Meta:
+        ordering = ['created']
+
 class CommentsPostagem(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     postagem=models.ForeignKey(Postagem, on_delete=models.CASCADE)
     text=models.CharField(blank=True, max_length=500)
+
+    class Meta:
+        ordering = ['user']
 

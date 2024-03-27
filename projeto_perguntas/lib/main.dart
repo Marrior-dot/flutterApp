@@ -90,7 +90,6 @@ class _MyAppState extends State<MyApp> {
           child: FutureBuilder<postagem.Postagem>(
             future: futureFetch,
             builder: (context, snapshot) {
-              print(snapshot.data!.content);
               if (snapshot.hasData) {
                 return Text(snapshot.data!.content);
               } else if (snapshot.hasError) {

@@ -14,16 +14,18 @@ class Postagem {
   factory Postagem.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
+        'arquivo': String arquivo,
+        'content': String content,
         'likes': int likes,
         'dislikes': int dislikes,
-        'arquivo': String arquivo,
-        'content': String content
+        
       } =>
         Postagem(
+            arquivo: arquivo,
+            content: content,
             likes: likes,
             dislikes: dislikes,
-            arquivo: arquivo,
-            content: content),
+            ),
       _ => throw const FormatException('Falha ao carregar postagens'),
     };
   }

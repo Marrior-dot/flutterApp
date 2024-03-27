@@ -10,9 +10,10 @@ Future<postagem.Postagem> fetchPostagem() async {
       //ip do estágio
       await http.get(Uri.parse('http://10.54.2.110:8000/api/postagemlist'));
   if (response.statusCode == 200) {
-    String nResponseBody=trimColchetes(response.body);
+    //String nResponseBody=trimColchetes(response.body);
+    
     return postagem.Postagem.fromJson(
-    jsonDecode(nResponseBody) as Map<String, dynamic>);
+    jsonDecode(response.body.toString()) as Map<String, dynamic>);
   } else {
     throw Exception('Failed to load album');
   }
