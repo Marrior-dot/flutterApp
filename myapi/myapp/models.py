@@ -19,7 +19,7 @@ class Postagem(models.Model):
     dislikes = models.IntegerField()
 
     class Meta:
-        ordering = ['created']
+        ordering = ['content']
 
 class CommentsPostagem(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
