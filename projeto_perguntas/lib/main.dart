@@ -67,7 +67,7 @@ class LoginPage extends StatelessWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<postagem.Postagem> futureFetch;
+  late Future<List<postagem.Postagem>> futureFetch;
 
   @override
   void initState() {
@@ -87,11 +87,11 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Fetch Data Example'),
         ),
         body: Center(
-          child: FutureBuilder<postagem.Postagem>(
+          child: FutureBuilder<List<postagem.Postagem>>(
             future: futureFetch,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data!.content);
+                return PostagemList(posts: snapshot.data!);
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
@@ -102,6 +102,25 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class PostagemList extends StatelessWidget {
+  const PostagemList({super.key, required this.posts});
+
+  final List<postagem.Postagem> posts;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
+      itemCount: posts.length,
+      itemBuilder: (context, index) {
+        return Text(posts[index].arquivo);
+      },
     );
   }
 }

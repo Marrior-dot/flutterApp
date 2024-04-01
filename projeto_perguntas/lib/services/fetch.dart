@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 
-Future<postagem.Postagem> fetchPostagem() async {
+Future<List<postagem.Postagem>> fetchPostagem() async {
   final response =
       //ip de casa
       await http.get(Uri.parse('http://192.168.15.7:8000/api/postagemlist'));
@@ -13,10 +13,12 @@ Future<postagem.Postagem> fetchPostagem() async {
   if (response.statusCode == 200) {
     String nResponseBody = trimColchetes(response.body);
     //print(nResponseBody);
-
-    //var postagemMap = jsonDecode(response.body) as Map<String, dynamic>;
-    var postagemMap = jsonDecode(nResponseBody) as Map<String, dynamic>;
-    var ppost = postagem.Postagem.fromJson(postagemMap[0]);
+    //print(nResponseBody[90]);
+    var postagemMap =
+        (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
+    var ppost = postagemMap
+        .map<postagem.Postagem>((json) => postagem.Postagem.fromJson(json))
+        .toList();
 
     //return postagem.Postagem.fromJson(
     //    json.decode(nResponseBody) as Map<String, dynamic>);
