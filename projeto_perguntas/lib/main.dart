@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 import 'package:projeto_perguntas/services/fetch.dart' as fetch;
 
@@ -113,14 +114,16 @@ class PostagemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-      ),
-      itemCount: posts.length,
-      itemBuilder: (context, index) {
-        return Text(posts[index].arquivo);
-      },
+  return  ListView.builder(
+  padding: const EdgeInsets.all(8),
+  itemCount: posts.length,
+  itemBuilder: (context, index){
+    return Container(
+            height: 50,
+            child: Center(child:Text(posts[index].content))
     );
+  },
+ 
+  );
   }
 }
