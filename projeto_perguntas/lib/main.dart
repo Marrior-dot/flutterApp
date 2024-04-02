@@ -120,7 +120,10 @@ class PostagemList extends StatelessWidget {
   itemBuilder: (context, index){
     return Container(
             height: 50,
-            child: Center(child:Text(posts[index].content))
+           child: Column(
+            children: [//Image.asset(posts[index].arquivo),
+            Text(posts[index].content)],
+           ),
     );
   },
  
