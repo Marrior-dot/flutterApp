@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 import 'package:projeto_perguntas/services/fetch.dart' as fetch;
+import 'package:projeto_perguntas/views/PostagemList.dart' as PostagemList;
 
 void main() {
   runApp(MyApp());
@@ -21,50 +22,6 @@ class MyApp extends StatefulWidget /*StatelessWidget */ {
       home: LoginPage(),
     );
   }*/
-}
-
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          //title: Text('Bem-vindo ao (Nome da Aplicação)'),
-          ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Senha',
-                  prefixIcon: Icon(Icons.lock),
-                ),
-                obscureText: true,
-              ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Handle login button press
-                },
-                child: Text('Login'),
-              ),
-              TextButton(
-                  onPressed: null, child: Text("Não tem Cadastro? Clique aqui"))
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _MyAppState extends State<MyApp> {
@@ -92,7 +49,7 @@ class _MyAppState extends State<MyApp> {
             future: futureFetch,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return PostagemList(posts: snapshot.data!);
+                return PostagemList.PostagemList(posts: snapshot.data!);
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
@@ -104,29 +61,5 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
-  }
-}
-
-class PostagemList extends StatelessWidget {
-  const PostagemList({super.key, required this.posts});
-
-  final List<postagem.Postagem> posts;
-
-  @override
-  Widget build(BuildContext context) {
-  return  ListView.builder(
-  padding: const EdgeInsets.all(8),
-  itemCount: posts.length,
-  itemBuilder: (context, index){
-    return Container(
-            height: 50,
-           child: Column(
-            children: [//Image.asset(posts[index].arquivo),
-            Text(posts[index].content)],
-           ),
-    );
-  },
- 
-  );
   }
 }
