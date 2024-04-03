@@ -9,4 +9,4 @@ class PostagemSerializer(serializers.ModelSerializer):
     class Meta:
         model=Postagem
         #fields=["isTextQuestion","content","arquivo", "likes", "dislikes"]
-        fields=["content","arquivo", "likes", "dislikes"]
+        fields=["id","content","arquivo", "likes", "dislikes"]

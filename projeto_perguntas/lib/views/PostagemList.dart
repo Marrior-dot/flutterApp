@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
-
+import 'package:projeto_perguntas/services/likeDislikeButton.dart' as actionButton;
 
 class PostagemList extends StatelessWidget {
   const PostagemList({super.key, required this.posts});
@@ -15,20 +16,26 @@ class PostagemList extends StatelessWidget {
   itemBuilder: (context, index){
     return Container(
             height: 50,
-           child: Column(
+            child: Column(
             children: [//Image.asset(posts[index].arquivo),
             Text(posts[index].content),
-            Row(children: [
-            ElevatedButton(
-            onPressed: null,
-            child: const Text('Disabled'),
-          
-          ),],)],
+              Row(children: [
+                ElevatedButton(
+                  onPressed: null,
+                  child:
+                    //Image(image:AssetImage('gostar.png')) 
+                  const Text('Disabled'),
+                ),ElevatedButton(
+                  onPressed:(){
+                    actionButton.updateLikeDislike('likes', posts[index].likes, posts[index].id);
+                  } ,
+                  child: const Text('likes'),
+                ),
+              ])],
             
-           ),
+            ),
     );
   },
- 
   );
   }
 }
