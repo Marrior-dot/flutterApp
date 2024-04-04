@@ -21,15 +21,15 @@ class PostagemList extends StatelessWidget {
             Text(posts[index].content),
               Row(children: [
                 ElevatedButton(
-                  onPressed: null,
-                  child:
-                    //Image(image:AssetImage('gostar.png')) 
-                  const Text('Disabled'),
+                  onPressed: (){
+                    actionButton.updateLikeDislike('dislikes', posts[index].dislikes, posts[index].id);
+                  },
+                  child: const Text('dislikes'),
                 ),ElevatedButton(
                   onPressed:(){
                     actionButton.updateLikeDislike('likes', posts[index].likes, posts[index].id);
                   } ,
-                  child: const Text('likes'),
+                  child:Text('likes ${posts[index].likes}') ,
                 ),
               ])],
             

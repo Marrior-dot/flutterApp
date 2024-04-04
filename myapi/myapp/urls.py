@@ -11,5 +11,5 @@ urlpatterns = [path("userHowTo", usersOverview, name="users-overview"),
     path("postagemlist/", postagensList, name="post-list"),
     path("postagemdetail/<str:pk>/", postagensDetail, name="post-detail"),
     path("postagemcreate/", postagensCreate, name="post-create"),
-    path("postagemupdate/<str:pk>/", postagensUpdate, name="post-update"),
+    path("postagemupdate/<int:pk>/", postagensUpdate, name="post-update"),
     path("postagemdelete/<str:pk>/", postagensDelete, name="post-delete"),]

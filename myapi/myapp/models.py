@@ -3,20 +3,20 @@ from django.db import models
 # Create your models here.
 
 class User(models.Model):
-    name = models.CharField(max_length=100)
-    passWord = models.CharField(max_length=100)
-    email = models.EmailField()
-    username = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, blank=True)
+    passWord = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(blank=True)
+    username = models.CharField(max_length=100, blank=True)
 
     class Meta:
         ordering = ['email']
 
 class Postagem(models.Model):
     #isTextQuestion = models.BooleanField()
-    arquivo = models.FileField()
-    content = models.CharField(max_length=500)
-    likes = models.IntegerField()
-    dislikes = models.IntegerField()
+    arquivo = models.FileField(blank=True)
+    content = models.CharField(max_length=500, blank=True)
+    likes = models.IntegerField(blank=True)
+    dislikes = models.IntegerField(blank=True)
 
     class Meta:
         ordering = ['content']

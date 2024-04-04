@@ -1,6 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from myapp.serializers import UserSerializer, PostagemSerializer 
+
 
 from myapp.models import User, Postagem
 
@@ -90,6 +92,17 @@ def postagensCreate(req):
 
     return Response(serializer.data)
 
+@api_view(["PUT"])
+def postagensUpdate(req, pk):
+    post = Postagem.objects.get(id=pk)
+    serializer = PostagemSerializer(instance=post, data=req.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+'''
 @api_view(["PATCH"])
 def postagensUpdate(req, pk):
     post = Postagem.objects.get(id=pk)
@@ -99,6 +112,7 @@ def postagensUpdate(req, pk):
         serializer.save()
 
     return Response(serializer.data)
+'''
 
 @api_view(["DELETE"])
 def postagensDelete(req, pk):
