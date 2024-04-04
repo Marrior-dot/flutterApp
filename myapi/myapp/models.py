@@ -22,9 +22,9 @@ class Postagem(models.Model):
         ordering = ['content']
 
 class CommentsPostagem(models.Model):
-    user=models.ForeignKey(User, on_delete=models.CASCADE)
-    postagem=models.ForeignKey(Postagem, on_delete=models.CASCADE)
-    text=models.CharField(blank=True, max_length=500)
+    user=models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    postagem=models.ForeignKey(Postagem, on_delete=models.CASCADE, blank=True)
+    text=models.CharField(max_length=500)
 
     class Meta:
         ordering = ['user']

@@ -1,10 +1,10 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from myapp.serializers import UserSerializer, PostagemSerializer 
+from myapp.serializers import UserSerializer, PostagemSerializer, CommentsPostagemSerializer 
 
 
-from myapp.models import User, Postagem
+from myapp.models import User, Postagem, CommentsPostagem
 
 #-----User------
 @api_view(["GET"])
@@ -120,3 +120,19 @@ def postagensDelete(req, pk):
     post.delete()
     return Response("Item successfully deleted!")
 #-----Postagem------
+
+#-----Comentários------
+@api_view(["POST"])
+def comentariosPosts(req, pk):
+    serializer = CommentsPostagemSerializer(data=req.data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def comentariosList(req, pk):
+    comments = CommentsPostagem.objects.all()
+    serializer = CommentsPostagemSerializer(comments, many=True)
+    return Response(serializer.data)
