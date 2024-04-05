@@ -73,9 +73,7 @@ def postagensOverview(req):
 def postagensList(req):
     post = Postagem.objects.all()
     serializer = PostagemSerializer(post, many=True)
-    #print(Response(serializer.data[0]))
     return Response(serializer.data)
-    #return serializer.data
 
 @api_view(["GET"])
 def postagensDetail(req, pk):
@@ -123,16 +121,17 @@ def postagensDelete(req, pk):
 
 #-----Comentários------
 @api_view(["POST"])
-def comentariosPosts(req, pk):
-    serializer = CommentsPostagemSerializer(data=req.data)
-
+def comentariosPosts(req,pk):
+    posts = Postagem.objects.get(id=pk)
+    serializer = CommentsPostagemSerializer(instance=posts,data=req.data)
     if serializer.is_valid():
         serializer.save()
+        return Response(serializer.data)
 
-    return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
-def comentariosList(req, pk):
+def comentariosList(req):
     comments = CommentsPostagem.objects.all()
     serializer = CommentsPostagemSerializer(comments, many=True)
     return Response(serializer.data)

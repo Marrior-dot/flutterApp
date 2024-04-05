@@ -27,5 +27,5 @@ class CommentsPostagem(models.Model):
     text=models.CharField(max_length=500)
 
     class Meta:
-        ordering = ['user']
+        ordering = ['text']
 

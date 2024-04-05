@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
-import 'package:projeto_perguntas/services/fetch.dart' as fetch;
+import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
 import 'package:projeto_perguntas/views/PostagemList.dart' as PostagemList;
 
 void main() {
