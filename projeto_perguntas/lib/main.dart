@@ -3,15 +3,15 @@ import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
 import 'package:projeto_perguntas/views/PostagemList.dart' as PostagemList;
+import 'package:projeto_perguntas/views/LoginPage.dart' as LoginPage;
+
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget /*StatelessWidget */ {
+class MyApp extends StatefulWidget /*StatelessWidget*/  {
   @override
-  State<MyApp> createState() => _MyAppState();
-  /*@override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Login Page',
@@ -19,10 +19,13 @@ class MyApp extends StatefulWidget /*StatelessWidget */ {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginPage(),
+      home: LoginPage.LoginPage(),
     );
-  }*/
+  }
+  @override
+  State<MyApp> createState() => _MyAppState();
 }
+
 
 class _MyAppState extends State<MyApp> {
   late Future<List<postagem.Postagem>> futureFetch;

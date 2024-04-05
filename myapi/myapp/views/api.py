@@ -33,10 +33,8 @@ def userDetail(req, pk):
 @api_view(["POST"])
 def userCreate(req):
     serializer = UserSerializer(data=req.data)
-
     if serializer.is_valid():
         serializer.save()
-
     return Response(serializer.data)
 
 @api_view(["PATCH"])

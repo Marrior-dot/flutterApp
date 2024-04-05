@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_perguntas/views/RegisterPage.dart' as RegisterPage;
 
-class LoginPage extends StatelessWidget {
+
+class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,6 +14,18 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Nome',
+                  prefixIcon: Icon(Icons.email),
+                ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'CPF',
+                  prefixIcon: Icon(Icons.email),
+                ),
+              ),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -31,15 +43,10 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-
+                  // Handle login button press
                 },
-                child: Text('Login'),
+                child: Text('Cadastrar'),
               ),
-              TextButton(
-                  onPressed:(){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage.RegisterPage()));
-                  } 
-                  , child: Text("Não tem Cadastro? Clique aqui"))
             ],
           ),
         ),
