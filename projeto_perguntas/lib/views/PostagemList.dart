@@ -5,7 +5,7 @@ import 'package:projeto_perguntas/services/likeDislikeButton.dart' as actionButt
 import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
 import 'package:projeto_perguntas/main.dart';
 
-
+/*
 class _MyAppState extends State<MyApp> {
   late Future<List<postagem.Postagem>> futureFetch;
 
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
+*/
 class PostagemList extends StatelessWidget {
   const PostagemList({super.key, required this.posts});
 

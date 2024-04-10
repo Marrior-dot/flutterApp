@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
 import 'package:projeto_perguntas/views/PostagemList.dart' as PostagemList;
-import 'package:projeto_perguntas/views/LoginPage.dart' as LoginPage;
+import 'package:projeto_perguntas/views/LoginPage.dart';
 
 
 void main() {
@@ -11,19 +11,19 @@ void main() {
 }
 
 class MyApp extends StatefulWidget /*StatelessWidget*/  {
+  //@override
+  //Widget build(BuildContext context) {
+  //  return MaterialApp(
+  //    title: 'Login Page',
+  //    theme: ThemeData(
+  //      primarySwatch: Colors.blue,
+  //      visualDensity: VisualDensity.adaptivePlatformDensity,
+  //    ),
+  //    home: LoginPage.LoginPage(),
+  //  );
+  //}
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Login Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: LoginPage.LoginPage(),
-    );
-  }
-  @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => LoginPage();//_MyAppState();
 }
 
 
