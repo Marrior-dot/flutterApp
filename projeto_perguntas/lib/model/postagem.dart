@@ -19,7 +19,7 @@ class Postagem {
         dislikes = json['dislikes'] as int;
 
   Map<String, dynamic> toJson() => {
-        'id':id,
+        'id': id,
         'arquivo': arquivo,
         'content': content,
         'likes': likes,

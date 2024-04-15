@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class RegisterPage extends StatelessWidget {
               SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  // Handle login button press
+                  Navigator.pop(context);
                 },
                 child: Text('Cadastrar'),
               ),

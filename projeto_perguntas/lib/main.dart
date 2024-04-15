@@ -5,27 +5,19 @@ import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
 import 'package:projeto_perguntas/views/PostagemList.dart' as PostagemList;
 import 'package:projeto_perguntas/views/LoginPage.dart';
 
-
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget /*StatelessWidget*/  {
+class MyApp extends StatefulWidget /*StatelessWidget*/ {
+  @override
+  State<MyApp> createState() => LoginPage();
+
   //@override
   //Widget build(BuildContext context) {
-  //  return MaterialApp(
-  //    title: 'Login Page',
-  //    theme: ThemeData(
-  //      primarySwatch: Colors.blue,
-  //      visualDensity: VisualDensity.adaptivePlatformDensity,
-  //    ),
-  //    home: LoginPage.LoginPage(),
-  //  );
+  // return MaterialApp(home: LoginPage());
   //}
-  @override
-  State<MyApp> createState() => LoginPage();//_MyAppState();
 }
-
 
 class _MyAppState extends State<MyApp> {
   late Future<List<postagem.Postagem>> futureFetch;
