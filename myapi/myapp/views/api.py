@@ -11,8 +11,8 @@ from myapp.models import User, Postagem, CommentsPostagem
 def usersOverview(req):
     api_urls = {
         "User":"/userlist/",
-        "Detail":"/userdetail",
-        "Create":"/usercreate",
+        "Detail":"/userdetail/<str:pk>",
+        "Create":"/usercreate/",
         "Update":"userupdate/<str:pk>",
         "Delete":"/userdelete/<str:pk>"
     }
@@ -26,7 +26,7 @@ def userList(req):
 
 @api_view(["GET"])
 def userDetail(req, pk):
-    users = User.objects.get(id=pk)
+    users = User.objects.get()
     serializer = UserSerializer(users, many=False)
     return Response(serializer.data)
 

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['192.168.15.6','127.0.0.1','localhost','10.54.2.110','192.168.1
 INSTALLED_APPS = [
     'myapp.apps.MyappConfig',
     'rest_framework',
+    #'rest_framework.authtoken',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +42,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+#REST_FRAMEWORK = {
+#    'DEFAULT_AUTHENTICATION_CLASSES': (
+#        'rest_framework.authentication.TokenAuthentication',
+#    ),
+#    'DEFAULT_PERMISSION_CLASSES': [
+#        'rest_framework.permissions.IsAuthenticated',
+#    ],
+#}
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,9 +1,9 @@
 from django.urls import path
 from .views.api import * 
 
-urlpatterns = [path("userHowTo", usersOverview, name="users-overview"),
+urlpatterns = [path("userHowTo/", usersOverview, name="users-overview"),
     path("userlist/", userList, name="users-list"),
-    path("userdetail/<int:pk>/", userDetail, name="users-detail"),
+    path("userdetail/<str:pk>/", userDetail, name="users-detail"),
     path("usercreate/", userCreate, name="users-create"),
     path("userupdate/<int:pk>/", userUpdate, name="users-update"),
     path("userdelete/<int:pk>/", userDelete, name="users-delete"),
