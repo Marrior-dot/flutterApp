@@ -5,8 +5,6 @@ import 'package:projeto_perguntas/services/userLogin.dart';
 import 'package:projeto_perguntas/main.dart';
 
 class LoginPage extends State<MyApp> {
-  var userNameJson;
-  var passWordJson;
   final userNameController = TextEditingController();
   final passWordController = TextEditingController();
   //late Future<List<User>> usuarioLogado;
@@ -77,15 +75,6 @@ class LoginPage extends State<MyApp> {
                                 },
                                 child: Text("Não tem Cadastro? Clique aqui")),
                           ))
-                  /*TextButton(
-                      onPressed: () {
-                        //Navigator.pushNamed(context, '/registrar');
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RegisterPage()));
-                      },
-                      child: Text("Não tem Cadastro? Clique aqui"))*/
                 ],
               ),
             ),

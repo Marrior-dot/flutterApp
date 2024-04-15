@@ -2,7 +2,7 @@ import 'package:projeto_perguntas/model/user.dart' as Usuario;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<Usuario.User> createAlbum(
+Future<Usuario.User> userCreate(
     String usuario, String email, String senha, String nome) async {
   final response = await http.post(
     Uri.parse('http://localhost:8000/api/usercreate/'),
