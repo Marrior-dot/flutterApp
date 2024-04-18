@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,7 +32,6 @@ ALLOWED_HOSTS = ['192.168.15.6','127.0.0.1','localhost','10.54.2.110','192.168.1
 INSTALLED_APPS = [
     'myapp.apps.MyappConfig',
     'rest_framework',
-    #'rest_framework.authtoken',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
