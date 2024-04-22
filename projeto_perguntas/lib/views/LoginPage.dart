@@ -7,7 +7,6 @@ import 'package:projeto_perguntas/main.dart';
 class LoginPage extends State<MyApp> {
   final userNameController = TextEditingController();
   final passWordController = TextEditingController();
-  //late Future<List<User>> usuarioLogado;
   late Future<User> usuarioLogado;
 
   @override
@@ -16,12 +15,6 @@ class LoginPage extends State<MyApp> {
     passWordController.dispose();
     super.dispose();
   }
-
-  /*@override
-  void initState() {
-    super.initState();
-    usuarioLogado = userLogin();
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -64,16 +57,11 @@ class LoginPage extends State<MyApp> {
                       }),
                   Builder(
                       builder: (context) => Center(
-                            child: TextButton(
+                          /* child: TextButton(
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/registrar');
-                                  /*Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              RegisterPage()));*/
                                 },
-                                child: Text("Não tem Cadastro? Clique aqui")),
+                                child: Text("Não tem Cadastro? Clique aqui")),*/
                           ))
                 ],
               ),

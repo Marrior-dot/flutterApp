@@ -65,17 +65,6 @@ class RegisterPage extends StatelessWidget {
                           child: Text('Cadastrar'),
                         ),
                       ))
-              /*ElevatedButton(
-                onPressed: () {
-                  userCreate(
-                      userNameController.text.toString(),
-                      emailController.text.toString(),
-                      passWordController.text.toString(),
-                      nameController.text.toString());
-                  Navigator.pop(context);
-                },
-                child: Text('Cadastrar'),
-              ),*/
             ],
           ),
         ),
