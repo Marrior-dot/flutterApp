@@ -90,20 +90,22 @@ class _MyAppState extends State<MyApp> {
 class PostagemListState extends State<PostagemList>{
 
   //final List<postagem.Postagem> posts;
-
-
    void incrementLikes(int button ,int id){
     setState(() {
       actionButton.updateLikeDislike('likes', button, id);
     });
   }
 
+  int likeButton = 0;
+
   @override
   Widget build(BuildContext context) {
+  
   return  ListView.builder(
   padding: const EdgeInsets.all(8),
   itemCount: widget.posts.length,
   itemBuilder: (context, index){
+    likeButton = widget.posts[index].likes;
     return Container(
             height: 50,
             child: Column(
@@ -117,9 +119,13 @@ class PostagemListState extends State<PostagemList>{
                   child: const Text('dislikes'),
                 ),ElevatedButton(
                   onPressed:(){
-                    //actionButton.updateLikeDislike('likes', posts[index].likes, posts[index].id);
+                    setState(() {
+                      likeButton++;
+                      actionButton.updateLikeDislike('likes', likeButton, widget.posts[index].id);
+                        });
                   } ,
-                  child:Text('likes ${widget.posts[index].likes}'),
+                  //child:Text('likes ${widget.posts[index].likes}'),
+                  child:Text('likes ${likeButton}'),
                 ),
               ])],
             

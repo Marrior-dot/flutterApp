@@ -1,5 +1,7 @@
 //import 'dart:io';
 
+import 'dart:io';
+
 class Postagem {
   final int id;
   final String arquivo;

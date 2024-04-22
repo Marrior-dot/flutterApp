@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
+import 'package:projeto_perguntas/services/fetchPosts.dart';
 
 Future<postagem.Postagem> updateLikeDislike(
     String likeOrDislike, int button, int id) async {
@@ -13,13 +14,18 @@ Future<postagem.Postagem> updateLikeDislike(
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, int>{
-      likeOrDislike: button + 1,
+      likeOrDislike: button,
     }),
   );
+  
   if (response.statusCode == 200) {
+    removeNullInString(response.body);
     return postagem.Postagem.fromJson(
+        //jsonDecode(response.body) as Map<String, dynamic>);
         jsonDecode(response.body) as Map<String, dynamic>);
   } else {
     throw Exception('Failed to update album.');
   }
 }
+
+
