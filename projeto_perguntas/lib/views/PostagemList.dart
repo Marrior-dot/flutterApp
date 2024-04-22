@@ -4,7 +4,8 @@ import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 import 'package:projeto_perguntas/services/likeDislikeButton.dart' as actionButton;
 import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
 import 'package:projeto_perguntas/main.dart';
-
+import 'dart:async';
+import 'dart:convert';
 /*
 class _MyAppState extends State<MyApp> {
   late Future<List<postagem.Postagem>> futureFetch;
@@ -45,12 +46,16 @@ class _MyAppState extends State<MyApp> {
   }
 }
 */
-class PostagemList extends StatelessWidget {
+//class PostagemList extends  StatelessWidget {
+  class PostagemList extends StatefulWidget{
   const PostagemList({super.key, required this.posts});
+
+  State<PostagemList> createState() => PostagemListState();
 
   final List<postagem.Postagem> posts;
 
-  @override
+
+  /*@override
   Widget build(BuildContext context) {
   return  ListView.builder(
   padding: const EdgeInsets.all(8),
@@ -59,7 +64,7 @@ class PostagemList extends StatelessWidget {
     return Container(
             height: 50,
             child: Column(
-            children: [//Image.asset(posts[index].arquivo),
+            children: [
             Text(posts[index].content),
               Row(children: [
                 ElevatedButton(
@@ -69,9 +74,52 @@ class PostagemList extends StatelessWidget {
                   child: const Text('dislikes'),
                 ),ElevatedButton(
                   onPressed:(){
-                    actionButton.updateLikeDislike('likes', posts[index].likes, posts[index].id);
+                    //actionButton.updateLikeDislike('likes', posts[index].likes, posts[index].id);
                   } ,
-                  child:Text('likes ${posts[index].likes}') ,
+                  child:Text('likes ${posts[index].likes}'),
+                ),
+              ])],
+            
+            ),
+    );
+  },
+  );
+  }*/
+}
+
+class PostagemListState extends State<PostagemList>{
+
+  //final List<postagem.Postagem> posts;
+
+
+   void incrementLikes(int button ,int id){
+    setState(() {
+      actionButton.updateLikeDislike('likes', button, id);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+  return  ListView.builder(
+  padding: const EdgeInsets.all(8),
+  itemCount: widget.posts.length,
+  itemBuilder: (context, index){
+    return Container(
+            height: 50,
+            child: Column(
+            children: [
+            Text(widget.posts[index].content),
+              Row(children: [
+                ElevatedButton(
+                  onPressed: (){
+                    actionButton.updateLikeDislike('dislikes', widget.posts[index].dislikes, widget.posts[index].id);
+                  },
+                  child: const Text('dislikes'),
+                ),ElevatedButton(
+                  onPressed:(){
+                    //actionButton.updateLikeDislike('likes', posts[index].likes, posts[index].id);
+                  } ,
+                  child:Text('likes ${widget.posts[index].likes}'),
                 ),
               ])],
             

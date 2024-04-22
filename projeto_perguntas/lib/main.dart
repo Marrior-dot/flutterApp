@@ -4,7 +4,8 @@ import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
 import 'package:projeto_perguntas/views/PostagemList.dart' as PostagemList;
 import 'package:projeto_perguntas/views/LoginPage.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:projeto_perguntas/services/likeDislikeButton.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -20,7 +21,8 @@ class MyApp extends StatefulWidget /*StatelessWidget*/ {
 
   @override
   //State<MyApp> createState() => LoginPage();
-  State<MyApp> createState() => _MyHomePageState();
+  //State<MyApp> createState() => _MyHomePageState();
+  State<MyApp> createState() => _MyAppState();
 
   //@override
   //Widget build(BuildContext context) {
@@ -28,7 +30,6 @@ class MyApp extends StatefulWidget /*StatelessWidget*/ {
   //}
 }
 
-/*
 class _MyAppState extends State<MyApp> {
   late Future<List<postagem.Postagem>> futureFetch;
 
@@ -37,6 +38,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     futureFetch = fetch.fetchPostagem();
   }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-*/
+/*
 class _MyHomePageState extends State<MyApp> {
   final TextEditingController _controller = TextEditingController();
   final _channel = WebSocketChannel.connect(
@@ -124,3 +126,4 @@ class _MyHomePageState extends State<MyApp> {
     super.dispose();
   }
 }
+*/

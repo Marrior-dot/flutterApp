@@ -12,6 +12,10 @@ Future<List<postagem.Postagem>> fetchPostagem() async {
       //await http.get(Uri.parse('http://10.113.160.36:8000/home/postagemlist'));
       await http.get(Uri.parse('http://localhost:8000/api/postagemlist/'));
 
+  print(response.body);
+
+  
+
   if (response.statusCode == 200) {
     var postagemMap =
         (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
