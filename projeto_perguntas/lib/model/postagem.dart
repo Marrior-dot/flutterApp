@@ -4,8 +4,8 @@ import 'dart:io';
 
 class Postagem {
   final int id;
-  final String arquivo;
-  //final File arquivo;
+  //final String arquivo;
+  final File? arquivo;
   final String content;
   final int likes;
   final int dislikes;
@@ -14,7 +14,7 @@ class Postagem {
 
   Postagem.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int,
-        arquivo = json['arquivo'] as String,
+        arquivo = json['arquivo'] as File?,
         //arquivo = json['arquivo'] as File,
         content = json['content'] as String,
         likes = json['likes'] as int,

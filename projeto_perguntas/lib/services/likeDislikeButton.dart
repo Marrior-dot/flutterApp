@@ -19,7 +19,9 @@ Future<postagem.Postagem> updateLikeDislike(
   );
   
   if (response.statusCode == 200) {
+    //print(response.body);
     removeNullInString(response.body);
+    //print(response.body);
     return postagem.Postagem.fromJson(
         //jsonDecode(response.body) as Map<String, dynamic>);
         jsonDecode(response.body) as Map<String, dynamic>);

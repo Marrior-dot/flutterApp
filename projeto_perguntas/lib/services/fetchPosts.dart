@@ -14,15 +14,16 @@ Future<List<postagem.Postagem>> fetchPostagem() async {
       await http.get(Uri.parse('http://localhost:8000/api/postagemlist/'));
 
   
-  //String newResponse = jsonEncode(removeNullInString(response.body)); //removeNullInString(response.body);
   if (response.statusCode == 200) {
     var postagemMap =
         (jsonDecode(response.body) as List).cast<Map<String, dynamic>>(); 
-
-    for (var element in postagemMap) {  
-      element["arquivo"] = "null";
-    }
-
+    print(postagemMap);
+    
+    /*for (var element in postagemMap) {
+      if(element["arquivo"]){
+        print(element["arquivo"]);
+      }  
+    }*/
     var ppost = postagemMap
         .map<postagem.Postagem>((json) => postagem.Postagem.fromJson(json))
         .toList();
@@ -37,7 +38,6 @@ Future<List<postagem.Postagem>> fetchPostagem() async {
 void removeNullInString(String response){
   RegExp nullRemover = RegExp("null");
   if (nullRemover.hasMatch(response)){
-    //print(response.replaceAll(nullRemover, "' '"));
     response = response.replaceAll(nullRemover, "hello");
-  }
+    }
   }

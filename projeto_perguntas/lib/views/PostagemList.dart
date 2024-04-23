@@ -53,42 +53,11 @@ class _MyAppState extends State<MyApp> {
   State<PostagemList> createState() => PostagemListState();
 
   final List<postagem.Postagem> posts;
-
-
-  /*@override
-  Widget build(BuildContext context) {
-  return  ListView.builder(
-  padding: const EdgeInsets.all(8),
-  itemCount: posts.length,
-  itemBuilder: (context, index){
-    return Container(
-            height: 50,
-            child: Column(
-            children: [
-            Text(posts[index].content),
-              Row(children: [
-                ElevatedButton(
-                  onPressed: (){
-                    actionButton.updateLikeDislike('dislikes', posts[index].dislikes, posts[index].id);
-                  },
-                  child: const Text('dislikes'),
-                ),ElevatedButton(
-                  onPressed:(){
-                    //actionButton.updateLikeDislike('likes', posts[index].likes, posts[index].id);
-                  } ,
-                  child:Text('likes ${posts[index].likes}'),
-                ),
-              ])],
-            
-            ),
-    );
-  },
-  );
-  }*/
 }
 
 class PostagemListState extends State<PostagemList>{
 
+  late Future<List<postagem.Postagem>> likeFetch;
   //final List<postagem.Postagem> posts;
    void incrementLikes(int button ,int id){
     setState(() {
@@ -96,16 +65,15 @@ class PostagemListState extends State<PostagemList>{
     });
   }
 
-  int likeButton = 0;
 
   @override
   Widget build(BuildContext context) {
-  
+  late List<int> likeButtons = getLikesList(); 
+
   return  ListView.builder(
   padding: const EdgeInsets.all(8),
   itemCount: widget.posts.length,
   itemBuilder: (context, index){
-    likeButton = widget.posts[index].likes;
     return Container(
             height: 50,
             child: Column(
@@ -120,12 +88,14 @@ class PostagemListState extends State<PostagemList>{
                 ),ElevatedButton(
                   onPressed:(){
                     setState(() {
-                      likeButton++;
-                      actionButton.updateLikeDislike('likes', likeButton, widget.posts[index].id);
-                        });
+                      likeButtons[index]++;
+                      //incrementLike(, id)
+                      //actionButton.updateLikeDislike('likes', likeButton, widget.posts[index].id);
+                      actionButton.updateLikeDislike('likes', likeButtons[index], widget.posts[index].id);
+                      });
+                      
                   } ,
-                  //child:Text('likes ${widget.posts[index].likes}'),
-                  child:Text('likes ${likeButton}'),
+                  child:Text('like ${likeButtons[index]}'),
                 ),
               ])],
             
@@ -133,5 +103,13 @@ class PostagemListState extends State<PostagemList>{
     );
   },
   );
+  }
+
+  List<int> getLikesList(){
+    List<int> likesList = [];
+    for (int counter = 0; counter < widget.posts.length; counter++){
+      likesList.add(widget.posts[counter].likes);
+    }
+    return likesList;
   }
 }
