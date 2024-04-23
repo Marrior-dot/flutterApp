@@ -7,7 +7,8 @@ import 'package:projeto_perguntas/views/LoginPage.dart';
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
 
 
-void main() {
+
+void main() async {
   runApp(MyApp());
 }
 
@@ -24,10 +25,6 @@ class MyApp extends StatefulWidget /*StatelessWidget*/ {
   //State<MyApp> createState() => _MyHomePageState();
   State<MyApp> createState() => _MyAppState();
 
-  //@override
-  //Widget build(BuildContext context) {
-  // return MaterialApp(home: LoginPage());
-  //}
 }
 
 class _MyAppState extends State<MyApp> {
@@ -38,7 +35,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     futureFetch = fetch.fetchPostagem();
   }
- 
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +52,43 @@ class _MyAppState extends State<MyApp> {
             future: futureFetch,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return PostagemList.PostagemList(posts: snapshot.data!);
+                return ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index){
+                    fetchLike(snapshot.data![index].id);
+                    var likeButton = snapshot.data![index].likes;                    
+                    return Container(
+                      height: 50,
+                          child: Column(
+                          children: [
+                          Text(snapshot.data![index].content),
+                            Row(children: [
+                              ElevatedButton(
+                                onPressed: (){
+                                  updateLikeDislike('dislikes', snapshot.data![index].dislikes, snapshot.data![index].id);
+                                },
+                                child: const Text('dislikes'),
+                              ),ElevatedButton(
+                                onPressed:(){
+                                  setState(() {
+                                    likeButton = likeButton + 1;
+                                    updateLikeDislike('likes', likeButton,snapshot.data![index].id);
+                                    });
+
+                                } ,
+                                child:FutureBuilder<postagem.Postagem>(
+                                  future: fetchLike(snapshot.data![index].id),
+                                  builder: (context, snapshot){
+                                    return Text("likes ${snapshot.data!.likes}");
+                                  }
+                                )
+                ),
+              ])],
+            ),
+    );
+  },
+  );
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
@@ -69,61 +101,8 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
-/*
-class _MyHomePageState extends State<MyApp> {
-  final TextEditingController _controller = TextEditingController();
-  final _channel = WebSocketChannel.connect(
-    //Uri.parse('wss://echo.websocket.events'),
-    Uri.parse('http://localhost:8000/api/postagemlist/')
-  );
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Form(
-              child: TextFormField(
-                controller: _controller,
-                decoration: const InputDecoration(labelText: 'Send a message'),
-              ),
-            ),
-            const SizedBox(height: 24),
-            StreamBuilder(
-              stream: _channel.stream,
-              builder: (context, snapshot) {
-                return Text(snapshot.hasData ? '${snapshot.data}' : '');
-              },
-            )
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _sendMessage,
-        tooltip: 'Send message',
-        child: const Icon(Icons.send),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      _channel.sink.add(_controller.text);
-    }
-  }
-
-  @override
-  void dispose() {
-    _channel.sink.close();
-    _controller.dispose();
-    super.dispose();
+  convertFutureToint(Future<int> futureInt) async{
+    return await futureInt;
   }
 }
-*/

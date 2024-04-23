@@ -19,15 +19,30 @@ Future<postagem.Postagem> updateLikeDislike(
   );
   
   if (response.statusCode == 200) {
-    //print(response.body);
     removeNullInString(response.body);
-    //print(response.body);
     return postagem.Postagem.fromJson(
-        //jsonDecode(response.body) as Map<String, dynamic>);
         jsonDecode(response.body) as Map<String, dynamic>);
   } else {
     throw Exception('Failed to update album.');
   }
 }
+
+Future<postagem.Postagem> fetchLike(int id) async{
+  final response =
+      //ip de casa
+      //await http.get(Uri.parse('http://192.168.15.7:8000/api/postagemlist'));
+      //ip do estágio
+      //await http.get(Uri.parse('http://10.54.2.110:8000/home/postagemlist'));
+      //await http.get(Uri.parse('http://10.113.160.36:8000/home/postagemlist'));
+      await http.get(Uri.parse('http://localhost:8000/api/postagemdetail/${id}'));
+  if (response.statusCode == 200) { 
+    var postagemMap = postagem.Postagem.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    //print(postagemMap[0]["likes"]);
+    return postagemMap;
+  } else {
+    throw Exception('Failed to load album');
+  }
+}
+
 
 

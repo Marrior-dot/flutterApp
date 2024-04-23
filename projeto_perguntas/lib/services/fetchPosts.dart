@@ -17,7 +17,6 @@ Future<List<postagem.Postagem>> fetchPostagem() async {
   if (response.statusCode == 200) {
     var postagemMap =
         (jsonDecode(response.body) as List).cast<Map<String, dynamic>>(); 
-    print(postagemMap);
     
     /*for (var element in postagemMap) {
       if(element["arquivo"]){
