@@ -15,5 +15,4 @@ urlpatterns = [path("userHowTo/", usersOverview, name="users-overview"),
     path("postagemupdate/<int:pk>/", postagensUpdate, name="post-update"),
     path("postagemdelete/<int:pk>/", postagensDelete, name="post-delete"),
     path("comentariolist/", comentariosList, name="comment-list"),
-    path("comentariocreate/<int:pk>", comentariosPosts, name="comment-create"),
-    path("test_websocket/", index, name="websocket_teste")]
+    path("comentariocreate/<int:pk>", comentariosPosts, name="comment-create")]

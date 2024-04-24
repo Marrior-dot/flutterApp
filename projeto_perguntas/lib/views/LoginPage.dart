@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/views/RegisterPage.dart';
 import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/services/userLogin.dart';
+import 'package:projeto_perguntas/views/PostagemList.dart';
 import 'package:projeto_perguntas/main.dart';
 
 class LoginPage extends State<MyApp> {
   final userNameController = TextEditingController();
   final passWordController = TextEditingController();
   late Future<User> usuarioLogado;
+  int? userId;
 
   @override
   void dispose() {
@@ -21,6 +23,7 @@ class LoginPage extends State<MyApp> {
     return MaterialApp(
         routes: {
           "/registrar": (context) => RegisterPage(),
+          "/user/${userId}/feed": (context) => PostagemList()
         },
         home: Scaffold(
           appBar: AppBar(
@@ -52,16 +55,18 @@ class LoginPage extends State<MyApp> {
                   ElevatedButton(
                       child: Text("Login"),
                       onPressed: () {
-                        userLogin(userNameController.text.toString(),
-                            passWordController.text.toString());
+                      //if  (userLogin(userNameController.text.toString(),passWordController.text.toString()));
+                      print(userLogin(userNameController.text.toString(),passWordController.text.toString()));
+                      
+                      //Navigator.pushNamed(context, )
                       }),
                   Builder(
                       builder: (context) => Center(
-                          /* child: TextButton(
+                           child: TextButton(
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/registrar');
                                 },
-                                child: Text("Não tem Cadastro? Clique aqui")),*/
+                                child: Text("Não tem Cadastro? Clique aqui")),
                           ))
                 ],
               ),

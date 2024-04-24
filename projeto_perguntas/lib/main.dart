@@ -18,12 +18,10 @@ class MyApp extends StatefulWidget /*StatelessWidget*/ {
     super.key,
   });
 
-  final String title="Web Socket Demo";
-
   @override
-  //State<MyApp> createState() => LoginPage();
+  State<MyApp> createState() => LoginPage();
   //State<MyApp> createState() => _MyHomePageState();
-  State<MyApp> createState() => _MyAppState();
+  //State<MyApp> createState() => _MyAppState();
 
 }
 
@@ -100,9 +98,5 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
-  }
-
-  convertFutureToint(Future<int> futureInt) async{
-    return await futureInt;
   }
 }

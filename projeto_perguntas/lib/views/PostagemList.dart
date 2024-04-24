@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
-import 'package:projeto_perguntas/services/likeDislikeButton.dart' as actionButton;
+import 'package:projeto_perguntas/services/likeDislikeButton.dart';
 import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
 import 'package:projeto_perguntas/main.dart';
 import 'dart:async';
 import 'dart:convert';
-/*
-class _MyAppState extends State<MyApp> {
-  late Future<List<postagem.Postagem>> futureFetch;
+
+  class PostagemList extends StatefulWidget{
+  const PostagemList({super.key});
+
+  State<PostagemList> createState() => PostagemListState();
+
+}
+
+class PostagemListState extends State<PostagemList>{
+   late Future<List<postagem.Postagem>> futureFetch;
 
   @override
   void initState() {
@@ -32,10 +39,46 @@ class _MyAppState extends State<MyApp> {
             future: futureFetch,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return PostagemList(posts: snapshot.data!);
+                return ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index){
+                    var likeButton = snapshot.data![index].likes;                    
+                    return Container(
+                      height: 50,
+                          child: Column(
+                          children: [
+                          Text(snapshot.data![index].content),
+                            Row(children: [
+                              ElevatedButton(
+                                onPressed: (){
+                                  updateLikeDislike('dislikes', snapshot.data![index].dislikes, snapshot.data![index].id);
+                                },
+                                child: const Text('dislikes'),
+                              ),ElevatedButton(
+                                onPressed:(){
+                                  setState(() {
+                                    likeButton = likeButton + 1;
+                                    updateLikeDislike('likes', likeButton,snapshot.data![index].id);
+                                    });
+
+                                } ,
+                                child:FutureBuilder<postagem.Postagem>(
+                                  future: fetchLike(snapshot.data![index].id),
+                                  builder: (context, snapshot){
+                                    return Text("likes ${snapshot.data!.likes}");
+                                  }
+                                )
+                ),
+              ])],
+            ),
+    );
+  },
+  );
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
+
               // By default, show a loading spinner.
               return const CircularProgressIndicator();
             },
@@ -44,19 +87,7 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
-*/
-//class PostagemList extends  StatelessWidget {
-  class PostagemList extends StatefulWidget{
-  const PostagemList({super.key, required this.posts});
-
-  State<PostagemList> createState() => PostagemListState();
-
-  final List<postagem.Postagem> posts;
-}
-
-class PostagemListState extends State<PostagemList>{
-
+/*
   late Future<List<postagem.Postagem>> likeFetch;
   //final List<postagem.Postagem> posts;
    void incrementLikes(int button ,int id){
@@ -68,7 +99,6 @@ class PostagemListState extends State<PostagemList>{
 
   @override
   Widget build(BuildContext context) {
-  late List<int> likeButtons = getLikesList(); 
 
   return  ListView.builder(
   padding: const EdgeInsets.all(8),
@@ -102,14 +132,5 @@ class PostagemListState extends State<PostagemList>{
             ),
     );
   },
-  );
+  );*/
   }
-
-  List<int> getLikesList(){
-    List<int> likesList = [];
-    for (int counter = 0; counter < widget.posts.length; counter++){
-      likesList.add(widget.posts[counter].likes);
-    }
-    return likesList;
-  }
-}

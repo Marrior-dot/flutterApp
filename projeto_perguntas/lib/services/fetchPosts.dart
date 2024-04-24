@@ -18,11 +18,6 @@ Future<List<postagem.Postagem>> fetchPostagem() async {
     var postagemMap =
         (jsonDecode(response.body) as List).cast<Map<String, dynamic>>(); 
     
-    /*for (var element in postagemMap) {
-      if(element["arquivo"]){
-        print(element["arquivo"]);
-      }  
-    }*/
     var ppost = postagemMap
         .map<postagem.Postagem>((json) => postagem.Postagem.fromJson(json))
         .toList();
