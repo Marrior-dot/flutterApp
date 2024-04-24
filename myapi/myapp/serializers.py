@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields=["id","name","password","email","username"]
+        fields=["name","password","email","username"]
 
        # validators = [
         #    UniqueTogetherValidator(
