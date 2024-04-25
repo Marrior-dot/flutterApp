@@ -19,7 +19,7 @@ def usersOverview(req):
     return Response(api_urls)
 
 @api_view(["GET"])
-def userList(req,pk):
+def userList(req):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)

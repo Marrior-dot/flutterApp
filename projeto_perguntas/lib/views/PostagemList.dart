@@ -110,6 +110,7 @@ class PostagemListState extends State<PostagemList>{
             children: [
             Text(widget.posts[index].content),
               Row(children: [
+                          //Navigator.pushNamed(context,'/user/${userName}/feed');
                 ElevatedButton(
                   onPressed: (){
                     actionButton.updateLikeDislike('dislikes', widget.posts[index].dislikes, widget.posts[index].id);

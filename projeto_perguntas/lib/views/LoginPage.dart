@@ -9,7 +9,7 @@ class LoginPage extends State<MyApp> {
   final userNameController = TextEditingController();
   final passWordController = TextEditingController();
   late Future<User> usuarioLogado;
-  int? userId;
+  String? userName;
 
   @override
   void dispose() {
@@ -23,7 +23,7 @@ class LoginPage extends State<MyApp> {
     return MaterialApp(
         routes: {
           "/registrar": (context) => RegisterPage(),
-          "/user/${userId}/feed": (context) => PostagemList()
+          "/user/${userName}/feed": (context) => PostagemList()
         },
         home: Scaffold(
           appBar: AppBar(
@@ -52,14 +52,17 @@ class LoginPage extends State<MyApp> {
                     controller: passWordController,
                   ),
                   SizedBox(height: 20.0),
-                  ElevatedButton(
-                      child: Text("Login"),
-                      onPressed: () {
-                      //if  (userLogin(userNameController.text.toString(),passWordController.text.toString()));
-                      print(userLogin(userNameController.text.toString(),passWordController.text.toString()));
-                      
-                      //Navigator.pushNamed(context, )
-                      }),
+                  Builder (builder: (context) => Center(
+                        child: ElevatedButton(
+                          child: Text("Login"),
+                          onPressed: () {
+                          userLogin(userNameController.text.toString(),passWordController.text.toString());    
+                          userName = userNameController.text.toString();
+                          //Navigator.of(context).pushNamed('/user/${userName}/feed');
+                          Navigator.push(context, new MaterialPageRoute(
+                            builder: (context) => new PostagemList()));
+                          }),
+                  )) ,                      
                   Builder(
                       builder: (context) => Center(
                            child: TextButton(
