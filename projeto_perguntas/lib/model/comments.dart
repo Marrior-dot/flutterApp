@@ -13,7 +13,6 @@ class CommentsPostagem {
   CommentsPostagem.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int,
         usuario = json['usuario'] as user.User,
-        //arquivo = json['arquivo'] as File,
         posts = json['posts'] as postagem.Postagem,
         texto = json['texto'] as String;
 

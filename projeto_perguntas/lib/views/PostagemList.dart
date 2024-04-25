@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
-import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
+import 'package:projeto_perguntas/services/fetchPosts.dart';
+import 'package:projeto_perguntas/services/fetchComments.dart';
 import 'package:projeto_perguntas/main.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -16,11 +17,12 @@ import 'dart:convert';
 
 class PostagemListState extends State<PostagemList>{
    late Future<List<postagem.Postagem>> futureFetch;
+   var comentarioController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    futureFetch = fetch.fetchPostagem();
+    futureFetch = fetchPostagem();
   }
 
   @override
@@ -70,7 +72,17 @@ class PostagemListState extends State<PostagemList>{
                                   }
                                 )
                 ),
-              ])],
+              ]),
+              FutureBuilder(future: fetchComments(), builder: (context, snapshot){
+                
+              })
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: "Escreva um comentário"
+
+                ),
+                controller: comentarioController,
+              )],
             ),
     );
   },

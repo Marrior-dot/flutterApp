@@ -100,19 +100,6 @@ def postagensUpdate(req, pk):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-'''
-@api_view(["PATCH"])
-def postagensUpdate(req, pk):
-    post = Postagem.objects.get(id=pk)
-    serializer = PostagemSerializer(instance=post, data=req.data)
-
-    if serializer.is_valid():
-        serializer.save()
-
-    return Response(serializer.data)
-'''
-
 @api_view(["DELETE"])
 def postagensDelete(req, pk):
     post = Postagem.objects.get(id=pk)
