@@ -73,16 +73,16 @@ class PostagemListState extends State<PostagemList>{
                                 )
                 ),
               ]),
-              FutureBuilder(future: fetchComments(), builder: (context, snapshot){
+              /*FutureBuilder(future: fetchComments(), builder: (context, snapshot){
                 
-              })
-              TextFormField(
+              })*/
+              /*TextFormField(
                 decoration: InputDecoration(
                   labelText: "Escreva um comentário"
 
                 ),
                 controller: comentarioController,
-              )],
+              )*/],
             ),
     );
   },
