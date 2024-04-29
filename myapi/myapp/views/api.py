@@ -110,8 +110,8 @@ def postagensDelete(req, pk):
 #-----Comentários------
 @api_view(["POST"])
 def comentariosPosts(req,pk):
-    posts = Postagem.objects.get(id=pk)
-    serializer = CommentsPostagemSerializer(instance=posts,data=req.data)
+    comments = CommentsPostagem.objects.get(id=pk)
+    serializer = CommentsPostagemSerializer(instance=comments,data=req.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)

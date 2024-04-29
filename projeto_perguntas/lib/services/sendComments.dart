@@ -3,9 +3,11 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-Future<comments.CommentsPostagem> createComment(String texto) async {
+Future<comments.CommentsPostagem> createComment(String texto, int id) async {
   final response = await http.post(
-    Uri.parse('http://10.54.2.110:8000/api/comentariocreate'),
+    //Uri.parse('http://10.54.2.110:8000/api/comentariocreate'),
+    //Uri.parse('http://localhost:8000/api/comentariocreate/${usuario}/'),
+    Uri.parse('http://localhost:8000/api/postagemdetail/${id}/comentarioCreate/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

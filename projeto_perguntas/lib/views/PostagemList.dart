@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
+import 'package:projeto_perguntas/model/comments.dart';
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
 import 'package:projeto_perguntas/services/fetchPosts.dart';
 import 'package:projeto_perguntas/services/fetchComments.dart';
@@ -8,16 +9,16 @@ import 'package:projeto_perguntas/main.dart';
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:projeto_perguntas/services/sendComments.dart';
+
   class PostagemList extends StatefulWidget{
   const PostagemList({super.key});
 
   State<PostagemList> createState() => PostagemListState();
-
 }
 
 class PostagemListState extends State<PostagemList>{
    late Future<List<postagem.Postagem>> futureFetch;
-   var comentarioController = TextEditingController();
 
   @override
   void initState() {
@@ -45,9 +46,10 @@ class PostagemListState extends State<PostagemList>{
                   padding: const EdgeInsets.all(8),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index){
-                    var likeButton = snapshot.data![index].likes;                    
+                    var likeButton = snapshot.data![index].likes;
+                    var idForComment = snapshot.data![index].id;
                     return Container(
-                      height: 50,
+                      height: 130,
                           child: Column(
                           children: [
                           Text(snapshot.data![index].content),
@@ -73,16 +75,46 @@ class PostagemListState extends State<PostagemList>{
                                 )
                 ),
               ]),
-              /*FutureBuilder(future: fetchComments(), builder: (context, snapshot){
-                
-              })*/
-              /*TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Escreva um comentário"
-
-                ),
-                controller: comentarioController,
-              )*/],
+              FutureBuilder<List<CommentsPostagem>>(
+                future: fetchComments(snapshot.data![index].id),
+                builder: (context, snapshot){
+                  var comentarioController = TextEditingController();
+                  if(snapshot.hasData){
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index){
+                          return Container(
+                            child: Column(
+                              children: [
+                                Text(snapshot.data![index].texto),
+                                TextFormField(
+                                  decoration: InputDecoration(labelText: 'Envie um Comentário',
+                                  prefixIcon: Icon(Icons.comment),
+                                  ),
+                                  controller: comentarioController),
+                                ElevatedButton(
+                                  onPressed:(){
+                                    setState(() {
+                                      createComment(comentarioController.toString(), idForComment);
+                                    });
+                                    } , 
+                                  child: const Text("Enviar comentário"))
+                              ]));
+                  });
+                }
+                //else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                //}
+                //return const CircularProgressIndicator();
+              }),
+              //TextFormField(
+              //  decoration: InputDecoration(
+              //    labelText: "Escreva um comentário"
+//
+              //  ),
+              //  controller: comentarioController,
+              //)
+              ],
             ),
     );
   },
