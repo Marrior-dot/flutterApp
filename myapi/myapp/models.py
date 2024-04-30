@@ -11,6 +11,10 @@ class User(models.Model):
 
     class Meta:
         ordering = ['email']
+
+    def __str__(self) -> str:
+        return self.name
+    
 class Postagem(models.Model):
     #isTextQuestion = models.BooleanField()
     arquivo = models.FileField(blank=True, default="")
@@ -20,6 +24,9 @@ class Postagem(models.Model):
 
     class Meta:
         ordering = ['content']
+    
+    def __str__(self) -> str:
+        return self.content
 
 class CommentsPostagem(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
@@ -28,4 +35,6 @@ class CommentsPostagem(models.Model):
 
     class Meta:
         ordering = ['postagem']
+
+    
 
