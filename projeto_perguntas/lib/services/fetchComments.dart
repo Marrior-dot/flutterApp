@@ -6,7 +6,7 @@ import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:projeto_perguntas/model/comments.dart';
 
 Future<List<CommentsPostagem>> fetchComments(
-    Postagem postagem /*int id*/) async {
+    Postagem postagem) async {
   final response =
       //ip de casa
       //await http.get(Uri.parse('http://192.168.15.7:8000/api/postagemlist'));
@@ -17,7 +17,7 @@ Future<List<CommentsPostagem>> fetchComments(
       //await http.get(Uri.parse('http://localhost:8000/api/postagemdetail/${id}/comentarioList/'));
       await http.get(
           Uri.parse('http://localhost:8000/api/comentarioList/${postagem}/'));
-  //print(response.statusCode);
+          //Uri.parse('http://localhost:8000/api/comentarioList/'));
 
   if (response.statusCode == 200) {
     var commentsMap =

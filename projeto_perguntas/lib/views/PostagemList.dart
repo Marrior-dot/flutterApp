@@ -43,11 +43,13 @@ class PostagemListState extends State<PostagemList> {
             future: futureFetch,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                var comentarioController = TextEditingController();
                 return ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     var likeButton = snapshot.data![index].likes;
+                    var postagem = snapshot.data![index];
                     return Container(
                       height: 130,
                       child: Column(
@@ -81,38 +83,54 @@ class PostagemListState extends State<PostagemList> {
                                           "likes ${snapshot.data!.likes}");
                                     })),
                           ]),
-
+                                TextFormField(
+                                              decoration: InputDecoration(
+                                                labelText:
+                                                    'Envie um Comentário',
+                                                prefixIcon: Icon(Icons.comment),
+                                              ),
+                                              controller: TextEditingController()),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                print(comentarioController);
+                                                setState(() {
+                                                  createComment(
+                                                    comentarioController.text,
+                                                    widget.user, postagem
+                                                  );
+                                                });
+                                              },
+                                              child: const Text(
+                                                  "Enviar comentário")),
                           FutureBuilder<List<CommentsPostagem>>(
-                              future: fetchComments(snapshot.data![index]),
+                              future: fetchComments(postagem),
                               builder: (context, snapshot) {
-                                var comentarioController =
-                                    TextEditingController();
                                 if (snapshot.hasData) {
                                   return ListView.builder(
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
                                         return Container(
                                             child: Column(children: [
-                                          Text(snapshot.data![index].texto),
-                                          TextFormField(
-                                              decoration: InputDecoration(
-                                                labelText:
-                                                    'Envie um Comentário',
-                                                prefixIcon: Icon(Icons.comment),
-                                              ),
-                                              controller: comentarioController),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  createComment(
-                                                    comentarioController
-                                                        .toString(),
-                                                    widget.user,
-                                                  );
-                                                });
-                                              },
-                                              child: const Text(
-                                                  "Enviar comentário"))
+                                          Text(snapshot.data![index].text),
+                                          //TextFormField(
+                                          //    decoration: InputDecoration(
+                                          //      labelText:
+                                          //          'Envie um Comentário',
+                                          //      prefixIcon: Icon(Icons.comment),
+                                          //    ),
+                                          //    controller: comentarioController),
+                                          //ElevatedButton(
+                                          //    onPressed: () {
+                                          //      setState(() {
+                                          //        createComment(
+                                          //          comentarioController
+                                          //              .toString(),
+                                          //          widget.user, postagem
+                                          //        );
+                                          //      });
+                                          //    },
+                                          //    child: const Text(
+                                          //        "Enviar comentário"))
                                         ]));
                                       });
                                 }
@@ -120,14 +138,7 @@ class PostagemListState extends State<PostagemList> {
                                 return Text('${snapshot.error}');
                                 //}
                                 //return const CircularProgressIndicator();
-                              }),
-                          //TextFormField(
-                          //  decoration: InputDecoration(
-                          //    labelText: "Escreva um comentário"
-//
-                          //  ),
-                          //  controller: comentarioController,
-                          //)
+                              })
                         ],
                       ),
                     );

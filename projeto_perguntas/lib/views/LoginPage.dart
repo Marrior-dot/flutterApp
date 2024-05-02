@@ -59,17 +59,25 @@ class LoginPage extends State<MyApp> {
                                 onPressed: () {
                                   userLogin(userNameController.text.toString(),
                                       passWordController.text.toString());
-                                  //userName = userNameController.text.toString();
+                                  //Navigator.push(
+                                  //    context,
+                                  //     MaterialPageRoute(
+                                  //        builder: (context) =>
+                                  //             PostagemList(
+                                  //                user: userLogin(
+                                  //                    userNameController.text
+                                  //                        .toString(),
+                                  //                    passWordController.text
+                                  //                        .toString()) as User)));
                                   Navigator.push(
                                       context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              new PostagemList(
-                                                  user: userLogin(
-                                                      userNameController.text
-                                                          .toString(),
-                                                      passWordController.text
-                                                          .toString()))));
+                                       MaterialPageRoute(
+                                          builder: (BuildContext context) => 
+                                          FutureBuilder(future: userLogin(userNameController.text.toString(), passWordController.text.toString()), 
+                                            builder: (BuildContext context, AsyncSnapshot snapshot) =>
+                                            PostagemList(
+                                                  user: snapshot.data! ) )
+                                               ));
                                 }),
                           )),
                   Builder(

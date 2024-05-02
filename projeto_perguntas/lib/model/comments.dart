@@ -1,25 +1,24 @@
 import 'dart:io';
-import 'package:projeto_perguntas/model/user.dart' as user;
-import 'package:projeto_perguntas/model/postagem.dart' as postagem;
+import 'package:projeto_perguntas/model/user.dart';
+import 'package:projeto_perguntas/model/postagem.dart';
 
 class CommentsPostagem {
-  final int id;
-  final user.User usuario;
-  final postagem.Postagem posts;
-  final String texto;
+  //final int id;
+  final User user;
+  final Postagem postagem;
+  final String text;
 
-  CommentsPostagem(this.id, this.usuario, this.posts ,this.texto);
+  CommentsPostagem(this.user, this.postagem ,this.text);
 
   CommentsPostagem.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int,
-        usuario = json['usuario'] as user.User,
-        posts = json['posts'] as postagem.Postagem,
-        texto = json['texto'] as String;
+      : user = json['user'] as User,
+        postagem = json['postagem'] as Postagem,
+        text = json['text'] as String;
 
   Map<String, dynamic> toJson() => {
-        'id':id,
-        'usuario': usuario,
-        'posts': posts,
-        'texto': texto
+        //'id':id,
+        'user': user,
+        'postagem': postagem,
+        'text': text
       };
 }
