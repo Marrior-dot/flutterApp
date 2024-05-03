@@ -89,7 +89,7 @@ class PostagemListState extends State<PostagemList> {
                                                     'Envie um Comentário',
                                                 prefixIcon: Icon(Icons.comment),
                                               ),
-                                              controller: TextEditingController()),
+                                              controller: comentarioController),
                                           ElevatedButton(
                                               onPressed: () {
                                                 print(comentarioController);

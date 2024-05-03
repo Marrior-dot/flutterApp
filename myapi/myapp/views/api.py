@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from myapp.serializers import UserSerializer, PostagemSerializer, CommentsPostagemSerializer 
-
+from django.db.utils import IntegrityError
 from myapp.models import User, Postagem, CommentsPostagem
 
 #-----User------
@@ -110,9 +110,14 @@ def postagensDelete(req, pk):
 @api_view(["POST"])
 def comentariosPosts(req):
     serializer = CommentsPostagemSerializer(data=req.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
+    #if serializer.initial_data["postagem"]["arquivo"] == None:
+    #    serializer.initial_data["postagem"]["arquivo"] = ""
+    try: 
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+    except IntegrityError as e:
+        print("Erro:" + "{}".format(e))
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])

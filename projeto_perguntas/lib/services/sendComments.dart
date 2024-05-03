@@ -13,7 +13,7 @@ Future<CommentsPostagem> createComment(
   final response = await http.post(
     //Uri.parse('http://10.54.2.110:8000/api/comentariocreate'),
     //Uri.parse('http://localhost:8000/api/comentariocreate/${usuario}/'),
-    Uri.parse('http://localhost:8000/api/comentarioCreate/'),
+    Uri.parse('http://localhost:8000/api/comentariocreate/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
