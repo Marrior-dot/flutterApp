@@ -14,7 +14,7 @@ urlpatterns = [path("userHowTo/", usersOverview, name="users-overview"),
     path("postagemcreate/", postagensCreate, name="post-create"),
     path("postagemupdate/<int:pk>/", postagensUpdate, name="post-update"),
     path("postagemdelete/<int:pk>/", postagensDelete, name="post-delete"),
-    path("comentarioList/<postagem>", comentariosListPostagem, name="coment-list-postagem"),
-    path("comentarioList/", comentariosList, name="comment-list"),
-    path("comentarioCreate/", comentariosPosts, name="comment-create")
+    path("comentariolist/<postagem>", comentariosListPostagem, name="coment-list-postagem"),
+    path("comentariolist/", comentariosList, name="comment-list"),
+    path("comentariocreate/", comentariosPosts, name="comment-create")
     ]
