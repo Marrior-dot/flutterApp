@@ -151,4 +151,3 @@ LOGGING = {
     },
 }
 
-#settings.configure(DEBUG=True)

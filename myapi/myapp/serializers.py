@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 from .models import User, Postagem, CommentsPostagem
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,9 +12,8 @@ class PostagemSerializer(serializers.ModelSerializer):
         fields=["id","content","arquivo","likes","dislikes"]
         
 class CommentsPostagemSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
-    postagem = serializers.PrimaryKeyRelatedField(read_only=True) #PostagemSerializer()
+    user = UserSerializer(read_only=True) #serializers.PrimaryKeyRelatedField(read_only=True)
+    postagem = PostagemSerializer(read_only=True) #serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model=CommentsPostagem
         fields=["id","user","postagem","text"]
-        #fields=["user","postagem","text"]

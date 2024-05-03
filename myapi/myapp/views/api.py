@@ -109,16 +109,8 @@ def postagensDelete(req, pk):
 #-----Comentários------
 @api_view(["POST"])
 def comentariosPosts(req):
-    serializer = CommentsPostagemSerializer(data=req.data)
-    #if serializer.initial_data["postagem"]["arquivo"] == None:
-    #    serializer.initial_data["postagem"]["arquivo"] = ""
-    try: 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-    except IntegrityError as e:
-        print("Erro:" + "{}".format(e))
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = CommentsPostagemSerializer(req.data)
+    return Response(serializer.data)
 
 @api_view(["GET"])
 def comentariosList(req):

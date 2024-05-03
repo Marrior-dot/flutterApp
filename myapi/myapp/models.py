@@ -34,3 +34,6 @@ class CommentsPostagem(models.Model):
 
     class Meta:
         ordering = ['postagem']
+    
+    def __str__(self) -> str:
+        return self.text
