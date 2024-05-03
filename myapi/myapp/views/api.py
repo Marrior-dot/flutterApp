@@ -110,7 +110,7 @@ def postagensDelete(req, pk):
 @api_view(["POST"])
 def comentariosPosts(req):
     serializer = CommentsPostagemSerializer(req.data)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(["GET"])
 def comentariosList(req):

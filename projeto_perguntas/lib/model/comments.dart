@@ -8,17 +8,13 @@ class CommentsPostagem {
   final Postagem postagem;
   final String text;
 
-  CommentsPostagem(this.user, this.postagem ,this.text);
+  CommentsPostagem(this.user, this.postagem, this.text);
 
   CommentsPostagem.fromJson(Map<String, dynamic> json)
       : user = json['user'] as User,
         postagem = json['postagem'] as Postagem,
         text = json['text'] as String;
 
-  Map<String, dynamic> toJson() => {
-        //'id':id,
-        'user': user,
-        'postagem': postagem,
-        'text': text
-      };
+  Map<String, dynamic> toJson() =>
+      {'user': user, 'postagem': postagem, 'text': text};
 }

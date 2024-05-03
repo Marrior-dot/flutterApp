@@ -7,9 +7,6 @@ import 'dart:convert';
 
 Future<CommentsPostagem> createComment(
     String text, User user, Postagem postagem) async {
-      //print(text);
-      print(user);
-      print(postagem);
   final response = await http.post(
     //Uri.parse('http://10.54.2.110:8000/api/comentariocreate'),
     //Uri.parse('http://localhost:8000/api/comentariocreate/${usuario}/'),
