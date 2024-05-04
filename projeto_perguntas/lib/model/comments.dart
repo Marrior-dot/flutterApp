@@ -1,9 +1,23 @@
 import 'dart:io';
 import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/model/postagem.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'commentpostagem.g.dart';
 
+@JsonSerializable()
 class CommentsPostagem {
-  //final int id;
+  CommentsPostagem(this.user, this.postagem, this.text);
+
+  User user;
+  Postagem postagem;
+  String text;
+
+  factory CommentsPostagem.fromJson(Map<String, dynamic> json) =>
+      _$CommentsPostagemFromJson(json);
+  Map<String, dynamic> toJson() => _$CommentsPostagemToJson(this);
+}
+/*
+class CommentsPostagem {
   final User user;
   final Postagem postagem;
   final String text;
@@ -17,4 +31,4 @@ class CommentsPostagem {
 
   Map<String, dynamic> toJson() =>
       {'user': user, 'postagem': postagem, 'text': text};
-}
+}*/
