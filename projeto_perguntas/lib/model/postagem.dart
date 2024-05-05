@@ -1,28 +1,26 @@
 import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
 import 'dart:io';
-part 'postagem.g.dart';
 
-class MyJsonConverter extends JsonConverter<File?, Map<String, File?>> {
-  File? arquivo;
+//part 'postagem.g.dart';
 
-  MyJsonConverter(this.arquivo);
-
-  @override
-  MyJsonConverter.fromJson(Map<String, dynamic> json)
-      : arquivo = json['arquivo'] as File?;
-
-  @override
-  String? toJson(DateTime? json) => json?.toIso8601String();
-}
+//Classe usando JsonSerializable
 
 @JsonSerializable()
 class Postagem {
   Postagem(this.id, this.arquivo, this.content, this.likes, this.dislikes);
 
+  String fileToJson() => jsonEncode(<String, File?>{"arquivo": arquivo});
+
+  File? fileFromJson(String json) {
+    Map<String, File?> jsonDecoded = jsonDecode(json);
+    return jsonDecoded["arquivo"];
+  }
+
+  Function? ffj = fileFromJson();
+
   int id;
-  @MyJsonConverter()
+  //@JsonKey(fromJson: ffj, toJson: )
   File? arquivo;
   String content;
   int likes;
@@ -30,12 +28,20 @@ class Postagem {
 
   factory Postagem.fromJson(Map<String, dynamic> json) =>
       _$PostagemFromJson(json);
-  Map<String, dynamic> toJson() => _$PostagemFromJson(this);
+  Map<String, dynamic> toJson() => _$PostagemToJson(this);
 
-  //final Function?  fromJsonFile(){
-  //return json.encode(arquivo);
+  //String fileToJson() => jsonEncode(<String, File?>{"arquivo": arquivo});
+  //Function? ftj = fileToJson();
+//
+  //File? fileFromJson(String json) {
+  //  Map<String, File?> jsonDecoded = jsonDecode(json);
+  //  return jsonDecoded["arquivo"];
   //}
+//
+  //Function? ffj = fileFromJson();
 }
+
+// Classe postagem original
 /*class Postagem {
   final int id;
   final File? arquivo;
