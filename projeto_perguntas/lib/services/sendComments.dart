@@ -21,7 +21,8 @@ Future<CommentsPostagem> createComment(
       "text": text,
     }),
   );
-  print(response.statusCode);
+  //print(user);
+  //print(postagem);
   if (response.statusCode == 201) {
   
     // If the server did return a 201 CREATED response,

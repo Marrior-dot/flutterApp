@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'user.g.dart';
 
-@JsonSerializable()
-class User {
+//@JsonSerializable()
+/*class User {
   User(this.name, this.password, this.email, this.username);
 
   String name;
@@ -13,8 +13,8 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
-}
-/*
+}*/
+
 class User {
   final String name;
   final String password;
@@ -36,4 +36,3 @@ class User {
         'username': username
       }; //=> throw const FormatException('Falha ao carregar dados de usuários');
 }
-*/

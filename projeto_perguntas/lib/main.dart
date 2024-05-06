@@ -10,7 +10,7 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget /*StatelessWidget*/ {
+class MyApp extends StatefulWidget{
 
   const MyApp({
     super.key,
@@ -23,6 +23,7 @@ class MyApp extends StatefulWidget /*StatelessWidget*/ {
 
 }
 
+/*
 class _MyAppState extends State<MyApp> {
   late Future<List<postagem.Postagem>> futureFetch;
 
@@ -97,4 +98,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
+}*/

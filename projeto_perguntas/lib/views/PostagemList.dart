@@ -60,7 +60,8 @@ class PostagemListState extends State<PostagemList> {
                                 updateLikeDislike(
                                     'dislikes',
                                     snapshot.data![index].dislikes,
-                                    snapshot.data![index].id);
+                                    snapshot.data![index].id,
+                                    snapshot.data![index].content);
                               },
                               child: const Text('dislikes'),
                             ),
@@ -71,7 +72,7 @@ class PostagemListState extends State<PostagemList> {
                                   setState(() {
                                     likeButton = likeButton + 1;
                                     updateLikeDislike('likes', likeButton,
-                                        snapshot.data![index].id);
+                                        snapshot.data![index].id, snapshot.data![index].content);
                                   });
                                 },
                                 child: FutureBuilder<Postagem>(
