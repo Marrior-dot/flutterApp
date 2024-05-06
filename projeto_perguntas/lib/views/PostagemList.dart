@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:projeto_perguntas/model/comments.dart';
 import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
 import 'package:projeto_perguntas/services/fetchPosts.dart';
 import 'package:projeto_perguntas/services/fetchComments.dart';
-import 'package:projeto_perguntas/main.dart';
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:projeto_perguntas/services/sendComments.dart';
 
 class PostagemList extends StatefulWidget {
   final User user;
   const PostagemList({super.key, required this.user});
+  @override
   State<PostagemList> createState() => PostagemListState();
 }
 
@@ -49,8 +47,8 @@ class PostagemListState extends State<PostagemList> {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     var likeButton = snapshot.data![index].likes;
-                    var postagem = snapshot.data![index];
-                    return Container(
+                    late var postagem = snapshot.data![index];
+                    return SizedBox(
                       height: 130,
                       child: Column(
                         children: [
@@ -84,7 +82,7 @@ class PostagemListState extends State<PostagemList> {
                                     })),
                           ]),
                                 TextFormField(
-                                              decoration: InputDecoration(
+                                              decoration: const InputDecoration(
                                                 labelText:
                                                     'Envie um Comentário',
                                                 prefixIcon: Icon(Icons.comment),
@@ -92,7 +90,6 @@ class PostagemListState extends State<PostagemList> {
                                               controller: comentarioController),
                                           ElevatedButton(
                                               onPressed: () {
-                                                print(comentarioController);
                                                 setState(() {
                                                   createComment(
                                                     comentarioController.text,

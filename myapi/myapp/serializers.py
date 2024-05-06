@@ -12,8 +12,11 @@ class PostagemSerializer(serializers.ModelSerializer):
         fields=["id","content","arquivo","likes","dislikes"]
         
 class CommentsPostagemSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True) #serializers.PrimaryKeyRelatedField(read_only=True)
-    postagem = PostagemSerializer(read_only=True) #serializers.PrimaryKeyRelatedField(read_only=True)
+    #user = UserSerializer(many=True, read_only=True) #serializers.PrimaryKeyRelatedField(read_only=True)
+    #postagem = PostagemSerializer(many=True, read_only=True) #serializers.PrimaryKeyRelatedField(read_only=True)
+    #class Meta:
+    #    model=CommentsPostagem
+    #    fields=["id","user","postagem","text"]
     class Meta:
         model=CommentsPostagem
-        fields=["id","user","postagem","text"]
+        fields=["text"]

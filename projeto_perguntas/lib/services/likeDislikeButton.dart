@@ -9,7 +9,7 @@ Future<postagem.Postagem> updateLikeDislike(
   final response = await http.put(
     //Uri.parse('http://192.168.15.7:8000/api/postagemupdate/${id}')
     //Uri.parse('http://10.54.2.110:8000/api/postagemupdate/${id}/' ),
-    Uri.parse('http://localhost:8000/api/postagemupdate/${id}/'),
+    Uri.parse('http://localhost:8000/api/postagemupdate/$id/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -34,7 +34,7 @@ Future<postagem.Postagem> fetchLike(int id) async{
       //ip do estágio
       //await http.get(Uri.parse('http://10.54.2.110:8000/home/postagemlist'));
       //await http.get(Uri.parse('http://10.113.160.36:8000/home/postagemlist'));
-      await http.get(Uri.parse('http://localhost:8000/api/postagemdetail/${id}'));
+      await http.get(Uri.parse('http://localhost:8000/api/postagemdetail/$id'));
   if (response.statusCode == 200) { 
     var postagemMap = postagem.Postagem.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     //print(postagemMap[0]["likes"]);

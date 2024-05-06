@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:projeto_perguntas/model/comments.dart';
@@ -16,7 +15,7 @@ Future<List<CommentsPostagem>> fetchComments(
       //await http.get(Uri.parse('http://localhost:8000/api/postagemlist/'));
       //await http.get(Uri.parse('http://localhost:8000/api/postagemdetail/${id}/comentarioList/'));
       await http.get(
-          Uri.parse('http://localhost:8000/api/comentarioList/${postagem}/'));
+          Uri.parse('http://localhost:8000/api/comentarioList/$postagem/'));
           //Uri.parse('http://localhost:8000/api/comentarioList/'));
 
   if (response.statusCode == 200) {

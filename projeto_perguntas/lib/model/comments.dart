@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:json_annotation/json_annotation.dart';
-part 'commentpostagem.g.dart';
+part 'comments.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class CommentsPostagem {

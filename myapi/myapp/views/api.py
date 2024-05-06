@@ -109,8 +109,42 @@ def postagensDelete(req, pk):
 #-----Comentários------
 @api_view(["POST"])
 def comentariosPosts(req):
-    serializer = CommentsPostagemSerializer(req.data)
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    serializerComments = CommentsPostagemSerializer(data=req.data)
+    serializerPostagem = PostagemSerializer(data=req.data)
+    serializerUser = UserSerializer(data=req.data)
+    if serializerComments.is_valid() and serializerPostagem.is_valid() and serializerUser.is_valid():
+        postagem = serializerPostagem.save()
+        user = serializerUser.save()
+        try:
+            serializerComments.save(user=user,postagem=postagem)
+            return Response(serializerComments.data, 201)
+        except IntegrityError as e:
+            print(e)
+        #comment_data = {'postagem': req.data.get('postagem').id, ''}
+
+    #if serializerUser.is_valid() == True and serializerPostagem.is_valid() == True:
+    #    serializerPostagem.save()
+    #    serializerUser.save()
+    #    user_instance = serializerUser.save()
+    #    postagem_instance = serializerPostagem.save()
+#
+    #    comment_data = {'user':user_instance, 'postagem': postagem_instance.id, 'text': req.data.get('text')}
+    #    commentSerializer = CommentsPostagemSerializer(data=comment_data)
+#
+    #    if commentSerializer.is_valid():
+    #        commentSerializer.save()
+    #        return Response(commentSerializer.data, status.HTTP_201_CREATED)
+    #    else:
+    #        user_instance.delete()
+    #        postagem_instance.delete()
+    #        return Response(commentSerializer.errors, status=400)
+    else:
+        return Response("Dados não foram salvos: ", status=400)
+
+
+    #except IntegrityError as e:
+    #    print('erro: {}'.format(e))
+    #return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
 def comentariosList(req):

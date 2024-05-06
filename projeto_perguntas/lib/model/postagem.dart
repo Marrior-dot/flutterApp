@@ -5,22 +5,16 @@ import 'dart:io';
 //part 'postagem.g.dart';
 
 //Classe usando JsonSerializable
-
+/*
 @JsonSerializable()
 class Postagem {
   Postagem(this.id, this.arquivo, this.content, this.likes, this.dislikes);
 
-  String fileToJson() => jsonEncode(<String, File?>{"arquivo": arquivo});
-
-  File? fileFromJson(String json) {
-    Map<String, File?> jsonDecoded = jsonDecode(json);
-    return jsonDecoded["arquivo"];
-  }
+  
 
   Function? ffj = fileFromJson();
 
   int id;
-  //@JsonKey(fromJson: ffj, toJson: )
   File? arquivo;
   String content;
   int likes;
@@ -30,25 +24,24 @@ class Postagem {
       _$PostagemFromJson(json);
   Map<String, dynamic> toJson() => _$PostagemToJson(this);
 
-  //String fileToJson() => jsonEncode(<String, File?>{"arquivo": arquivo});
-  //Function? ftj = fileToJson();
-//
-  //File? fileFromJson(String json) {
-  //  Map<String, File?> jsonDecoded = jsonDecode(json);
-  //  return jsonDecoded["arquivo"];
-  //}
-//
-  //Function? ffj = fileFromJson();
-}
+  String fileToJson() => jsonEncode(<String, File?>{"arquivo": arquivo});
+
+  File? fileFromJson(String json) {
+    Map<String, File?> jsonDecoded = jsonDecode(json);
+    return jsonDecoded["arquivo"];
+  }
+
+}*/
 
 // Classe postagem original
-/*class Postagem {
+@JsonSerializable()
+class Postagem {
   final int id;
   final File? arquivo;
   final String content;
   final int likes;
   final int dislikes;
-
+  
   Postagem(this.id, this.arquivo, this.content, this.likes, this.dislikes);
 
   Postagem.fromJson(Map<String, dynamic> json)
@@ -66,4 +59,4 @@ class Postagem {
         'dislikes': dislikes,
       };
 }
-*/
+

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
-import 'package:projeto_perguntas/views/PostagemList.dart' as PostagemList;
 import 'package:projeto_perguntas/views/LoginPage.dart';
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
 
 
 
 void main() async {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget /*StatelessWidget*/ {
@@ -56,7 +54,7 @@ class _MyAppState extends State<MyApp> {
                   itemBuilder: (context, index){
                     fetchLike(snapshot.data![index].id);
                     var likeButton = snapshot.data![index].likes;                    
-                    return Container(
+                    return SizedBox(
                       height: 50,
                           child: Column(
                           children: [
