@@ -28,7 +28,7 @@ class Postagem(models.Model):
         return self.content
 
 class CommentsPostagem(models.Model):
-    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    #user=models.ForeignKey(User, on_delete=models.CASCADE)
     postagem=models.ForeignKey(Postagem, on_delete=models.CASCADE)
     text=models.CharField(max_length=500)
 
