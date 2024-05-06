@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-Future<CommentsPostagem> createComment(String text, Postagem postagem) async {
+Future<CommentsPostagem> createComment(
+    String username, String text, Postagem postagem) async {
   final response = await http.post(
     //Uri.parse('http://10.54.2.110:8000/api/comentariocreate'),
     //Uri.parse('http://localhost:8000/api/comentariocreate/${usuario}/'),
@@ -19,8 +20,7 @@ Future<CommentsPostagem> createComment(String text, Postagem postagem) async {
       "text": text,
     }),
   );
-  //print(user);
-  //print(postagem);
+
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.

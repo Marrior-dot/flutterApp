@@ -5,8 +5,8 @@ part 'comments.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class CommentsPostagem {
-  CommentsPostagem(this.postagem, this.text);
-
+  CommentsPostagem(this.username, this.postagem, this.text);
+  String username;
   Postagem postagem;
   String text;
 
