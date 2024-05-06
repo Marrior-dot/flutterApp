@@ -71,8 +71,11 @@ class PostagemListState extends State<PostagemList> {
                                 onPressed: () {
                                   setState(() {
                                     likeButton = likeButton + 1;
-                                    updateLikeDislike('likes', likeButton,
-                                        snapshot.data![index].id, snapshot.data![index].content);
+                                    updateLikeDislike(
+                                        'likes',
+                                        likeButton,
+                                        snapshot.data![index].id,
+                                        snapshot.data![index].content);
                                   });
                                 },
                                 child: FutureBuilder<Postagem>(
@@ -82,24 +85,20 @@ class PostagemListState extends State<PostagemList> {
                                           "likes ${snapshot.data!.likes}");
                                     })),
                           ]),
-                                TextFormField(
-                                              decoration: const InputDecoration(
-                                                labelText:
-                                                    'Envie um Comentário',
-                                                prefixIcon: Icon(Icons.comment),
-                                              ),
-                                              controller: comentarioController),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  createComment(
-                                                    comentarioController.text,
-                                                    widget.user, postagem
-                                                  );
-                                                });
-                                              },
-                                              child: const Text(
-                                                  "Enviar comentário")),
+                          TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Envie um Comentário',
+                                prefixIcon: Icon(Icons.comment),
+                              ),
+                              controller: comentarioController),
+                          ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  createComment(
+                                      comentarioController.text, postagem);
+                                });
+                              },
+                              child: const Text("Enviar comentário")),
                           FutureBuilder<List<CommentsPostagem>>(
                               future: fetchComments(postagem),
                               builder: (context, snapshot) {
