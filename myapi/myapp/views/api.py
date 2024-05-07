@@ -123,8 +123,8 @@ def comentariosList(req):
     return Response(serializer.data)
 
 @api_view(["GET"])
-def comentariosListPostagem(req):
-    print(req)
-    comments = CommentsPostagem.objects.filter()
+def comentariosListPostagem(req, pk):
+    postagem = Postagem.objects.get(pk=pk)
+    comments = CommentsPostagem.objects.filter(postagem=postagem)
     serializer = CommentsPostagemSerializer(comments, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
