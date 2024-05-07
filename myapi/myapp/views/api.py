@@ -110,20 +110,11 @@ def postagensDelete(req, pk):
 @api_view(["POST"])
 def comentariosPosts(req):
     serializerComments = CommentsPostagemSerializer(data=req.data)
-    serializerPostagem = PostagemSerializer(data=req.data.get("postagem"))
-    #serializerUser = UserSerializer(data=req.data.get("user"))
-    #print(serializerComments.is_valid())
-    #print(serializerPostagem.is_valid())
-    #print(serializerUser.is_valid())
-    if serializerComments.is_valid() and serializerPostagem.is_valid(): #and serializerUser.is_valid():
-        postagem = serializerPostagem.save()
-        #user = serializerUser.save()
+    postagem = Postagem.objects.filter(pk=req.data.get("postagem")["id"]).get()
+    if serializerComments.is_valid(): 
         serializerComments.save(postagem=postagem)
-        return Response({"message":"Dados salvos: "}, status=status.HTTP_201_CREATED)
-    return Response(serializerPostagem.errors, status=status.HTTP_400_BAD_REQUEST)
-    #except IntegrityError as e:
-    #    print('erro: {}'.format(e))
-    #return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializerComments.data, status=status.HTTP_201_CREATED)
+    return Response(serializerComments, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
 def comentariosList(req):
@@ -132,7 +123,8 @@ def comentariosList(req):
     return Response(serializer.data)
 
 @api_view(["GET"])
-def comentariosListPostagem(req,*args):
-    comments = CommentsPostagem.objects.filter(postagem=args)
+def comentariosListPostagem(req):
+    print(req)
+    comments = CommentsPostagem.objects.filter()
     serializer = CommentsPostagemSerializer(comments, many=True)
     return Response(serializer.data)

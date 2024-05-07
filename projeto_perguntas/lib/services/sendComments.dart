@@ -16,11 +16,11 @@ Future<CommentsPostagem> createComment(
     },
 
     body: jsonEncode(<String, dynamic>{
+      "username": username,
       "postagem": postagem,
       "text": text,
     }),
   );
-
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.

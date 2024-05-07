@@ -94,8 +94,7 @@ class PostagemListState extends State<PostagemList> {
                           ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  createComment(comentarioController.text,
-                                      widget.user.username, postagem);
+                                  createComment( widget.user.username, comentarioController.text.toString(),postagem);
                                 });
                               },
                               child: const Text("Enviar comentário")),
