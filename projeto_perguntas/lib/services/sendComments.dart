@@ -21,6 +21,7 @@ Future<CommentsPostagem> createComment(
       "text": text,
     }),
   );
+  print(text);
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.

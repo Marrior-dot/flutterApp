@@ -18,7 +18,7 @@ class PostagemList extends StatefulWidget {
 
 class PostagemListState extends State<PostagemList> {
   late Future<List<Postagem>> futureFetch;
-  final TextEditingController comentarioController = TextEditingController();
+  TextEditingController comentarioController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -29,6 +29,16 @@ class PostagemListState extends State<PostagemList> {
   void dispose() {
     comentarioController.dispose();
     super.dispose();
+  }
+
+  TextEditingController controllersComments(int quantidade){
+    List<TextEditingController> listaControllers=[];
+    for (int i = 0; i < quantidade; i++) {
+      listaControllers.add(TextEditingController());
+    }
+    TextEditingController controllerPop = listaControllers[0];
+    listaControllers.removeAt(0);
+    return controllerPop;
   }
 
   @override
@@ -47,17 +57,17 @@ class PostagemListState extends State<PostagemList> {
                 child: FutureBuilder<List<Postagem>>(
                     future: futureFetch,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        //final TextEditingController comentarioController =
-                        //  TextEditingController();
+                      if (snapshot.hasData) {                
                         return ListView.builder(
                             padding: const EdgeInsets.all(8),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               var likeButton = snapshot.data![index].likes;
                               late var postagem = snapshot.data![index];
+                              comentarioController = controllersComments(snapshot.data!.length);
                               return SizedBox(
-                                height: 130,
+                                width: MediaQuery.of(context).size.width*0.5,
+                                height:MediaQuery.of(context).size.height*0.5, //200,
                                 child: Column(children: [
                                   Text(snapshot.data![index].content),
                                   Row(children: [
@@ -110,33 +120,6 @@ class PostagemListState extends State<PostagemList> {
                                         });
                                       },
                                       child: const Text("Enviar comentário")),
-                                  /*FutureBuilder<List<CommentsPostagem>>(
-                                    future: fetchComments(postagem),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                      if (snapshot.hasData) {
-                                        return ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: snapshot.data!.length,
-                                          itemBuilder: (context, index) {
-                                            return Text(
-                                                snapshot.data![index].text);
-                                          },
-                                        );
-                                      } else if (snapshot.hasError) {
-                                        return Text('${snapshot.error}');
-                                      } else {
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                    },
-                                  ),*/
                                   FutureBuilder<List<CommentsPostagem>>(
                                     future: fetchComments(postagem),
                                     builder: (context, snapshot) {
@@ -186,27 +169,21 @@ class PostagemListState extends State<PostagemList> {
                                             const Divider(
                                           color: Colors
                                               .blueGrey, // Light blue separator
-                                          height: 5.0, // Set separator height
+                                          height: 200, // Set separator height
                                         ),
                                         itemBuilder: (context, index) {
                                           final comment = comments[index];
 
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 24.0,
+                                                horizontal: 5.0,
                                                 vertical:
-                                                    30.0), // Increased spacing
+                                                    5.0), // Increased spacing
                                             child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment
                                                       .start, // Align comment text
                                               children: [
-                                                //CircleAvatar(
-                                                //  backgroundColor: Colors.blueGrey[200], // Placeholder avatar color
-                                                //  backgroundImage: comment.user?.avatarUrl != null
-                                                //      ? NetworkImage(comment.user!.avatarUrl!)
-                                                //      : null, // Use user's avatar if available
-                                                //),
                                                 const SizedBox(
                                                     width:
                                                         8.0), // Spacing between avatar and text
