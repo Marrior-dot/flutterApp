@@ -9,7 +9,6 @@ Future<List<CommentsPostagem>> fetchComments(
   final response =
       await http.get(
           Uri.parse('http://localhost:8000/api/comentariolist/${postagem.id}/'));
-  print(response.statusCode);
   if (response.statusCode == 200) {
     var commentsMap =
         (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();

@@ -18,7 +18,9 @@ class PostagemList extends StatefulWidget {
 
 class PostagemListState extends State<PostagemList> {
   late Future<List<Postagem>> futureFetch;
-  TextEditingController comentarioController = TextEditingController();
+  late TextEditingController comentarioController;
+  String commentText="";
+
   @override
   void initState() {
     super.initState();
@@ -30,15 +32,13 @@ class PostagemListState extends State<PostagemList> {
     comentarioController.dispose();
     super.dispose();
   }
-
-  TextEditingController controllersComments(int quantidade){
+  List<TextEditingController> controllersComments(int quantidade){
     List<TextEditingController> listaControllers=[];
     for (int i = 0; i < quantidade; i++) {
       listaControllers.add(TextEditingController());
     }
-    TextEditingController controllerPop = listaControllers[0];
-    listaControllers.removeAt(0);
-    return controllerPop;
+
+    return listaControllers;
   }
 
   @override
@@ -57,20 +57,24 @@ class PostagemListState extends State<PostagemList> {
                 child: FutureBuilder<List<Postagem>>(
                     future: futureFetch,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {                
+                      if (snapshot.hasData) {
                         return ListView.builder(
                             padding: const EdgeInsets.all(8),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               var likeButton = snapshot.data![index].likes;
                               late var postagem = snapshot.data![index];
-                              comentarioController = controllersComments(snapshot.data!.length);
+                              //print(snapshot.data!.length);
+                              //print(snapshot.data!);
+                              //print(controllersComments(snapshot.data!.length));
+                              comentarioController = controllersComments(snapshot.data!.length)[index];
                               return SizedBox(
                                 width: MediaQuery.of(context).size.width*0.5,
-                                height:MediaQuery.of(context).size.height*0.5, //200,
+                                height:MediaQuery.of(context).size.height*0.9, //200,
                                 child: Column(children: [
                                   Text(snapshot.data![index].content),
-                                  Row(children: [
+                                  Row(
+                                  children: [
                                     //Botão para mudar os dislikes no feed de postagem, somente manda para o servidor
                                     ElevatedButton(
                                       onPressed: () {
@@ -99,7 +103,7 @@ class PostagemListState extends State<PostagemList> {
                                             future: fetchLike(
                                                 snapshot.data![index].id),
                                             builder: (context, snapshot) {
-                                              return Text(
+                                                        return Text(
                                                   "likes ${snapshot.data!.likes}");
                                             })),
                                   ]),
@@ -108,14 +112,18 @@ class PostagemListState extends State<PostagemList> {
                                         labelText: 'Envie um Comentário',
                                         prefixIcon: Icon(Icons.comment),
                                       ),
-                                      controller: comentarioController),
+                                      controller: comentarioController,
+                                      onChanged: (value) => {
+                                          commentText = value,
+                                      },
+                                      ),
                                   ElevatedButton(
                                       onPressed: () {
                                         setState(() {
                                           createComment(
                                               widget.user.username,
-                                              comentarioController.text
-                                                  .toString(),
+                                              //comentarioController.text,
+                                              commentText,
                                               postagem);
                                         });
                                       },
