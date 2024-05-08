@@ -19,6 +19,7 @@ class PostagemList extends StatefulWidget {
 class PostagemListState extends State<PostagemList> {
   late Future<List<Postagem>> futureFetch;
   late TextEditingController comentarioController;
+  //TextEditingController comentarioController = TextEditingController();
   String commentText="";
 
   @override
@@ -32,13 +33,17 @@ class PostagemListState extends State<PostagemList> {
     comentarioController.dispose();
     super.dispose();
   }
-  List<TextEditingController> controllersComments(int quantidade){
-    List<TextEditingController> listaControllers=[];
-    for (int i = 0; i < quantidade; i++) {
-      listaControllers.add(TextEditingController());
-    }
 
-    return listaControllers;
+  //List<TextEditingController> controllersComments(int quantidade){
+  //  List<TextEditingController> listaControllers=[];
+  //  for (int i = 0; i < quantidade; i++) {
+  //    listaControllers.add(TextEditingController());
+  //  }
+  //  return listaControllers;
+  //}
+
+  TextEditingController controllerComments(){
+    return TextEditingController();
   }
 
   @override
@@ -64,10 +69,8 @@ class PostagemListState extends State<PostagemList> {
                             itemBuilder: (context, index) {
                               var likeButton = snapshot.data![index].likes;
                               late var postagem = snapshot.data![index];
-                              //print(snapshot.data!.length);
-                              //print(snapshot.data!);
-                              //print(controllersComments(snapshot.data!.length));
-                              comentarioController = controllersComments(snapshot.data!.length)[index];
+                              //comentarioController = controllersComments(snapshot.data!.length)[index];
+                              comentarioController = controllerComments();
                               return SizedBox(
                                 width: MediaQuery.of(context).size.width*0.5,
                                 height:MediaQuery.of(context).size.height*0.9, //200,
@@ -122,7 +125,6 @@ class PostagemListState extends State<PostagemList> {
                                         setState(() {
                                           createComment(
                                               widget.user.username,
-                                              //comentarioController.text,
                                               commentText,
                                               postagem);
                                         });
