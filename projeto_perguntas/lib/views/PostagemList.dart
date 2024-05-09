@@ -65,7 +65,7 @@ class PostagemListState extends State<PostagemList> {
                               return SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 height: MediaQuery.of(context).size.height *
-                                    0.5, //200,
+                                    0.5, 
                                 child: Column(children: [
                                   Text(snapshot.data![index].content),
                                   const SizedBox(
