@@ -10,6 +10,10 @@ class LoginPage extends State<MyApp> {
   //late Future<User> usuarioLogado;
   //String? userName;
 
+  final loginButtonStyle = ButtonStyle(
+    foregroundColor: MaterialStateProperty.all(Colors.white),
+  );
+
   @override
   void dispose() {
     userNameController.dispose();
@@ -34,49 +38,58 @@ class LoginPage extends State<MyApp> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Usuário',
-                      prefixIcon: Icon(Icons.login),
-                    ),
-                    controller: userNameController,
-                  ),
-                  const SizedBox(height: 20.0),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Senha',
-                      prefixIcon: Icon(Icons.lock),
-                    ),
-                    obscureText: true,
-                    controller: passWordController,
-                  ),
+                  Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          border: Border.all(color: Colors.grey, width: 1.0)),
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Usuário',
+                          prefixIcon: Icon(Icons.login),
+                        ),
+                        controller: userNameController,
+                      )),
+                  const SizedBox(height: 40.0),
+                  Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          border: Border.all(color: Colors.grey, width: 1.0)),
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Senha',
+                          prefixIcon: Icon(Icons.lock),
+                        ),
+                        obscureText: true,
+                        controller: passWordController,
+                      )),
                   const SizedBox(height: 20.0),
                   Builder(
                       builder: (context) => Center(
                             child: ElevatedButton(
+                                style: loginButtonStyle,
                                 child: const Text("Login"),
                                 onPressed: () {
                                   userLogin(userNameController.text.toString(),
                                       passWordController.text.toString());
-                                  //Navigator.push(
-                                  //    context,
-                                  //     MaterialPageRoute(
-                                  //        builder: (context) =>
-                                  //             PostagemList(
-                                  //                user: userLogin(
-                                  //                    userNameController.text
-                                  //                        .toString(),
-                                  //                    passWordController.text
-                                  //                        .toString()) as User)));
                                   Navigator.push(
                                       context,
-                                       MaterialPageRoute(
-                                          builder: (BuildContext context) => 
-                                          FutureBuilder(future: userLogin(userNameController.text.toString(), passWordController.text.toString()), 
-                                            builder: (BuildContext context, AsyncSnapshot snapshot) =>
-                                            PostagemList(
-                                                  user: snapshot.data! ) )
-                                               ));
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              FutureBuilder(
+                                                  future: userLogin(
+                                                      userNameController.text
+                                                          .toString(),
+                                                      passWordController.text
+                                                          .toString()),
+                                                  builder:
+                                                      (BuildContext context,
+                                                              AsyncSnapshot
+                                                                  snapshot) =>
+                                                          PostagemList(
+                                                              user: snapshot
+                                                                  .data!))));
                                 }),
                           )),
                   Builder(
@@ -85,7 +98,8 @@ class LoginPage extends State<MyApp> {
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/registrar');
                                 },
-                                child: const Text("Não tem Cadastro? Clique aqui")),
+                                child: const Text(
+                                    "Não tem Cadastro? Clique aqui")),
                           ))
                 ],
               ),
