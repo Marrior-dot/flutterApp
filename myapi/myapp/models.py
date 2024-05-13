@@ -14,18 +14,35 @@ class User(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
+#class Respostas(models.Model):
+#    postagem = models.ForeignKey(Postagem, on_delete=models.CASCADE)
+#    resposta = models.CharField(max_length=500 ,blank=True, null=True, default="")
+
 class Postagem(models.Model):
     arquivo = models.FileField(blank= True,null=True, default="")
     content = models.CharField(max_length=500)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
+    #respostas = models.ManyToManyField(Respostas)
 
     class Meta:
         ordering = ['content']
     
     def __str__(self) -> str:
         return self.content
+
+class Respostas(models.Model):
+    postagem = models.ForeignKey(Postagem, on_delete=models.CASCADE)
+    respostaTexto = models.CharField(max_length=500 ,blank=True, null=True, default="")
+    respostaBool = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['postagem']
+    
+    def __str__(self):
+        return self.postagem
+    
 
 class CommentsPostagem(models.Model):
     #user=models.ForeignKey(User, on_delete=models.CASCADE)
