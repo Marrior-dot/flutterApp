@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:json_annotation/json_annotation.dart';
 import 'dart:io';
 
@@ -8,15 +9,19 @@ class Postagem {
   final String content;
   final int likes;
   final int dislikes;
+  final List<String> respostas;
+  final Bool escolha_unica;
   
-  Postagem(this.id, this.arquivo, this.content, this.likes, this.dislikes);
+  Postagem(this.id, this.arquivo, this.content, this.likes, this.dislikes, this.respostas, this.escolha_unica);
 
   Postagem.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int,
         arquivo = json['arquivo'] as File?,
         content = json['content'] as String,
         likes = json['likes'] as int,
-        dislikes = json['dislikes'] as int;
+        dislikes = json['dislikes'] as int,
+        respostas = json['respostas'] as List<String>,
+        escolha_unica = json['escolha_unica'] as Bool;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -24,6 +29,8 @@ class Postagem {
         'content': content,
         'likes': likes,
         'dislikes': dislikes,
+        'respostas':respostas,
+        'escolha_unica':escolha_unica
       };
 }
 
