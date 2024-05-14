@@ -30,7 +30,8 @@ class Postagem(models.Model):
     content = models.CharField(max_length=500)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
-    respostas = models.ManyToManyField(Respostas, blank=True, default=[])
+    respostas = models.ManyToManyField(Respostas, blank=True, default="")
+    escolha_unica = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['content']

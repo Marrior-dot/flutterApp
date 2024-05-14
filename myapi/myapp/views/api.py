@@ -1,9 +1,9 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from myapp.serializers import UserSerializer, PostagemSerializer, CommentsPostagemSerializer 
-from django.db.utils import IntegrityError
-from myapp.models import User, Postagem, CommentsPostagem
+from myapp.serializers import UserSerializer, PostagemSerializer, CommentsPostagemSerializer, RespostasSerializer 
+#from django.db.utils import IntegrityError
+from myapp.models import User, Postagem, CommentsPostagem, Respostas
 
 #-----User------
 @api_view(["GET"])
@@ -128,3 +128,12 @@ def comentariosListPostagem(req, pk):
     comments = CommentsPostagem.objects.filter(postagem=postagem)
     serializer = CommentsPostagemSerializer(comments, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(["PUT"])
+def respostasUpdate(req, texto):
+    ans = Respostas.objects.filter(respostaTexto=texto).get()
+    serializer = RespostasSerializer(instance=ans, data=req.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -16,5 +16,6 @@ urlpatterns = [path("userHowTo/", usersOverview, name="users-overview"),
     path("postagemdelete/<int:pk>/", postagensDelete, name="post-delete"),
     path("comentariolist/<int:pk>/", comentariosListPostagem, name="coment-list-postagem"),
     path("comentariolist/", comentariosList, name="comment-list"),
-    path("comentariocreate/", comentariosPosts, name="comment-create")
+    path("comentariocreate/", comentariosPosts, name="comment-create"),
+    path("respostasupdate/<str:texto>/", respostasUpdate, name="resposta-update"),
     ]
