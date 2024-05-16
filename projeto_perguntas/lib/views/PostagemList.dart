@@ -63,67 +63,24 @@ class PostagemListState extends State<PostagemList> {
                             padding: const EdgeInsets.all(8),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
+
                               var likeButton = snapshot.data![index].likes;
                               var postagem = snapshot.data![index];
                               int itemCountRespostas = snapshot
                                             .data![index].respostas.length;
                               List<dynamic> respostas =
                                             snapshot.data![index].respostas;
+                              bool radioOrCheckbox = snapshot.data![index].escolha_unica;
+                              String currentOption = "";
                               comentarioController = controllerComments();
 
                               return SizedBox(
+                              
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 height:
                                     MediaQuery.of(context).size.height * 0.5,
                                 child: Column(children: [
                                   Text(snapshot.data![index].content),
-                                  FutureBuilder(
-                                      future: futureFetch,
-                                      builder: (context, snapshot) {
-                                        if(!snapshot.hasError){
-                                          checkBoxOrRadio(snapshot.data![index].escolha_unica, itemCountRespostas, respostas);
-                                        }
-                                        /*if (snapshot
-                                                .data![index].escolha_unica ==
-                                            true) {
-                                          return ListView.builder(
-                                              itemCount: itemCountRespostas,
-                                              itemBuilder: (context, index) {
-                                                return ListTile(
-                                                  title: Text(respostas[index]),
-                                                  leading: Radio(
-                                                      value: respostas[index],
-                                                      groupValue: currentOption,
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          currentOption =
-                                                              value.toString();
-                                                        });
-                                                      }),
-                                                );
-                                              });
-                                        }
-                                        else{
-                                          return ListView.builder(
-                                              itemCount: itemCountRespostas,
-                                              itemBuilder: (context, index) {
-                                                return ListTile(
-                                                  title: Text(respostas[index]),
-                                                  leading: Checkbox(
-                                                      value: respostas[index],                                                      
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          currentOption =
-                                                              value.toString();
-                                                        });
-                                                      }),
-                                                );
-                                              });
-                                        }*/
-                                                                                
-                                        return Text('${snapshot.error}');
-                                          
-                                      }),
 
                                   const SizedBox(
                                     height: 20.0,
@@ -249,12 +206,11 @@ class PostagemListState extends State<PostagemList> {
 
   ListView checkBoxOrRadio(bool tipoRespostas, int lengthRespostas, List<dynamic> respostasLista){
     String currentOption = "";
-    //print(tipoRespostas);
-    if (tipoRespostas == false){
+
+    if (tipoRespostas == true){
       return  ListView.builder(
           itemCount: lengthRespostas,
           itemBuilder: (context, index) {
-            //print(respostasLista[index]);
             return ListTile(
               title: Text(respostasLista[index]),
               leading: Radio(

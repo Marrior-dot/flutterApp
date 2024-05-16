@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 Future<Respostas> updateResposta(
-    String respostaTexto, bool respostaBool) async {
+    String respostaTexto, int respondido) async {
   final response = await http.put(
     Uri.parse('http://localhost:8000/api/respostasupdate/${respostaTexto}/'),
     headers: <String, String>{
@@ -11,7 +11,7 @@ Future<Respostas> updateResposta(
     },
     body: jsonEncode(<String, dynamic>{
       'respostaTexto': respostaTexto,
-      'respostaBool': respostaBool
+      'respondido': respondido + 1
     }),
   );
 

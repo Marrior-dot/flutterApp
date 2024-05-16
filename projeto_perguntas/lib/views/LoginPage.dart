@@ -107,7 +107,6 @@ class LoginPage extends State<MyApp> {
                                                           context,
                                                       AsyncSnapshot snapshot) {
                                                     //=>
-                                                    print(snapshot.data!);
                                                     return PostagemList(
                                                         user: snapshot.data!);
                                                   })));

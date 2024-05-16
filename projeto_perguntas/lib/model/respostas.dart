@@ -1,16 +1,16 @@
 class Respostas {
   final String respostaTexto;
-  final String respostaBool;
+  final int respondido;
 
   const Respostas({
     required this.respostaTexto,
-    required this.respostaBool,
+    required this.respondido,
   });
 
   factory Respostas.fromJson(Map<String, dynamic> json) {
     return Respostas(
       respostaTexto: json['respostaTexto'] as String,
-      respostaBool: json['respostaBool'] as String,
+      respondido: json['respondido'] as int,
     );
   }
 }
