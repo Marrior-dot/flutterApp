@@ -55,14 +55,20 @@ class PostagemListState extends State<PostagemList> {
                 child: FutureBuilder<List<Postagem>>(
                     future: futureFetch,
                     builder: (context, snapshot) {
+                      
                       //print("carregando");
                       if (snapshot.hasData) {
+                        
                         return ListView.builder(
                             padding: const EdgeInsets.all(8),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               var likeButton = snapshot.data![index].likes;
                               var postagem = snapshot.data![index];
+                              int itemCountRespostas = snapshot
+                                            .data![index].respostas.length;
+                              List<dynamic> respostas =
+                                            snapshot.data![index].respostas;
                               comentarioController = controllerComments();
 
                               return SizedBox(
@@ -71,16 +77,13 @@ class PostagemListState extends State<PostagemList> {
                                     MediaQuery.of(context).size.height * 0.5,
                                 child: Column(children: [
                                   Text(snapshot.data![index].content),
-                                  /*FutureBuilder(
+                                  FutureBuilder(
                                       future: futureFetch,
                                       builder: (context, snapshot) {
-                                        int itemCountRespostas = snapshot
-                                            .data![index].respostas.length;
-                                        List<String> respostas =
-                                            snapshot.data![index].respostas;
-                                        String currentOption = "";
-
-                                        if (snapshot
+                                        if(!snapshot.hasError){
+                                          checkBoxOrRadio(snapshot.data![index].escolha_unica, itemCountRespostas, respostas);
+                                        }
+                                        /*if (snapshot
                                                 .data![index].escolha_unica ==
                                             true) {
                                           return ListView.builder(
@@ -100,10 +103,27 @@ class PostagemListState extends State<PostagemList> {
                                                 );
                                               });
                                         }
-                                        //return ListView.builder(
-                                        //)
+                                        else{
+                                          return ListView.builder(
+                                              itemCount: itemCountRespostas,
+                                              itemBuilder: (context, index) {
+                                                return ListTile(
+                                                  title: Text(respostas[index]),
+                                                  leading: Checkbox(
+                                                      value: respostas[index],                                                      
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          currentOption =
+                                                              value.toString();
+                                                        });
+                                                      }),
+                                                );
+                                              });
+                                        }*/
+                                                                                
                                         return Text('${snapshot.error}');
-                                      })*/
+                                          
+                                      }),
 
                                   const SizedBox(
                                     height: 20.0,
@@ -118,7 +138,8 @@ class PostagemListState extends State<PostagemList> {
                                                 'dislikes',
                                                 snapshot.data![index].dislikes,
                                                 snapshot.data![index].id,
-                                                snapshot.data![index].content);
+                                                snapshot.data![index].content,
+                                                respostas);
                                           },
                                           child: const Text('dislikes'),
                                           style: ButtonStyle(
@@ -138,7 +159,8 @@ class PostagemListState extends State<PostagemList> {
                                                   likeButton,
                                                   snapshot.data![index].id,
                                                   snapshot
-                                                      .data![index].content);
+                                                      .data![index].content,
+                                                      respostas);
                                             });
                                           },
                                           child: FutureBuilder<Postagem>(
@@ -223,5 +245,47 @@ class PostagemListState extends State<PostagemList> {
                       }
                       return Text('${snapshot.error}');
                     }))));
+  }
+
+  ListView checkBoxOrRadio(bool tipoRespostas, int lengthRespostas, List<dynamic> respostasLista){
+    String currentOption = "";
+    //print(tipoRespostas);
+    if (tipoRespostas == false){
+      return  ListView.builder(
+          itemCount: lengthRespostas,
+          itemBuilder: (context, index) {
+            //print(respostasLista[index]);
+            return ListTile(
+              title: Text(respostasLista[index]),
+              leading: Radio(
+                  value: respostasLista[index],
+                  groupValue: currentOption,
+                  onChanged: (value) {
+                    setState(() {
+                      currentOption =
+                          value.toString();
+                    });
+                  }),
+            );
+          });
+    }
+    else{
+    return ListView.builder(
+            itemCount: lengthRespostas,
+            itemBuilder: (context, index) {
+              //print(respostasLista[index]);
+              return ListTile(
+                title: Text(respostasLista[index]),
+                leading: Checkbox(
+                    value: respostasLista[index],                                                      
+                    onChanged: (value) {
+                      setState(() {
+                        currentOption =
+                            value.toString();
+                      });
+                    }),
+              );
+            });
+            }
   }
 }
