@@ -5,6 +5,8 @@ import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
 import 'package:projeto_perguntas/services/fetchPosts.dart';
 import 'package:projeto_perguntas/services/fetchComments.dart';
+import 'package:projeto_perguntas/services/updateResposta.dart';
+import 'package:projeto_perguntas/model/respostas.dart';
 import 'dart:async';
 
 import 'package:projeto_perguntas/services/sendComments.dart';
@@ -62,12 +64,38 @@ class PostagemListState extends State<PostagemList> {
                               var postagem = snapshot.data![index];
                               comentarioController = controllerComments();
 
+
                               return SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.4,
-                                height: MediaQuery.of(context).size.height *
-                                    0.5, 
+                                height:
+                                    MediaQuery.of(context).size.height * 0.5,
                                 child: Column(children: [
                                   Text(snapshot.data![index].content),
+                                  FutureBuilder(future: futureFetch, builder: (context, snapshot){ 
+                                    int itemCountRespostas = snapshot.data![index].respostas.length;
+                                    List<String> respostas = snapshot.data![index].respostas;
+
+                                    if (snapshot.data![index].escolha_unica == true){
+                                      return ListView.builder(
+                                        itemCount: itemCountRespostas,
+                                        itemBuilder: (context, index){
+                                          return ListTile(
+                                            title: Text(respostas[index]),
+                                            leading: Radio(
+                                              value: respostas[index],
+                                              groupValue: option,
+                                              onChanged: (valyue),
+                                            ),
+                                          )
+                                          
+                                        }
+                                      )
+                                    }
+
+                                    return ListView.builder(
+                                      
+                                    )
+                                  } )
                                   const SizedBox(
                                     height: 20.0,
                                   ),
