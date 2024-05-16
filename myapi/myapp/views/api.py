@@ -25,10 +25,8 @@ def userList(req):
 
 @api_view(["GET"])
 def userDetail(req, pk):
-    #users = User.objects.get()
     users = User.objects.filter(pk=pk).get()
-    #print(users)
-    serializer = UserSerializer(users)#(users, many=False)
+    serializer = UserSerializer(users)
     print(serializer)
     return Response(serializer.data)
 
@@ -37,7 +35,7 @@ def userCreate(req):
     serializer = UserSerializer(data=req.data)
     if serializer.is_valid():
         serializer.save()
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(["PATCH"])
 def userUpdate(req, pk):

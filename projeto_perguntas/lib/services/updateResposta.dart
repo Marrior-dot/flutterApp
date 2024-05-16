@@ -5,7 +5,7 @@ import 'dart:convert';
 Future<Respostas> updateResposta(
     String respostaTexto, bool respostaBool) async {
   final response = await http.put(
-    Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
+    Uri.parse('http://localhost:8000/api/respostasupdate/${respostaTexto}/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

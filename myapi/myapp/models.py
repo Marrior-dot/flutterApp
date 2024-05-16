@@ -38,17 +38,6 @@ class Postagem(models.Model):
     
     def __str__(self) -> str:
         return self.content
-
-#class Respostas(models.Model):
-#    postagem = models.ForeignKey(Postagem, on_delete=models.CASCADE, null=True)
-#    respostaTexto = models.CharField(max_length=500 ,blank=True, null=True, default="")
-#    respostaBool = models.BooleanField(default=False)
-#
-#    class Meta:
-#        ordering = ['respostaTexto']
-#    
-#    def __str__(self):
-#        return self.respostaTexto
     
 
 class CommentsPostagem(models.Model):

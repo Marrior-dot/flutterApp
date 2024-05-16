@@ -1,8 +1,8 @@
-import 'package:projeto_perguntas/model/user.dart' as Usuario;
+import 'package:projeto_perguntas/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<Usuario.User> userCreate(
+Future<User> userCreate(
     String usuario, String email, String senha, String nome) async {
   final response = await http.post(
     Uri.parse('http://localhost:8000/api/usercreate/'),
@@ -20,8 +20,7 @@ Future<Usuario.User> userCreate(
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
-    return Usuario.User.fromJson(
-        jsonDecode(response.body) as Map<String, dynamic>);
+    return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.

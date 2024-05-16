@@ -55,6 +55,7 @@ class PostagemListState extends State<PostagemList> {
                 child: FutureBuilder<List<Postagem>>(
                     future: futureFetch,
                     builder: (context, snapshot) {
+                      //print("carregando");
                       if (snapshot.hasData) {
                         return ListView.builder(
                             padding: const EdgeInsets.all(8),
@@ -64,38 +65,46 @@ class PostagemListState extends State<PostagemList> {
                               var postagem = snapshot.data![index];
                               comentarioController = controllerComments();
 
-
                               return SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 height:
                                     MediaQuery.of(context).size.height * 0.5,
                                 child: Column(children: [
                                   Text(snapshot.data![index].content),
-                                  FutureBuilder(future: futureFetch, builder: (context, snapshot){ 
-                                    int itemCountRespostas = snapshot.data![index].respostas.length;
-                                    List<String> respostas = snapshot.data![index].respostas;
+                                  /*FutureBuilder(
+                                      future: futureFetch,
+                                      builder: (context, snapshot) {
+                                        int itemCountRespostas = snapshot
+                                            .data![index].respostas.length;
+                                        List<String> respostas =
+                                            snapshot.data![index].respostas;
+                                        String currentOption = "";
 
-                                    if (snapshot.data![index].escolha_unica == true){
-                                      return ListView.builder(
-                                        itemCount: itemCountRespostas,
-                                        itemBuilder: (context, index){
-                                          return ListTile(
-                                            title: Text(respostas[index]),
-                                            leading: Radio(
-                                              value: respostas[index],
-                                              groupValue: option,
-                                              onChanged: (valyue),
-                                            ),
-                                          )
-                                          
+                                        if (snapshot
+                                                .data![index].escolha_unica ==
+                                            true) {
+                                          return ListView.builder(
+                                              itemCount: itemCountRespostas,
+                                              itemBuilder: (context, index) {
+                                                return ListTile(
+                                                  title: Text(respostas[index]),
+                                                  leading: Radio(
+                                                      value: respostas[index],
+                                                      groupValue: currentOption,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          currentOption =
+                                                              value.toString();
+                                                        });
+                                                      }),
+                                                );
+                                              });
                                         }
-                                      )
-                                    }
+                                        //return ListView.builder(
+                                        //)
+                                        return Text('${snapshot.error}');
+                                      })*/
 
-                                    return ListView.builder(
-                                      
-                                    )
-                                  } )
                                   const SizedBox(
                                     height: 20.0,
                                   ),
