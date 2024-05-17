@@ -39,40 +39,45 @@ class PostagemListState extends State<PostagemList> {
     return TextEditingController();
   }
   Widget checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta){
-    String currentOption = "";
     if(respostaTexto.length == 0){
-       return Text ("");
+      return Text ("");
     }
-    if (tipoResposta == true){
-      return Column(
-          children: respostaTexto.map((item) => ListTile(
-            title: Text(item),
-              leading: Radio(
-                    value: item,
-                  groupValue: currentOption,
-                  onChanged: (value) {
-                      setState(() {
-                        currentOption =
-                          value.toString();
-                    });
-                  })
-          )).toList(),
-      );}
-
-      return Column(
-          children: respostaTexto.map((item) => ListTile(
-            title: Text(item),
-              leading: Checkbox(
-                    value: item,
-                  onChanged: (value) {
-                      setState(() {
-                        currentOption =
-                          value.toString();
-                    });
-                  })
-          )).toList(),
-      );
-  }
+  
+      if (tipoResposta == true){
+        dynamic currentOption = respostaTexto[0];
+        return Column(
+            children: respostaTexto.map((item) => ListTile(
+              title: Text(item),
+                leading: Radio(
+                      value: item,
+                    groupValue: currentOption,
+                    onChanged: (value) {
+                        setState(() {               
+                          currentOption = value;
+                      });
+                    })
+            )).toList(),
+          );
+        }
+  
+        return Column(
+            children: respostaTexto.map((item) => ListTile(
+              title: Text(item),
+                leading: Checkbox(
+                      value: false,
+                    onChanged: (value) {
+                        setState(() {
+                          if(value == false){
+                            value = true;
+                          }
+                          else{
+                            value = false;
+                          }
+                      });
+                    })
+            )).toList(),
+        );
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +108,6 @@ class PostagemListState extends State<PostagemList> {
                               List<dynamic> respostas =
                                             snapshot.data![index].respostas;
                               bool radioOrCheckbox = snapshot.data![index].escolha_unica;
-                              //String currentOption = "";
                               comentarioController = controllerComments();
 
                               return SizedBox(        
