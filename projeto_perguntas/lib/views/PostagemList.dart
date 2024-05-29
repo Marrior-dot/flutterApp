@@ -5,8 +5,10 @@ import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
 import 'package:projeto_perguntas/services/fetchPosts.dart';
 import 'package:projeto_perguntas/services/fetchComments.dart';
-import 'package:projeto_perguntas/services/updateResposta.dart';
-import 'package:projeto_perguntas/model/respostas.dart';
+import 'package:projeto_perguntas/views/radioChecboxWidget.dart';
+//import 'package:projeto_perguntas/services/updateResposta.dart';
+//import 'package:projeto_perguntas/model/respostas.dart';
+//import 'package:flutter/foundation.dart';
 import 'dart:async';
 
 import 'package:projeto_perguntas/services/sendComments.dart';
@@ -38,6 +40,57 @@ class PostagemListState extends State<PostagemList> {
   TextEditingController controllerComments() {
     return TextEditingController();
   }
+
+ListView checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta){
+    if(respostaTexto.length == 0){
+      return ListView();
+    }
+      if (tipoResposta == true){
+        dynamic currentOption = respostaTexto[0];
+        return ListView.builder(
+          itemCount: respostaTexto.length,
+          itemBuilder: (context, index){
+            return ListTile(
+              title: Text(respostaTexto[index]),
+                leading: Radio(
+                      value: respostaTexto[index],
+                    groupValue: currentOption,
+                    onChanged: (value) {
+                        setState(() {               
+                          currentOption = value;
+                      });
+                    })
+            );
+        }
+        );
+      }
+
+      else{
+        return ListView.builder(
+          itemCount: respostaTexto.length,
+          itemBuilder: (context, index){
+            return ListTile(
+              title: Text(respostaTexto[index]),
+                leading: Checkbox(
+                      value: false,
+                    onChanged: (value) {
+                        setState(() {
+                          if(value == false){
+                            value = true;
+                          }
+                          else{
+                            value = false;
+                          }
+                      });
+                    })
+            );
+      });
+        }
+      }
+
+
+/**
+
   Widget checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta){
     if(respostaTexto.length == 0){
       return Text ("");
@@ -78,7 +131,7 @@ class PostagemListState extends State<PostagemList> {
             )).toList(),
         );
   } 
-
+ */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -119,8 +172,8 @@ class PostagemListState extends State<PostagemList> {
                                   const SizedBox(
                                     height: 20.0,
                                   ), 
-                                  checkBoxOrRadio(respostas, radioOrCheckbox)
-                                  ,
+                                  //checkBoxOrRadio(respostas, radioOrCheckbox)
+                                  MyWidget(),
                                   Wrap(
                                     spacing: 20.0,
                                     children: <Widget>[
