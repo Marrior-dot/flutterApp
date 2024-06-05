@@ -41,53 +41,46 @@ class PostagemListState extends State<PostagemList> {
     return TextEditingController();
   }
 
-ListView checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta){
-    if(respostaTexto.length == 0){
+  ListView checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta) {
+    if (respostaTexto.length == 0) {
       return ListView();
     }
-      if (tipoResposta == true){
-        dynamic currentOption = respostaTexto[0];
-        return ListView.builder(
+    if (tipoResposta == true) {
+      dynamic currentOption = respostaTexto[0];
+      return ListView.builder(
           itemCount: respostaTexto.length,
-          itemBuilder: (context, index){
+          itemBuilder: (context, index) {
             return ListTile(
-              title: Text(respostaTexto[index]),
+                title: Text(respostaTexto[index]),
                 leading: Radio(
-                      value: respostaTexto[index],
+                    value: respostaTexto[index],
                     groupValue: currentOption,
                     onChanged: (value) {
-                        setState(() {               
-                          currentOption = value;
+                      setState(() {
+                        currentOption = value;
                       });
-                    })
-            );
-        }
-        );
-      }
-
-      else{
-        return ListView.builder(
+                    }));
+          });
+    } else {
+      return ListView.builder(
           itemCount: respostaTexto.length,
-          itemBuilder: (context, index){
+          itemBuilder: (context, index) {
             return ListTile(
-              title: Text(respostaTexto[index]),
+                title: Text(respostaTexto[index]),
                 leading: Checkbox(
-                      value: false,
+                    value: false,
                     onChanged: (value) {
-                        setState(() {
-                          if(value == false){
-                            value = true;
-                          }
-                          else{
-                            value = false;
-                          }
+                      setState(() {
+                        if (value == false) {
+                          value = true;
+                        } else {
+                          value = false;
+                        }
                       });
-                    })
-            );
-      });
-        }
-      }
-
+                    }));
+          });
+    }
+  }
 
 /**
 
@@ -148,10 +141,8 @@ ListView checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta){
                 child: FutureBuilder<List<Postagem>>(
                     future: futureFetch,
                     builder: (context, snapshot) {
-                      
                       //print("carregando");
                       if (snapshot.hasData) {
-                        
                         return ListView.builder(
                             padding: const EdgeInsets.all(8),
                             itemCount: snapshot.data!.length,
@@ -159,21 +150,25 @@ ListView checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta){
                               var likeButton = snapshot.data![index].likes;
                               var postagem = snapshot.data![index];
                               List<dynamic> respostas =
-                                            snapshot.data![index].respostas;
-                              bool radioOrCheckbox = snapshot.data![index].escolha_unica;
+                                  snapshot.data![index].respostas;
+                              bool radioOrCheckbox =
+                                  snapshot.data![index].escolha_unica;
                               comentarioController = controllerComments();
 
-                              return SizedBox(        
+                              return SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 height:
                                     MediaQuery.of(context).size.height * 0.5,
                                 child: Column(children: [
-                                  Text(snapshot.data![index].content),   
+                                  Text(snapshot.data![index].content),
                                   const SizedBox(
                                     height: 20.0,
-                                  ), 
+                                  ),
                                   //checkBoxOrRadio(respostas, radioOrCheckbox)
-                                  MyWidget(),
+                                  MyWidget(
+                                    respostaTexto: respostas,
+                                    tipoResposta: radioOrCheckbox,
+                                  ),
                                   Wrap(
                                     spacing: 20.0,
                                     children: <Widget>[
@@ -204,9 +199,8 @@ ListView checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta){
                                                   'likes',
                                                   likeButton,
                                                   snapshot.data![index].id,
-                                                  snapshot
-                                                      .data![index].content,
-                                                      respostas);
+                                                  snapshot.data![index].content,
+                                                  respostas);
                                             });
                                           },
                                           child: FutureBuilder<Postagem>(
@@ -291,6 +285,5 @@ ListView checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta){
                       }
                       return Text('${snapshot.error}');
                     }))));
-    } 
   }
-
+}
