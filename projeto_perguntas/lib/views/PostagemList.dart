@@ -82,49 +82,6 @@ class PostagemListState extends State<PostagemList> {
     }
   }
 
-/**
-
-  Widget checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta){
-    if(respostaTexto.length == 0){
-      return Text ("");
-    }
-  
-      if (tipoResposta == true){
-        dynamic currentOption = respostaTexto[0];
-        return Column(
-            children: respostaTexto.map((item) => ListTile(
-              title: Text(item),
-                leading: Radio(
-                      value: item,
-                    groupValue: currentOption,
-                    onChanged: (value) {
-                        setState(() {               
-                          currentOption = value;
-                      });
-                    })
-            )).toList(),
-          );
-        }
-  
-        return Column(
-            children: respostaTexto.map((item) => ListTile(
-              title: Text(item),
-                leading: Checkbox(
-                      value: false,
-                    onChanged: (value) {
-                        setState(() {
-                          if(value == false){
-                            value = true;
-                          }
-                          else{
-                            value = false;
-                          }
-                      });
-                    })
-            )).toList(),
-        );
-  } 
- */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -165,10 +122,11 @@ class PostagemListState extends State<PostagemList> {
                                     height: 20.0,
                                   ),
                                   //checkBoxOrRadio(respostas, radioOrCheckbox)
-                                  MyWidget(
-                                    respostaTexto: respostas,
-                                    tipoResposta: radioOrCheckbox,
-                                  ),
+                                  Flexible(
+                                    child:MyWidget(
+                                      respostaTexto: respostas,
+                                      tipoResposta: radioOrCheckbox,
+                                    )),
                                   Wrap(
                                     spacing: 20.0,
                                     children: <Widget>[

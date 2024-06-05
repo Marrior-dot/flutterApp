@@ -39,6 +39,7 @@ dependencies:
   web_socket_channel: ^2.4.5
   json_annotation: ^4.9.0
   google_fonts: ^6.2.1
+  empty_widget: ^0.0.5
 
 dev_dependencies:
   flutter_test:
