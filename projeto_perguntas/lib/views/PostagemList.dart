@@ -1,3 +1,4 @@
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:projeto_perguntas/model/comments.dart';
@@ -5,12 +6,8 @@ import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
 import 'package:projeto_perguntas/services/fetchPosts.dart';
 import 'package:projeto_perguntas/services/fetchComments.dart';
-import 'package:projeto_perguntas/views/radioChecboxWidget.dart';
-//import 'package:projeto_perguntas/services/updateResposta.dart';
-//import 'package:projeto_perguntas/model/respostas.dart';
-//import 'package:flutter/foundation.dart';
+import 'package:projeto_perguntas/views/radioWidget.dart';
 import 'dart:async';
-
 import 'package:projeto_perguntas/services/sendComments.dart';
 
 class PostagemList extends StatefulWidget {
@@ -41,12 +38,13 @@ class PostagemListState extends State<PostagemList> {
     return TextEditingController();
   }
 
-  ListView checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta) {
+  Widget checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta) {
     if (respostaTexto.length == 0) {
-      return ListView();
+      return EmptyWidget();
     }
     if (tipoResposta == true) {
-      dynamic currentOption = respostaTexto[0];
+
+      /*dynamic currentOption = respostaTexto[0];
       return ListView.builder(
           itemCount: respostaTexto.length,
           itemBuilder: (context, index) {
@@ -60,7 +58,7 @@ class PostagemListState extends State<PostagemList> {
                         currentOption = value;
                       });
                     }));
-          });
+          });*/
     } else {
       return ListView.builder(
           itemCount: respostaTexto.length,
@@ -121,12 +119,12 @@ class PostagemListState extends State<PostagemList> {
                                   const SizedBox(
                                     height: 20.0,
                                   ),
-                                  //checkBoxOrRadio(respostas, radioOrCheckbox)
-                                  Flexible(
-                                    child:MyWidget(
-                                      respostaTexto: respostas,
-                                      tipoResposta: radioOrCheckbox,
-                                    )),
+                                  checkBoxOrRadio(respostas, radioOrCheckbox),
+                                  //Flexible(
+                                  //  child:MyWidget(
+                                  //    respostaTexto: respostas,
+                                  //    tipoResposta: radioOrCheckbox,
+                                  //  )),
                                   Wrap(
                                     spacing: 20.0,
                                     children: <Widget>[
