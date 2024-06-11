@@ -38,8 +38,14 @@ class PostagemListState extends State<PostagemList> {
     return TextEditingController();
   }
 
+/*
   Widget checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta) {
-    if (respostaTexto.length == 0) {
+    List<dynamic> respostas = postagem.respostas;
+    int respostasLength = postagem.respostas.length;
+    bool tipoResposta = postagem.escolha_unica;
+    
+
+    if (respostasLength == 0) {
       return EmptyWidget();
     }
     if (tipoResposta == true) {
@@ -59,26 +65,28 @@ class PostagemListState extends State<PostagemList> {
                       });
                     }));
           });*/
+          return RadioWidget(respostaTexto: respostas);
     } else {
-      return ListView.builder(
-          itemCount: respostaTexto.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-                title: Text(respostaTexto[index]),
-                leading: Checkbox(
-                    value: false,
-                    onChanged: (value) {
-                      setState(() {
-                        if (value == false) {
-                          value = true;
-                        } else {
-                          value = false;
-                        }
-                      });
-                    }));
-          });
+      return EmptyWidget();
+      //return ListView.builder(
+      //    itemCount: respostasLength,
+      //    itemBuilder: (context, index) {
+      //      return ListTile(
+      //          title: Text(respostas[index]),
+      //          leading: Checkbox(
+      //              value: false,
+      //              onChanged: (value) {
+      //                setState(() {
+      //                  if (value == false) {
+      //                    value = true;
+      //                  } else {
+      //                    value = false;
+      //                  }
+      //                });
+      //              }));
+      //    });
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +99,7 @@ class PostagemListState extends State<PostagemList> {
             appBar: AppBar(
               title: const Text('Fetch Data Example'),
             ),
+            //resizeToAvoidBottomInset: true,
             body: Center(
                 //Fazendo Fetch das postagens
                 child: FutureBuilder<List<Postagem>>(
@@ -106,25 +115,25 @@ class PostagemListState extends State<PostagemList> {
                               var postagem = snapshot.data![index];
                               List<dynamic> respostas =
                                   snapshot.data![index].respostas;
-                              bool radioOrCheckbox =
-                                  snapshot.data![index].escolha_unica;
                               comentarioController = controllerComments();
 
-                              return SizedBox(
+                              return Container(
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 height:
                                     MediaQuery.of(context).size.height * 0.5,
-                                child: Column(children: [
+                                child: 
+                                Column(children: [
                                   Text(snapshot.data![index].content),
                                   const SizedBox(
                                     height: 20.0,
-                                  ),
-                                  checkBoxOrRadio(respostas, radioOrCheckbox),
-                                  //Flexible(
-                                  //  child:MyWidget(
-                                  //    respostaTexto: respostas,
-                                  //    tipoResposta: radioOrCheckbox,
-                                  //  )),
+                                  ),                                  
+                                  //Container(
+                                  //  width: MediaQuery.of(context).size.width * 0.4,
+                                  //  height: MediaQuery.of(context).size.height * 0.3,
+                                  //  child: RadioWidget(postagem: postagem),
+                                  //)
+                                  Expanded(child: RadioWidget(postagem: postagem))
+                                  ,
                                   Wrap(
                                     spacing: 20.0,
                                     children: <Widget>[
@@ -235,7 +244,8 @@ class PostagemListState extends State<PostagemList> {
                                       },
                                     ),
                                   ),
-                                ]),
+                                ])
+                                
                               );
                             });
                       }
