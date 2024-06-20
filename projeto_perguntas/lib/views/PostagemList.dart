@@ -6,7 +6,7 @@ import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
 import 'package:projeto_perguntas/services/fetchPosts.dart';
 import 'package:projeto_perguntas/services/fetchComments.dart';
-import 'package:projeto_perguntas/views/radioWidget.dart';
+import 'package:projeto_perguntas/views/IsRadio.dart';
 import 'dart:async';
 import 'package:projeto_perguntas/services/sendComments.dart';
 
@@ -38,218 +38,158 @@ class PostagemListState extends State<PostagemList> {
     return TextEditingController();
   }
 
-/*
-  Widget checkBoxOrRadio(List<dynamic> respostaTexto, bool tipoResposta) {
-    List<dynamic> respostas = postagem.respostas;
-    int respostasLength = postagem.respostas.length;
-    bool tipoResposta = postagem.escolha_unica;
-    
-
-    if (respostasLength == 0) {
-      return EmptyWidget();
-    }
-    if (tipoResposta == true) {
-
-      /*dynamic currentOption = respostaTexto[0];
-      return ListView.builder(
-          itemCount: respostaTexto.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-                title: Text(respostaTexto[index]),
-                leading: Radio(
-                    value: respostaTexto[index],
-                    groupValue: currentOption,
-                    onChanged: (value) {
-                      setState(() {
-                        currentOption = value;
-                      });
-                    }));
-          });*/
-          return RadioWidget(respostaTexto: respostas);
-    } else {
-      return EmptyWidget();
-      //return ListView.builder(
-      //    itemCount: respostasLength,
-      //    itemBuilder: (context, index) {
-      //      return ListTile(
-      //          title: Text(respostas[index]),
-      //          leading: Checkbox(
-      //              value: false,
-      //              onChanged: (value) {
-      //                setState(() {
-      //                  if (value == false) {
-      //                    value = true;
-      //                  } else {
-      //                    value = false;
-      //                  }
-      //                });
-      //              }));
-      //    });
-    }
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Fetch Data Example',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      title: 'Fetch Data Example',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Fetch Data Example'),
         ),
-        home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Fetch Data Example'),
-            ),
-            //resizeToAvoidBottomInset: true,
-            body: Center(
-                //Fazendo Fetch das postagens
-                child: FutureBuilder<List<Postagem>>(
-                    future: futureFetch,
-                    builder: (context, snapshot) {
-                      //print("carregando");
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                            padding: const EdgeInsets.all(8),
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (BuildContext context, index) {
-                              var likeButton = snapshot.data![index].likes;
-                              var postagem = snapshot.data![index];
-                              List<dynamic> respostas =
-                                  snapshot.data![index].respostas;
-                              comentarioController = controllerComments();
+        body: Center(
+          child: FutureBuilder<List<Postagem>>(
+            future: futureFetch,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16.0),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, index) {
+                    var likeButton = snapshot.data![index].likes;
+                    var postagem = snapshot.data![index];
+                    List<dynamic> respostas = snapshot.data![index].respostas;
+                    comentarioController = controllerComments();
 
-                              return Container(
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.5,
-                                child: 
-                                Column(children: [
-                                  Text(snapshot.data![index].content),
-                                  const SizedBox(
-                                    height: 20.0,
-                                  ),                                  
-                                  //Container(
-                                  //  width: MediaQuery.of(context).size.width * 0.4,
-                                  //  height: MediaQuery.of(context).size.height * 0.3,
-                                  //  child: RadioWidget(postagem: postagem),
-                                  //)
-                                  Expanded(child: RadioWidget(postagem: postagem))
-                                  ,
-                                  Wrap(
-                                    spacing: 20.0,
-                                    children: <Widget>[
-                                      Flexible(
-                                        child: OutlinedButton(
-                                          onPressed: () {
-                                            updateLikeDislike(
-                                                'dislikes',
-                                                snapshot.data![index].dislikes,
-                                                snapshot.data![index].id,
-                                                snapshot.data![index].content,
-                                                respostas);
-                                          },
-                                          child: const Text('dislikes'),
-                                          style: ButtonStyle(
-                                              foregroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.grey)),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: /*ElevatedButton*/
-                                            OutlinedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              likeButton = likeButton + 1;
-                                              updateLikeDislike(
-                                                  'likes',
-                                                  likeButton,
-                                                  snapshot.data![index].id,
-                                                  snapshot.data![index].content,
-                                                  respostas);
-                                            });
-                                          },
-                                          child: FutureBuilder<Postagem>(
-                                              future: fetchLike(
-                                                  snapshot.data![index].id),
-                                              builder: (context, snapshot) {
-                                                return Text(
-                                                    "likes ${snapshot.data!.likes}");
-                                              }),
-                                          style: ButtonStyle(
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.blue),
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                    return Card(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              snapshot.data![index].content,
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 16.0),
+                            OptionsListWidget<String>(
+                              options: respostas.cast<String>(),
+                              isRadio: postagem.escolha_unica,
+                              onChanged: (value) {
+                                print('Selected value: $value');
+                              },
+                            ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                OutlinedButton.icon(
+                                  onPressed: () {
+                                    updateLikeDislike(
+                                      'dislikes',
+                                      snapshot.data![index].dislikes,
+                                      snapshot.data![index].id,
+                                      snapshot.data![index].content,
+                                      respostas,
+                                    );
+                                  },
+                                  icon: const Icon(Icons.thumb_down),
+                                  label: const Text('Dislike'),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.grey,
                                   ),
-                                  const SizedBox(
-                                    height: 20.0,
+                                ),
+                                OutlinedButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      likeButton = likeButton + 1;
+                                      updateLikeDislike(
+                                        'likes',
+                                        likeButton,
+                                        snapshot.data![index].id,
+                                        snapshot.data![index].content,
+                                        respostas,
+                                      );
+                                    });
+                                  },
+                                  icon: const Icon(Icons.thumb_up),
+                                  label: FutureBuilder<Postagem>(
+                                    future: fetchLike(snapshot.data![index].id),
+                                    builder: (context, snapshot) {
+                                      return Text("Likes ${snapshot.data!.likes}");
+                                    },
                                   ),
-                                  Flexible(
-                                      child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          10.0), // Adjust as desired
-                                      border: Border.all(
-                                        color: Colors
-                                            .grey, // Customize border color
-                                        width: 1.0, // Adjust border width
-                                      ),
-                                    ),
-                                    child: TextFormField(
-                                      decoration: const InputDecoration(
-                                        contentPadding: EdgeInsets.all(5),
-                                        labelText: 'Escreva seu comentário',
-                                        prefixIcon: Icon(Icons.comment),
-                                      ),
-                                      controller: comentarioController,
-                                      onChanged: (value) => commentText = value,
-                                    ),
-                                  )),
-                                  const SizedBox(height: 15.0),
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          createComment(widget.user.username,
-                                              commentText, postagem);
-                                        });
-                                      },
-                                      child: const Text("Enviar comentário")),
-                                  Flexible(
-                                    child:
-                                        FutureBuilder<List<CommentsPostagem>>(
-                                      future: fetchComments(postagem),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Flexible(
-                                            child: ListView.builder(
-                                              itemCount: snapshot.data!.length,
-                                              itemBuilder: (context, index) {
-                                                final item =
-                                                    snapshot.data![index].text;
-                                                return ListTile(
-                                                  title: Text(item),
-                                                  trailing: Icon(Icons
-                                                      .arrow_right), // Add a trailing icon
-                                                );
-                                              },
-                                            ),
-                                          );
-                                        }
-                                        return Text('${snapshot.error}');
-                                      },
-                                    ),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.blue,
                                   ),
-                                ])
-                                
-                              );
-                            });
-                      }
-                      return Text('${snapshot.error}');
-                    }))));
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Escreva seu comentário',
+                                prefixIcon: Icon(Icons.comment),
+                                border: OutlineInputBorder(),
+                              ),
+                              controller: comentarioController,
+                              onChanged: (value) => commentText = value,
+                            ),
+                            SizedBox(height: 16.0, width: MediaQuery.sizeOf(context).width*0.4,),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  createComment(
+                                    widget.user.username,
+                                    commentText,
+                                    postagem,
+                                  );
+                                });
+                              },
+                              child: const Text("Enviar comentário"),
+                            ),
+                            const SizedBox(height: 16.0),
+                            FutureBuilder<List<CommentsPostagem>>(
+                              future: fetchComments(postagem),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      final item = snapshot.data![index].text;
+                                      return ListTile(
+                                        title: Text(item),
+                                        trailing: const Icon(Icons.arrow_right),
+                                      );
+                                    },
+                                  );
+                                }
+                                return Text('${snapshot.error}');
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+              return Text('${snapshot.error}');
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
