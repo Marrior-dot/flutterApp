@@ -84,9 +84,6 @@ class PostagemListState extends State<PostagemList> {
                             OptionsListWidget<String>(
                               options: respostas.cast<String>(),
                               isRadio: postagem.escolha_unica,
-                              onChanged: (value) {
-                                print('Selected value: $value');
-                              },
                             ),
                             const SizedBox(height: 16.0),
                             Row(

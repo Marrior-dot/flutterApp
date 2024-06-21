@@ -5,14 +5,12 @@ class OptionsListWidget<T> extends StatefulWidget {
   final List<T> options;
   final bool isRadio;
   final T? initialValue;
-  final ValueChanged<T?> onChanged;
 
   const OptionsListWidget({
     super.key,
     required this.options,
     required this.isRadio,
     this.initialValue,
-    required this.onChanged,
   });
 
   @override
@@ -21,18 +19,20 @@ class OptionsListWidget<T> extends StatefulWidget {
 
 class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
   T? _selectedValue;
+  bool? checkBoxInitialValue;
 
   @override
   void initState() {
     super.initState();
     _selectedValue = widget.initialValue;
+    checkBoxInitialValue = false;
   }
 
   @override
   Widget build(BuildContext context) {
 
     if(widget.options.isEmpty){
-     return Text("");
+      return Text("");
     }
 
     if(widget.isRadio){
@@ -49,31 +49,29 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                   onChanged: (T? value) {
                     setState(() {
                       _selectedValue = value;
-                      widget.onChanged(value);
                     });
                   },
                 ) );}
       );
     }
+
     else
     {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: widget.options.length,
       itemBuilder: (context, index) {
-        final option = widget.options[index];      
+        final option = widget.options[index];
+        bool? checkBoxValue = checkBoxInitialValue;      
         return ListTile(
           title: Text(option.toString()),
           leading: Checkbox(
-                  value: _selectedValue == option,
+                  value: checkBoxValue,
                   onChanged: (bool? value) {
                     setState(() {
-                      if (value == true) {
-                        _selectedValue = option;
-                      } else {
-                        _selectedValue = null;
-                      }
-                      widget.onChanged(_selectedValue);
+                      checkBoxInitialValue = value!;
+                      checkBoxValue = checkBoxInitialValue;
+                      print(checkBoxInitialValue);
                     });
                   },
                 )
@@ -81,40 +79,5 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                 }
       );      
     }
-
-    /*return ListView.builder(
-      shrinkWrap: true,
-      itemCount: widget.options.length,
-      itemBuilder: (context, index) {
-        final option = widget.options[index];      
-        return ListTile(
-          title: Text(option.toString()),
-          leading: widget.isRadio
-              ? Radio<T>(
-                  value: option,
-                  groupValue: _selectedValue,
-                  onChanged: (T? value) {
-                    setState(() {
-                      _selectedValue = value;
-                      widget.onChanged(value);
-                    });
-                  },
-                )
-              : Checkbox(
-                  value: _selectedValue == option,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      if (value == true) {
-                        _selectedValue = option;
-                      } else {
-                        _selectedValue = null;
-                      }
-                      widget.onChanged(_selectedValue);
-                    });
-                  },
-                ),
-        );
-      },
-    );*/
   }
 }
