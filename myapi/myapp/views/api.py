@@ -129,6 +129,7 @@ def comentariosListPostagem(req, pk):
 
 @api_view(["PUT"])
 def respostasUpdate(req, texto):
+    print(req.data.respondido)
     ans = Respostas.objects.filter(respostaTexto=texto).get()
     serializer = RespostasSerializer(instance=ans, data=req.data)
     if serializer.is_valid():

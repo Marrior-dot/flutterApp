@@ -1,5 +1,6 @@
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_perguntas/services/updateResposta.dart';
 
 class OptionsListWidget<T> extends StatefulWidget {
   final List<T> options;
@@ -19,13 +20,15 @@ class OptionsListWidget<T> extends StatefulWidget {
 
 class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
   T? _selectedValue;
-  bool? checkBoxInitialValue;
+  List<bool?> checkBoxInitialValue=[];
 
   @override
   void initState() {
     super.initState();
     _selectedValue = widget.initialValue;
-    checkBoxInitialValue = false;
+    for (int index = 0 ; index < widget.options.length; index++){
+      checkBoxInitialValue.add(false);
+    }
   }
 
   @override
@@ -36,48 +39,52 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
     }
 
     if(widget.isRadio){
-      return ListView.builder(
-      shrinkWrap: true,
-      itemCount: widget.options.length,
-      itemBuilder: (context, index) {
-        final option = widget.options[index];      
-        return ListTile(
-          title: Text(option.toString()),
-          leading: Radio(
-                  value: option,
-                  groupValue: _selectedValue,
-                  onChanged: (T? value) {
-                    setState(() {
-                      _selectedValue = value;
-                    });
-                  },
-                ) );}
-      );
+      return Column(
+        children:  [
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: widget.options.length,
+            itemBuilder: (context, index) {
+              final option = widget.options[index];      
+              return ListTile(
+                title: Text(option.toString()),
+                leading: Radio(
+                        value: option,
+                        groupValue: _selectedValue,
+                        onChanged: (T? value) {
+                          setState(() {
+                            _selectedValue = value;
+                          });
+                        },
+                      ) );}
+            )
+          //ElevatedButton(onPressed: onPressed, child: Text("Enviar resposta"))    
+          ]
+        );
     }
 
     else
     {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: widget.options.length,
-      itemBuilder: (context, index) {
-        final option = widget.options[index];
-        bool? checkBoxValue = checkBoxInitialValue;      
-        return ListTile(
-          title: Text(option.toString()),
-          leading: Checkbox(
-                  value: checkBoxValue,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      checkBoxInitialValue = value!;
-                      checkBoxValue = checkBoxInitialValue;
-                      print(checkBoxInitialValue);
-                    });
-                  },
-                )
-                );
-                }
-      );      
+    return Column(
+     children: [ 
+      ListView.builder(
+        shrinkWrap: true,
+        itemCount: widget.options.length,
+        itemBuilder: (context, index) {
+          final option = widget.options[index];
+          return ListTile(
+            title: Text(option.toString()),
+            leading: Checkbox(
+                    value: checkBoxInitialValue[index],
+                    onChanged: (bool? value) {
+                      setState(() {                      
+                        checkBoxInitialValue[index] = value!;
+                      });
+                    },
+                  )
+                  );
+                  }
+        )]);      
     }
   }
 }
