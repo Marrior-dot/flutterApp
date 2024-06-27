@@ -17,7 +17,6 @@ class User(models.Model):
 class Respostas(models.Model):
     respostaTexto = models.CharField(max_length=500 ,blank=True, null=True, default="")
     respondido = models.IntegerField(default=0)
-    #respostaBool = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['respostaTexto']

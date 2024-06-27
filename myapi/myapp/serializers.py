@@ -15,7 +15,7 @@ class PostagemSerializer(serializers.ModelSerializer):
 class RespostasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Respostas
-        fields = ["respostaBool"]
+        fields = ["respostaTexto", "respondido"]
         
 class CommentsPostagemSerializer(serializers.ModelSerializer):
     postagem = PostagemSerializer(read_only=True)

@@ -9,6 +9,7 @@ import 'package:projeto_perguntas/services/fetchComments.dart';
 import 'package:projeto_perguntas/views/IsRadio.dart';
 import 'dart:async';
 import 'package:projeto_perguntas/services/sendComments.dart';
+import 'dart:convert' show utf8;
 
 class PostagemList extends StatefulWidget {
   final User user;
@@ -122,7 +123,8 @@ class PostagemListState extends State<PostagemList> {
                                   label: FutureBuilder<Postagem>(
                                     future: fetchLike(snapshot.data![index].id),
                                     builder: (context, snapshot) {
-                                      return Text("Likes ${snapshot.data!.likes}");
+                                      return Text(
+                                          "Likes ${snapshot.data!.likes}");
                                     },
                                   ),
                                   style: OutlinedButton.styleFrom(
@@ -141,7 +143,10 @@ class PostagemListState extends State<PostagemList> {
                               controller: comentarioController,
                               onChanged: (value) => commentText = value,
                             ),
-                            SizedBox(height: 16.0, width: MediaQuery.sizeOf(context).width*0.4,),
+                            SizedBox(
+                              height: 16.0,
+                              width: MediaQuery.sizeOf(context).width * 0.4,
+                            ),
                             ElevatedButton(
                               onPressed: () {
                                 setState(() {
@@ -161,7 +166,8 @@ class PostagemListState extends State<PostagemList> {
                                 if (snapshot.hasData) {
                                   return ListView.builder(
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemCount: snapshot.data!.length,
                                     itemBuilder: (context, index) {
                                       final item = snapshot.data![index].text;
