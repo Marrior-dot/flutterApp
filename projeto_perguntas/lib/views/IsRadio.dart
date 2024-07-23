@@ -1,6 +1,7 @@
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/services/updateResposta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' show utf8;
 
 class OptionsListWidget<T> extends StatefulWidget {
@@ -34,6 +35,22 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
       checkBoxInitialValue.add(false);
     }
     checkBoxOption = [];
+    sendButton = true;
+  }
+
+  Future<void> _loadButtonState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      sendButton = prefs.getBool('sendButton') ?? true;
+    });
+  }
+
+  Future<void> _saveName(String name) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      sendButton = name;
+    });
+    await prefs.setString('name', name);
   }
 
   @override
@@ -64,13 +81,12 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                   ));
             }),
         ElevatedButton(
-            onPressed: //sendButton!
-                //?
-                () {
+            onPressed: sendButton == true ? (){
               updateResposta(radioOption);
-              sendButton = null;
-            }
-            //: null
+              setState((){
+                sendButton = null;
+              });
+            } : null
             ,
             child: Text("Enviar resposta"))
       ]);
@@ -99,11 +115,14 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                   ));
             }),
         ElevatedButton(
-            onPressed: () {
+            onPressed: sendButton == true ? () {
               for (var i = 0; i < checkBoxOption!.length; i++) {
                 updateResposta(checkBoxOption![i]);
               }
-            },
+              setState(() {
+                sendButton = null;
+              });
+            }: null,
             child: Text("Enviar resposta"))
       ]);
     }

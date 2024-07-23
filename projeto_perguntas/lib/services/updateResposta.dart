@@ -1,6 +1,7 @@
 import 'package:projeto_perguntas/model/respostas.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:projeto_perguntas/views/IsRadio.dart' as isRadio;
 
 Future<Respostas> updateResposta(String? respostaTexto) async {
   final response = await http.put(
@@ -10,7 +11,6 @@ Future<Respostas> updateResposta(String? respostaTexto) async {
     },
     body: jsonEncode(<String, dynamic>{
       'respostaTexto': respostaTexto,
-      //'respondido': respondido + 1
     }),
   );
 
