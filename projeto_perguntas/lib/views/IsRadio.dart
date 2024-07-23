@@ -25,7 +25,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
   List<bool?> checkBoxInitialValue = [];
   String? radioOption;
   List<String?>? checkBoxOption;
-  bool? sendButton = true;
+  bool? sendButton;
 
   @override
   void initState() {
@@ -35,22 +35,23 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
       checkBoxInitialValue.add(false);
     }
     checkBoxOption = [];
-    sendButton = true;
+    _loadButtonState();
   }
 
   Future<void> _loadButtonState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      sendButton = prefs.getBool('sendButton') ?? true;
+      //sendButton = prefs.getBool('sendButton') ?? true;
+      sendButton = prefs.getBool('sendButton') == false ? null : true;
     });
   }
 
-  Future<void> _saveName(String name) async {
+  Future<void> _saveButtonState(/*bool sendButton*/) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      sendButton = name;
+      sendButton = false;
     });
-    await prefs.setString('name', name);
+    await prefs.setBool('sendButton', false);
   }
 
   @override
@@ -83,6 +84,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
         ElevatedButton(
             onPressed: sendButton == true ? (){
               updateResposta(radioOption);
+              _saveButtonState();
               setState((){
                 sendButton = null;
               });
