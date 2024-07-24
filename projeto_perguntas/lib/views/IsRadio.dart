@@ -26,6 +26,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
   String? radioOption;
   List<String?>? checkBoxOption;
   bool? sendButton;
+  List<bool?>? listSendButton = [];
 
   @override
   void initState() {
@@ -39,19 +40,26 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
   }
 
   Future<void> _loadButtonState() async {
+    //for (int index = 0; index < widget.options.length; index++) {
+    //  listSendButton!.add(true);
+    //}
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
+      listSendButton = prefs.get('listSendButton') != null
+          ? prefs.get('listSendButton') as List<bool>?
+          : List.generate(widget.options.length, (index) => null);
       //sendButton = prefs.getBool('sendButton') ?? true;
-      sendButton = prefs.getBool('sendButton') == false ? null : true;
+      //sendButton = prefs.getBool('sendButton') == false ? null : true;
+      //listSendButton = prefs.get('listSendButton')
     });
   }
 
-  Future<void> _saveButtonState(/*bool sendButton*/) async {
+  Future<void> _saveButtonState(bool? sendButton) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      sendButton = false;
+      sendButton = sendButton;
     });
-    await prefs.setBool('sendButton', false);
+    //await prefs.setLi('sendButton', sendButton!);
   }
 
   @override
@@ -82,14 +90,16 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                   ));
             }),
         ElevatedButton(
-            onPressed: sendButton == true ? (){
-              updateResposta(radioOption);
-              _saveButtonState();
-              setState((){
-                sendButton = null;
-              });
-            } : null
-            ,
+            //onPressed: sendButton == true
+            onPressed: listSendButton[index] == true
+                ? () {
+                    updateResposta(radioOption);
+                    _saveButtonState(false);
+                    setState(() {
+                      sendButton = null;
+                    });
+                  }
+                : null,
             child: Text("Enviar resposta"))
       ]);
     } else {
@@ -117,14 +127,16 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                   ));
             }),
         ElevatedButton(
-            onPressed: sendButton == true ? () {
-              for (var i = 0; i < checkBoxOption!.length; i++) {
-                updateResposta(checkBoxOption![i]);
-              }
-              setState(() {
-                sendButton = null;
-              });
-            }: null,
+            onPressed: sendButton == true
+                ? () {
+                    for (var i = 0; i < checkBoxOption!.length; i++) {
+                      updateResposta(checkBoxOption![i]);
+                    }
+                    setState(() {
+                      sendButton = null;
+                    });
+                  }
+                : null,
             child: Text("Enviar resposta"))
       ]);
     }
