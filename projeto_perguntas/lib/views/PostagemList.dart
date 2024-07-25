@@ -9,6 +9,7 @@ import 'package:projeto_perguntas/views/IsRadio.dart';
 import 'dart:async';
 import 'package:projeto_perguntas/services/sendComments.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 
 class PostagemList extends StatefulWidget {
   final User user;
@@ -20,7 +21,7 @@ class PostagemList extends StatefulWidget {
 class PostagemListState extends State<PostagemList> {
   late Future<List<Postagem>> futureFetch;
   late TextEditingController comentarioController;
-  //late List<bool?> listSendButtonState;
+  late List<dynamic> listSendButtonStateBool;
   late List<String> listSendButtonState;
   String commentText = "";
 
@@ -36,22 +37,10 @@ class PostagemListState extends State<PostagemList> {
     super.dispose();
   }
 
-  Future<void> _loadButtonState(int listLgth) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      //listSendButton = prefs.get('listSendButton') != null
-      //    ? prefs.get('listSendButton') as List<bool>?
-      //    : List.generate(widget.options.length, (index) => null);
-      //listSendButtonState = prefs.get('listSendButtonState') as List<bool?>? ?? List.generate(listLgth, (index) => true);
-      listSendButtonState = prefs.getStringList('listSendButtonState') ?? List.generate(listLgth, (index) => 'true');
-    });
-  }
-
-  Future<void> _saveButtonState(int index) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    listSendButtonState[index] = 'null';
-    prefs.setStringList('listSendButtonState', listSendButtonState as List<String>);
-  }
+  void loadDataBool(int lgth){
+    final box = GetStorage();
+    listSendButtonStateBool = box.read('listSendButtonStateBool') ?? List.generate(lgth, (index) => true);
+    }
 
   TextEditingController controllerComments() {
     return TextEditingController();
@@ -59,7 +48,7 @@ class PostagemListState extends State<PostagemList> {
 
   @override
   Widget build(BuildContext context) {
-    localstora
+    //GetStorage().remove('listSendButtonStateBool');
     return MaterialApp(
       title: 'Fetch Data Example',
       theme: ThemeData(
@@ -74,8 +63,9 @@ class PostagemListState extends State<PostagemList> {
             future: futureFetch,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                _loadButtonState(snapshot.data!.length);
-                print(listSendButtonState);
+                //_loadButtonState(snapshot.data!.length);
+                loadDataBool(snapshot.data!.length);
+                //print(listSendButtonStateBool);
                 return ListView.builder(
                   padding: const EdgeInsets.all(16.0),
                   itemCount: snapshot.data!.length,
@@ -106,8 +96,11 @@ class PostagemListState extends State<PostagemList> {
                             OptionsListWidget<String>(
                               options: respostas.cast<String>(),
                               isRadio: postagem.escolha_unica,
-                              sendWidgetButton: listSendButtonState[index],
-                              saveButton: _saveButtonState(index),
+                              sendWidgetButton: listSendButtonStateBool[index],
+                              //saveButton: _saveButtonState(index),
+                              //saveButton: saveDataBool(index),
+                              listSendButtonStateBoolNew: listSendButtonStateBool,
+                              respostaIndex: index,
                             ),
                             const SizedBox(height: 16.0),
                             Row(

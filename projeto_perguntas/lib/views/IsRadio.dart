@@ -1,22 +1,27 @@
+import 'dart:ffi';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/services/updateResposta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 import 'dart:convert' show utf8;
 
 class OptionsListWidget<T> extends StatefulWidget {
   final List<T> options;
   final bool isRadio;
   final T? initialValue;
-  final Future<void>? saveButton;
-  String? sendWidgetButton; 
+  //final Function? saveButton;
+  int respostaIndex;
+  List<dynamic> listSendButtonStateBoolNew;
+  bool? sendWidgetButton; 
 
   OptionsListWidget({
     super.key,
     required this.options,
     required this.isRadio,
     this.initialValue,
-    this.saveButton,
+    required this.respostaIndex,
+    required this.listSendButtonStateBoolNew,
+    //this.saveButton,
     this.sendWidgetButton
   });
 
@@ -39,27 +44,13 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
       checkBoxInitialValue.add(false);
     }
     checkBoxOption = [];
-    sendButton = widget.sendWidgetButton == 'true' ? true : null;
-    //_loadButtonState();
+    sendButton = widget.sendWidgetButton == true ? true : null;
   }
 
-  //Future<void> _loadButtonState() async {
-  //  //for (int index = 0; index < widget.options.length; index++) {
-  //  //  listSendButton!.add(true);
-  //  //}
-  //  SharedPreferences prefs = await SharedPreferences.getInstance();
-  //  setState(() {
-  //    listSendButton = prefs.get('listSendButton') != null
-  //        ? prefs.get('listSendButton') as List<bool>?
-  //        : List.generate(widget.options.length, (index) => null);
-  //    //sendButton = prefs.getBool('sendButton') ?? true;
-  //    //sendButton = prefs.getBool('sendButton') == false ? null : true;
-  //    //listSendButton = prefs.get('listSendButton')
-  //  });
-  //}
-
-  Future<void> _saveButtonState(bool? sendButton) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void saveButtonState(int index, List<dynamic> listSendButtonStateBool){
+    final box = GetStorage();
+    listSendButtonStateBool[index] = null;
+    box.write('listSendButtonStateBool', listSendButtonStateBool);
   }
 
   @override
@@ -93,8 +84,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
             onPressed: sendButton == true
                 ? () {
                     updateResposta(radioOption);
-                    //_saveButtonState(false);
-                    widget.saveButton!;
+                    saveButtonState(widget.respostaIndex, widget.listSendButtonStateBoolNew);
                     setState(() {
                       sendButton = null;
                     });
@@ -132,6 +122,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                     for (var i = 0; i < checkBoxOption!.length; i++) {
                       updateResposta(checkBoxOption![i]);
                     }
+                    saveButtonState(widget.respostaIndex, widget.listSendButtonStateBoolNew);
                     setState(() {
                       sendButton = null;
                     });

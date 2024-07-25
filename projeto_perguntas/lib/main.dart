@@ -3,10 +3,11 @@ import 'package:projeto_perguntas/model/postagem.dart' as postagem;
 import 'package:projeto_perguntas/services/fetchPosts.dart' as fetch;
 import 'package:projeto_perguntas/views/LoginPage.dart';
 import 'package:projeto_perguntas/services/likeDislikeButton.dart';
-
+import 'package:get_storage/get_storage.dart';
 
 
 void main() async {
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
