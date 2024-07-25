@@ -11,10 +11,8 @@ Future<User> userLogin(String usuario, String senha) async {
   var uuser = User.fromJson(usuarioMap);
 
   if (response.statusCode == 200 && senha == uuser.password) {
-    print(uuser.username);
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    //print(uuser.runtimeType);
     return uuser;
   } else {
     // If the server did not return a 200 OK response,

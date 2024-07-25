@@ -9,7 +9,6 @@ class OptionsListWidget<T> extends StatefulWidget {
   final List<T> options;
   final bool isRadio;
   final T? initialValue;
-  //final Function? saveButton;
   int respostaIndex;
   List<dynamic> listSendButtonStateBoolNew;
   bool? sendWidgetButton; 
@@ -21,7 +20,6 @@ class OptionsListWidget<T> extends StatefulWidget {
     this.initialValue,
     required this.respostaIndex,
     required this.listSendButtonStateBoolNew,
-    //this.saveButton,
     this.sendWidgetButton
   });
 

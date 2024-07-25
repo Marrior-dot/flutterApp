@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 class LoginPage extends State<MyApp> {
   final userNameController = TextEditingController();
   final passWordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   final elevatedButtonStyle = ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
@@ -43,7 +44,10 @@ class LoginPage extends State<MyApp> {
           body: Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
+              child:
+              Form(
+                key: formKey  
+               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
@@ -76,6 +80,11 @@ class LoginPage extends State<MyApp> {
                         ),
                         obscureText: true,
                         controller: passWordController,
+                        validator: (value){
+                          if (value != "") {
+                            return "por favor deixe vazio";
+                          }
+                        },
                       )),
                   const SizedBox(height: 20.0),
                   Builder(
@@ -125,6 +134,7 @@ class LoginPage extends State<MyApp> {
               ),
             ),
           ),
-        ));
+        )
+      );
   }
 }
