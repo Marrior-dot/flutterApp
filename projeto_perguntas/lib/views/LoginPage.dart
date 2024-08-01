@@ -35,106 +35,153 @@ class LoginPage extends State<MyApp> {
           //"/user/${userName}/feed": (context) => PostagemList()
         },
         home: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text('Bem-vindo ao (Nome da Aplicação)',
-                style: GoogleFonts.montserrat(
-                    fontSize: 40, fontWeight: FontWeight.bold)),
-          ),
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-              Form(
-                key: formKey  
-               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                      child: Image.asset('assets/login.png'),
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.25),
-                  SizedBox(width: 1, height: 5),
-                  Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          border: Border.all(color: Colors.grey, width: 1.0)),
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Usuário',
-                          prefixIcon: Icon(Icons.login),
-                        ),
-                        controller: userNameController,
-                      )),
-                  const SizedBox(height: 40.0),
-                  Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          border: Border.all(color: Colors.grey, width: 1.0)),
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Senha',
-                          prefixIcon: Icon(Icons.lock),
-                        ),
-                        obscureText: true,
-                        controller: passWordController,
-                        validator: (value){
-                          if (value != "") {
-                            return "por favor deixe vazio";
-                          }
-                        },
-                      )),
-                  const SizedBox(height: 20.0),
-                  Builder(
-                      builder: (context) => Center(
-                              child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            height: 50,
-                            child: ElevatedButton(
-                                style: elevatedButtonStyle,
-                                child: Text("Login",
-                                    style: GoogleFonts.openSans(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold)),
-                                onPressed: () {
-                                  userLogin(userNameController.text.toString(),
-                                      passWordController.text.toString());
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              FutureBuilder<User>(
-                                                  future: userLogin(
-                                                    userNameController.text
-                                                        .toString(),
-                                                    passWordController.text
-                                                        .toString(),
-                                                  ),
-                                                  builder: (BuildContext
-                                                          context,
-                                                      AsyncSnapshot snapshot) {
-                                                    //=>
-                                                    return PostagemList(
-                                                        user: snapshot.data!);
-                                                  })));
-                                }),
-                          ))),
-                  Builder(
-                      builder: (context) => Center(
-                            child: TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/registrar');
-                                },
-                                child: const Text(
-                                    "Não tem Cadastro? Clique aqui")),
-                          ))
-                ],
-              ),
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text('Bem-vindo ao (Nome da Aplicação)',
+                  style: GoogleFonts.montserrat(
+                      fontSize: 40, fontWeight: FontWeight.bold)),
             ),
-          ),
-        )
-      );
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          child: Image.asset('assets/login.png'),
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          height: MediaQuery.of(context).size.height * 0.25),
+                      SizedBox(width: 1, height: 5),
+                      Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              border:
+                                  Border.all(color: Colors.grey, width: 1.0)),
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Usuário',
+                              prefixIcon: Icon(Icons.login),
+                            ),
+                            controller: userNameController,
+                            validator: (value) {
+                              value = userNameController.text;
+                              if (value.isEmpty || value == null) {
+                                return 'Por favor entre o nome de usuário';
+                              }
+                              return null;
+                            },
+                          )),
+                      const SizedBox(height: 40.0),
+                      Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              border:
+                                  Border.all(color: Colors.grey, width: 1.0)),
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Senha',
+                              prefixIcon: Icon(Icons.lock),
+                            ),
+                            obscureText: true,
+                            controller: passWordController,
+                            validator: (value) {
+                              value = passWordController.text;
+                              if (value.isEmpty || value == null) {
+                                return 'Por favor insira a senha';
+                              }
+                              return null;
+                            },
+                          )),
+                      const SizedBox(height: 20.0),
+                      Builder(
+                          builder: (context) => Center(
+                                  child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                height: 50,
+                                child: ElevatedButton(
+                                    style: elevatedButtonStyle,
+                                    child: Text("Login",
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold)),
+                                    onPressed: () {
+                                      //if (formKey.currentState!.validate() ==
+                                      //        true &&
+                                      //    userLogin(
+                                      //                userNameController.text
+                                      //                    .toString(),
+                                      //                passWordController.text
+                                      //                    .toString())
+                                      //            .runtimeType ==
+                                      //        Future<User>) {
+                                      //  Navigator.push(
+                                      //      context,
+                                      //      MaterialPageRoute(
+                                      //          builder: (BuildContext
+                                      //                  context) =>
+                                      //              FutureBuilder<User>(
+                                      //                  future: userLogin(
+                                      //                    userNameController
+                                      //                        .text
+                                      //                        .toString(),
+                                      //                    passWordController
+                                      //                        .text
+                                      //                        .toString(),
+                                      //                  ),
+                                      //                  builder: (BuildContext
+                                      //                          context,
+                                      //                      AsyncSnapshot
+                                      //                          snapshot) {
+                                      //                    //=>
+                                      //                    return PostagemList(
+                                      //                        user: snapshot
+                                      //                            .data!);
+                                      //                  })));
+                                      //}
+
+                                      userLogin(
+                                          userNameController.text.toString(),
+                                          passWordController.text.toString());
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  FutureBuilder<User>(
+                                                      future: userLogin(
+                                                        userNameController.text
+                                                            .toString(),
+                                                        passWordController.text
+                                                            .toString(),
+                                                      ),
+                                                      builder:
+                                                          (BuildContext context,
+                                                              AsyncSnapshot
+                                                                  snapshot) {
+                                                        //=>
+                                                        return PostagemList(
+                                                            user:
+                                                                snapshot.data!);
+                                                      })));
+                                    }),
+                              ))),
+                      Builder(
+                          builder: (context) => Center(
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, '/registrar');
+                                    },
+                                    child: const Text(
+                                        "Não tem Cadastro? Clique aqui")),
+                              ))
+                    ],
+                  ),
+                ),
+              ),
+            )));
   }
 }
