@@ -109,63 +109,55 @@ class LoginPage extends State<MyApp> {
                                             fontSize: 24,
                                             fontWeight: FontWeight.bold)),
                                     onPressed: () {
-                                      //if (formKey.currentState!.validate() ==
-                                      //        true &&
-                                      //    userLogin(
-                                      //                userNameController.text
-                                      //                    .toString(),
-                                      //                passWordController.text
-                                      //                    .toString())
-                                      //            .runtimeType ==
-                                      //        Future<User>) {
-                                      //  Navigator.push(
-                                      //      context,
-                                      //      MaterialPageRoute(
-                                      //          builder: (BuildContext
-                                      //                  context) =>
-                                      //              FutureBuilder<User>(
-                                      //                  future: userLogin(
-                                      //                    userNameController
-                                      //                        .text
-                                      //                        .toString(),
-                                      //                    passWordController
-                                      //                        .text
-                                      //                        .toString(),
-                                      //                  ),
-                                      //                  builder: (BuildContext
-                                      //                          context,
-                                      //                      AsyncSnapshot
-                                      //                          snapshot) {
-                                      //                    //=>
-                                      //                    return PostagemList(
-                                      //                        user: snapshot
-                                      //                            .data!);
-                                      //                  })));
-                                      //}
+                                      if (formKey.currentState!.validate()) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    FutureBuilder<User>(
+                                                        future: userLogin(
+                                                          userNameController
+                                                              .text
+                                                              .toString(),
+                                                          passWordController
+                                                              .text
+                                                              .toString(),
+                                                        ),
+                                                        builder: (BuildContext
+                                                                context,
+                                                            AsyncSnapshot
+                                                                snapshot) {
+                                                          //=>
+                                                          return PostagemList(
+                                                              user: snapshot
+                                                                  .data!);
+                                                        })));
+                                      }
 
-                                      userLogin(
-                                          userNameController.text.toString(),
-                                          passWordController.text.toString());
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  FutureBuilder<User>(
-                                                      future: userLogin(
-                                                        userNameController.text
-                                                            .toString(),
-                                                        passWordController.text
-                                                            .toString(),
-                                                      ),
-                                                      builder:
-                                                          (BuildContext context,
-                                                              AsyncSnapshot
-                                                                  snapshot) {
-                                                        //=>
-                                                        return PostagemList(
-                                                            user:
-                                                                snapshot.data!);
-                                                      })));
+                                      //userLogin(
+                                      //    userNameController.text.toString(),
+                                      //    passWordController.text.toString());
+                                      //Navigator.push(
+                                      //    context,
+                                      //    MaterialPageRoute(
+                                      //        builder: (BuildContext context) =>
+                                      //            FutureBuilder<User>(
+                                      //                future: userLogin(
+                                      //                  userNameController.text
+                                      //                      .toString(),
+                                      //                  passWordController.text
+                                      //                      .toString(),
+                                      //                ),
+                                      //                builder:
+                                      //                    (BuildContext context,
+                                      //                        AsyncSnapshot
+                                      //                            snapshot) {
+                                      //                  //=>
+                                      //                  return PostagemList(
+                                      //                      user:
+                                      //                          snapshot.data!);
+                                      //                })));
                                     }),
                               ))),
                       Builder(
