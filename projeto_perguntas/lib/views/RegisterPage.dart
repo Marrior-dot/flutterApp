@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/services/userCreate.dart';
 import 'package:projeto_perguntas/model/user.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:projeto_perguntas/services/userLogin.dart';
+import 'package:projeto_perguntas/views/PostagemList.dart';
 
 class RegisterPage extends StatelessWidget {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final userNameController = TextEditingController();
   final passWordController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+  final regexSenha = RegExp(r'^[a-zA-Z]+$[0-9]*');
+  final regexEmail = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 
   RegisterPage({super.key});
   final cadastrarButtonStyle = ElevatedButton.styleFrom(
@@ -31,7 +38,10 @@ class RegisterPage extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child: 
+          Form(
+            key: formKey,
+            child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(child: Image.asset('assets/registro.png'), width: MediaQuery.of(context).size.width * 0.5 , height: MediaQuery.of(context).size.height * 0.25),
@@ -46,7 +56,13 @@ class RegisterPage extends StatelessWidget {
                     labelText: 'Nome',
                     prefixIcon: Icon(Icons.login),
                   ),
-                  controller: nameController)),
+                  controller: nameController,
+                  validator: (value){
+                    if(value == null || value.isEmpty){
+                      return 'Por favor, digite seu nome';
+                    }
+                    return null;
+                  },)),
                   SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
                   Container(
                       decoration: BoxDecoration(
@@ -59,6 +75,26 @@ class RegisterPage extends StatelessWidget {
                   prefixIcon: Icon(Icons.password),
                 ),
                 controller: passWordController,
+                validator: (value){
+                  String errorStringSenha = "";
+                  if(value == null || value.isEmpty){
+                    return 'Por favor, digite sua senha';
+                  }
+
+                  if(value.length < 8){
+                    errorStringSenha += 'A senha deve conter no mínimo 8 caracteres\n';
+                  }
+
+                  if(!regexSenha.hasMatch(value)){
+                    errorStringSenha += 'A senha deve conter ao menos uma letra maiúscula e um número\n';
+                  }
+
+                  if (errorStringSenha != "") {
+                    return errorStringSenha;
+                  }
+
+                  return null;
+                },
                 obscureText: true,
               )),                  
               SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
@@ -72,6 +108,14 @@ class RegisterPage extends StatelessWidget {
                     labelText: 'Email',
                     prefixIcon: Icon(Icons.email),
                   ),
+                  validator: (value){
+                    if(value == null || value.isEmpty){
+                      return 'Por favor, digite seu email';
+                    }
+                    if(!regexEmail.hasMatch(value)){
+                      return 'Por favor, digite um email válido';
+                    }
+                  },
                   controller: emailController)),                 
                   SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
                   Container(
@@ -85,6 +129,15 @@ class RegisterPage extends StatelessWidget {
                   prefixIcon: Icon(Icons.supervised_user_circle),
                 ),
                 controller: userNameController,
+                validator: (value){
+                  if(value == null || value.isEmpty){
+                    return 'Por favor, digite seu nome de usuário';
+                  }
+                  if(value.length < 8){
+                    return 'O nome de usuário deve conter no mínimo 8 caracteres';
+                  }
+                  return null;
+                },
               )),              
               const SizedBox(height: 20.0),
               const SizedBox(height: 20.0),
@@ -97,12 +150,24 @@ class RegisterPage extends StatelessWidget {
                           child:ElevatedButton(
                           style: cadastrarButtonStyle,
                           onPressed: () {
+                            if (formKey.currentState!.validate()){
                             userCreate(
                                 userNameController.text.toString(),
                                 emailController.text.toString(),
                                 passWordController.text.toString(),
                                 nameController.text.toString());
-                            Navigator.pop(context);
+                                userLogin(userNameController.text, passWordController.text).then((value) { 
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => PostagemList(
+                                                    user: value,
+                                                  )),
+                                              );
+                                          
+                                        });
+                            //Navigator.pop(context);
+                            }
                           },
                           child: Text('Cadastrar',style: GoogleFonts.openSans(fontSize:24, fontWeight: FontWeight.bold)),
                         )) ,
@@ -111,6 +176,7 @@ class RegisterPage extends StatelessWidget {
           ),
         ),
       ),
+    )
     );
   }
 }

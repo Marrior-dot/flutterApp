@@ -27,7 +27,12 @@ def userList(req):
 def userDetail(req, pk):
     users = User.objects.filter(pk=pk).get()
     serializer = UserSerializer(users)
-    print(serializer)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def userExists(req, pk):
+    users = User.objects.filter(pk=pk).get()
+    serializer = UserSerializer(users)
     return Response(serializer.data)
 
 @api_view(["POST"])
