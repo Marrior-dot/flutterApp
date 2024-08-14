@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/views/RegisterPage.dart';
 import 'package:projeto_perguntas/services/userLogin.dart';
@@ -110,54 +111,24 @@ class LoginPage extends State<MyApp> {
                                             fontWeight: FontWeight.bold)),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    FutureBuilder<User>(
-                                                        future: userLogin(
-                                                          userNameController
-                                                              .text
-                                                              .toString(),
-                                                          passWordController
-                                                              .text
-                                                              .toString(),
-                                                        ),
-                                                        builder: (BuildContext
-                                                                context,
-                                                            AsyncSnapshot
-                                                                snapshot) {
-                                                          //=>
-                                                          return PostagemList(
-                                                              user: snapshot
-                                                                  .data!);
-                                                        })));
+                                        userLogin(userNameController.text, passWordController.text).then((value) { 
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => PostagemList(
+                                                    user: value,
+                                                  )),
+                                              );
+                                          
+                                        }).catchError((error) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text(
+                                                    'Usuário ou senha inválidos')),
+                                          );
+                                        });
                                       }
-
-                                      //userLogin(
-                                      //    userNameController.text.toString(),
-                                      //    passWordController.text.toString());
-                                      //Navigator.push(
-                                      //    context,
-                                      //    MaterialPageRoute(
-                                      //        builder: (BuildContext context) =>
-                                      //            FutureBuilder<User>(
-                                      //                future: userLogin(
-                                      //                  userNameController.text
-                                      //                      .toString(),
-                                      //                  passWordController.text
-                                      //                      .toString(),
-                                      //                ),
-                                      //                builder:
-                                      //                    (BuildContext context,
-                                      //                        AsyncSnapshot
-                                      //                            snapshot) {
-                                      //                  //=>
-                                      //                  return PostagemList(
-                                      //                      user:
-                                      //                          snapshot.data!);
-                                      //                })));
                                     }),
                               ))),
                       Builder(
