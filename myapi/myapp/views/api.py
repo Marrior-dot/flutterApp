@@ -1,6 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+import re
 from myapp.serializers import UserSerializer, PostagemSerializer, CommentsPostagemSerializer, RespostasSerializer 
 #from django.db.utils import IntegrityError
 from myapp.models import User, Postagem, CommentsPostagem, Respostas
@@ -24,16 +25,28 @@ def userList(req):
     return Response(serializer.data)
 
 @api_view(["GET"])
-def userDetail(req, pk):
-    users = User.objects.filter(pk=pk).get()
-    serializer = UserSerializer(users)
+def userDetail(req, pk=None, email=None):
+    #print(req.path)
+    #if(re.match(r"^/api/userdetail/\w+/$", req.path)):
+    if pk:
+        users = User.objects.filter(pk=pk).get()
+    elif email:
+        users = User.objects.filter(email=email).get()            
+    serializer = UserSerializer(users, many=False)
     return Response(serializer.data)
 
 @api_view(["GET"])
-def userExists(req, pk):
-    users = User.objects.filter(pk=pk).get()
-    serializer = UserSerializer(users)
-    return Response(serializer.data)
+def userExists(req, pk=None, email=None, name=None):
+    if pk:
+        users = User.objects.filter(pk=pk).get()
+        return Response(status=status.HTTP_200_OK)
+    elif email:
+        users = User.objects.filter(email=email).get()
+        return Response(status=status.HTTP_200_OK)
+    elif name:
+        users = User.objects.filter(name=name).get()
+        return Response(status=status.HTTP_200_OK) 
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 def userCreate(req):

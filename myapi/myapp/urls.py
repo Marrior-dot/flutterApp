@@ -1,14 +1,12 @@
 from django.urls import path, re_path
 from .views.api import * 
 from .views.views import *
-#(?P<username>[\w.@+-]+)/$
-#<str:pk>
 
 urlpatterns = [path("userHowTo/", usersOverview, name="users-overview"),
     path("userlist/", userList, name="users-list"),
     #path("userdetail/<str:pk>/", userDetail, name="users-detail"),
-    re_path(r'^userdetail/(?P<pk> || <email>)', userDetail, name="users-detail"),
-    re_path(r'^userexists/(?P<pk> || <email> || <name>)', userDetail, name="users-detail"),
+    re_path(r"^userdetail/((?P<pk>\w+)||(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+))/$", userDetail, name="users-detail"),
+    re_path(r'^userexists/((?P<pk>\w+)||(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+)||(?P<name>\w+))/', userExists, name="users-detail"),
     path("usercreate/", userCreate, name="users-create"),
     path("userupdate/<int:pk>/", userUpdate, name="users-update"),
     path("userdelete/<int:pk>/", userDelete, name="users-delete"),
