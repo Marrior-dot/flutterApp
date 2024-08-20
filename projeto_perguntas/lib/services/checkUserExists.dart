@@ -20,3 +20,5 @@ Future<int> checkUserExists(String? nomeEmailUsuario) async{
     throw Exception('Falha servidor');
   }
 }
+
+
