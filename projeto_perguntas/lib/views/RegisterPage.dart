@@ -22,13 +22,12 @@ class RegisterPageState extends State<RegisterPage>{
   final emailController = TextEditingController();
   final userNameController = TextEditingController();
   final passWordController = TextEditingController();
-  String errorStringNome= "";
+  String errorStringNome = "";
   String errorStringEmail = "";
   String errorStringUserName = "";
   
   final formKey = GlobalKey<FormState>();
-  final regexSenha = RegExp(r'^[a-zA-Z]+$[0-9]*[A-Z]*');
-  //final regexEmail = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]$');
+  final regexSenha = RegExp(r'^[a-zA-Z]+[0-9]*[A-Z]*');
   final regexEmail = RegExp(r'[\w.%+-]+@[A-Za-z0-9.-].[a-zA-Z]+');
 
   final cadastrarButtonStyle = ElevatedButton.styleFrom(
@@ -42,32 +41,24 @@ class RegisterPageState extends State<RegisterPage>{
     backgroundColor: Colors.white
   );
 
-String checUserExistsIteration(){
-      checkUserExists(nameController.text.toString()).then((value){
+  dynamic checUserExistsIteration() async{
+    await checkUserExists(nameController.text.toString()).then((value){
         if(value == 200){
-          setState(() {
-            errorStringNome += 'Nome já cadastrado\n';  
-          });
+            errorStringNome += 'Nome já cadastrado';  
         }
-      }).ignore();
+      }).onError((error, stackTrace) => null);
 
-      checkUserExists(emailController.text.toString()).then((value){
+    await  checkUserExists(emailController.text.toString()).then((value){
         if(value == 200){
-          setState(() {
-            errorStringEmail += 'Email já cadastrado\n';  
-          });
+            errorStringEmail += 'Email já cadastrado';  
         }
-      }).ignore();
+      }).onError((error, stackTrace) => null);
 
-      checkUserExists(userNameController.text.toString()).then((value){
+    await  checkUserExists(userNameController.text.toString()).then((value){
         if(value == 200){
-          setState(() {
-            errorStringUserName += 'Nome de usuário já cadastrado\n';
-          });
+            errorStringUserName += 'Nome de usuário já cadastrado';
         }
-      }).ignore();
-
-      return "";
+      }).onError((error, stackTrace) => null);
 }
 
   @override
@@ -100,28 +91,9 @@ String checUserExistsIteration(){
                   ),
                   controller: nameController,
                   validator: (value){
-
-                    //heckUserExists(value).then((value){})
                     if(value == null || value.isEmpty){
-                      //return 'Por favor, digite seu nome';
-                      setState(() {
                         errorStringNome += 'Por favor, digite seu nome\n';
-                      });
                     }
-                  
-                    checkUserExists(value).then((value){
-                      if(value == 200){
-                        setState(() {
-                          errorStringNome += 'Nome já cadastrado\n';
-                        });
-                      }
-                    });
-                 
-                    //if(checkingUserExists == 200){
-                    //  return 'Nome já cadastrado';
-                    //}
-
-                    //return null;
                     return errorStringNome != "" ? errorStringNome : null;
                   },)),
                   SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
@@ -139,22 +111,18 @@ String checUserExistsIteration(){
                 validator: (value){
                   String errorStringSenha = "";
                   if(value == null || value.isEmpty){
-                    return 'Por favor, digite sua senha';
+                    errorStringSenha += 'Por favor, digite sua senha\n';
                   }
 
-                  if(value.length < 8){
+                  if(value != "" && value!.length < 8){
                     errorStringSenha += 'A senha deve conter no mínimo 8 caracteres\n';
                   }
 
-                  if(!regexSenha.hasMatch(value)){
+                  if(value != "" && value!= null && regexSenha.hasMatch(value) == false){
                     errorStringSenha += 'A senha deve conter ao menos uma letra maiúscula e um número\n';
                   }
 
-                  if (errorStringSenha != "") {
-                    return errorStringSenha;
-                  }
-
-                  return null;
+                  return errorStringSenha != "" ? errorStringSenha : null;  
                 },
                 obscureText: true,
               )),                  
@@ -168,16 +136,16 @@ String checUserExistsIteration(){
                   decoration: const InputDecoration(
                     labelText: 'Email',
                     prefixIcon: Icon(Icons.email),
-                   ),
+                    ),
                   validator: (value){
                     if(value == null || value.isEmpty){
-                      return 'Por favor, digite seu email';
+                      errorStringEmail += 'Por favor, digite seu email\n';
                     }
-                    if(!regexEmail.hasMatch(value)){
-                      return 'Por favor, digite um email válido';
+                    if(value != "" && value!= null && regexEmail.hasMatch(value)== false){
+                      errorStringEmail += 'Por favor, digite um email válido\n';
                     }
 
-                    return null;
+                    return errorStringEmail != "" ? errorStringEmail : null;
                   },
                   controller: emailController,)),                 
                   SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
@@ -194,12 +162,9 @@ String checUserExistsIteration(){
                 controller: userNameController,
                 validator: (value){
                   if(value == null || value.isEmpty){
-                    return 'Por favor, digite seu nome de usuário';
+                    errorStringUserName += 'Por favor, digite seu nome de usuário\n';
                   }
-                  if(value.length < 8){
-                    return 'O nome de usuário deve conter no mínimo 8 caracteres';
-                  }
-                  return null;
+                  return errorStringUserName != "" ? errorStringUserName : null;
                 },
               )),              
               const SizedBox(height: 20.0),
@@ -212,15 +177,12 @@ String checUserExistsIteration(){
                           height: 50,
                           child:ElevatedButton(
                           style: cadastrarButtonStyle,
-                          onPressed: () async {
-                            if (formKey.currentState!.validate()){
-                              try{
-                                await checkUserExists(userNameController.text).then((value){
-                                  
-                                });
-                              }catch(e){
-                                print(e);
-                              }
+                          onPressed: () async{
+                            errorStringEmail = "";
+                            errorStringNome = "";
+                            errorStringUserName = "";
+                            await checUserExistsIteration();
+                            if (formKey.currentState!.validate()) {
                               userCreate(
                                       userNameController.text.toString(),
                                       emailController.text.toString(),
