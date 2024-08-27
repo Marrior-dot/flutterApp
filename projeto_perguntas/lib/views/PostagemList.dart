@@ -97,8 +97,6 @@ class PostagemListState extends State<PostagemList> {
                               options: respostas.cast<String>(),
                               isRadio: postagem.escolha_unica,
                               sendWidgetButton: listSendButtonStateBool[index],
-                              //saveButton: _saveButtonState(index),
-                              //saveButton: saveDataBool(index),
                               listSendButtonStateBoolNew: listSendButtonStateBool,
                               respostaIndex: index,
                             ),

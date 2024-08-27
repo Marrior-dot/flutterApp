@@ -1,11 +1,7 @@
 import 'dart:async';
-
-import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/services/userCreate.dart';
-import 'package:projeto_perguntas/model/user.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:projeto_perguntas/services/userLogin.dart';
 import 'package:projeto_perguntas/views/PostagemList.dart';
