@@ -5,8 +5,8 @@ import 'dart:convert';
 Future<User> userCreate(
     String usuario, String email, String senha, String nome) async {
   final response = await http.post(
-    //Uri.parse('http://localhost:8000/api/usercreate/'),
-    Uri.parse('http://10.54.2.110:8000/api/usercreate/'),
+    Uri.parse('http://localhost:8000/api/usercreate/'),
+    //Uri.parse('http://10.54.2.110:8000/api/usercreate/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

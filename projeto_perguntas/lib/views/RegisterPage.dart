@@ -23,7 +23,8 @@ class RegisterPageState extends State<RegisterPage>{
   String errorStringUserName = "";
   
   final formKey = GlobalKey<FormState>();
-  final regexSenha = RegExp(r'^[a-zA-Z]+[0-9]*[A-Z]*');
+  //final regexSenha = RegExp(r'^[a-zA-Z]+[0-9]*[A-Z]*');
+  final regexSenha = RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$');
   final regexEmail = RegExp(r'[\w.%+-]+@[A-Za-z0-9.-].[a-zA-Z]+');
 
   final cadastrarButtonStyle = ElevatedButton.styleFrom(

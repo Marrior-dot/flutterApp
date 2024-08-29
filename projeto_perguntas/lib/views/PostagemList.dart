@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:projeto_perguntas/services/sendComments.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:projeto_perguntas/views/ImageWidget.dart';
 
 class PostagemList extends StatefulWidget {
   final User user;
@@ -74,25 +75,30 @@ class PostagemListState extends State<PostagemList> {
                     var postagem = snapshot.data![index];
                     List<dynamic> respostas = snapshot.data![index].respostas;
                     comentarioController = controllerComments();
-
                     return Card(
                       elevation: 4.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16.0),
                       ),
-                      child: Padding(
+                      child: //Padding(
+                        SingleChildScrollView(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              snapshot.data![index].content,
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.8,
+                                child: Text(
+                                  snapshot.data![index].content,
+                                  style: const TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
                             ),
-                            const SizedBox(height: 16.0),
+                            //ImageWidget(imageUrl: snapshot.data![index].arquivo),
+                            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                             OptionsListWidget<String>(
                               options: respostas.cast<String>(),
                               isRadio: postagem.escolha_unica,
@@ -174,7 +180,8 @@ class PostagemListState extends State<PostagemList> {
                               child: const Text("Enviar comentário"),
                             ),
                             const SizedBox(height: 16.0),
-                            FutureBuilder<List<CommentsPostagem>>(
+                            SingleChildScrollView(
+                              child:  FutureBuilder<List<CommentsPostagem>>(
                               future: fetchComments(postagem),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
@@ -195,6 +202,28 @@ class PostagemListState extends State<PostagemList> {
                                 return Text('${snapshot.error}');
                               },
                             ),
+                            ),
+                            //FutureBuilder<List<CommentsPostagem>>(
+                            //  future: fetchComments(postagem),
+                            //  builder: (context, snapshot) {
+                            //    if (snapshot.hasData) {
+                            //      return ListView.builder(
+                            //        shrinkWrap: true,
+                            //        physics:
+                            //            const NeverScrollableScrollPhysics(),
+                            //        itemCount: snapshot.data!.length,
+                            //        itemBuilder: (context, index) {
+                            //          final item = snapshot.data![index].text;
+                            //          return ListTile(
+                            //            title: Text(item),
+                            //            trailing: const Icon(Icons.arrow_right),
+                            //          );
+                            //        },
+                            //      );
+                            //    }
+                            //    return Text('${snapshot.error}');
+                            //  },
+                            //),
                           ],
                         ),
                       ),

@@ -5,8 +5,8 @@ import 'package:projeto_perguntas/views/IsRadio.dart' as isRadio;
 
 Future<Respostas> updateResposta(String? respostaTexto) async {
   final response = await http.put(
-    //Uri.parse('http://localhost:8000/api/respostasupdate/${respostaTexto}/'),
-    Uri.parse('http://10.54.2.110:8000/api/respostasupdate/${respostaTexto}/'),
+    Uri.parse('http://localhost:8000/api/respostasupdate/${respostaTexto}/'),
+    //Uri.parse('http://10.54.2.110:8000/api/respostasupdate/${respostaTexto}/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

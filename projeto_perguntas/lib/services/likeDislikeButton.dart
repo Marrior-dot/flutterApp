@@ -8,8 +8,8 @@ Future<Postagem> updateLikeDislike(
     String likeOrDislike, int button, int id, String content, List<dynamic> respostas) async {
   final response = await http.put(
     //Uri.parse('http://192.168.15.7:8000/api/postagemupdate/${id}')
-    Uri.parse('http://10.54.2.110:8000/api/postagemupdate/$id/' ),
-    //Uri.parse('http://localhost:8000/api/postagemupdate/$id/'),
+    //Uri.parse('http://10.54.2.110:8000/api/postagemupdate/$id/' ),
+    Uri.parse('http://localhost:8000/api/postagemupdate/$id/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
