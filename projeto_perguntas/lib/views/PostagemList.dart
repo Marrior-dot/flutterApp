@@ -8,7 +8,6 @@ import 'package:projeto_perguntas/services/fetchComments.dart';
 import 'package:projeto_perguntas/views/IsRadio.dart';
 import 'dart:async';
 import 'package:projeto_perguntas/services/sendComments.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/views/ImageWidget.dart';
 
@@ -21,6 +20,7 @@ class PostagemList extends StatefulWidget {
 
 class PostagemListState extends State<PostagemList> {
   late Future<List<Postagem>> futureFetch;
+  //late TextEditingController comentarioController;
   late TextEditingController comentarioController;
   late List<dynamic> listSendButtonStateBool;
   late List<String> listSendButtonState;
@@ -29,8 +29,9 @@ class PostagemListState extends State<PostagemList> {
   @override
   void initState() {
     super.initState();
-    futureFetch = fetchPostagem();  
-    }
+    futureFetch = fetchPostagem();
+    comentarioController = controllerComments();
+  }
 
   @override
   void dispose() {
@@ -38,10 +39,11 @@ class PostagemListState extends State<PostagemList> {
     super.dispose();
   }
 
-  void loadDataBool(int lgth){
+  void loadDataBool(int lgth) {
     final box = GetStorage();
-    listSendButtonStateBool = box.read('listSendButtonStateBool') ?? List.generate(lgth, (index) => true);
-    }
+    listSendButtonStateBool = box.read('listSendButtonStateBool') ??
+        List.generate(lgth, (index) => true);
+  }
 
   TextEditingController controllerComments() {
     return TextEditingController();
@@ -71,7 +73,7 @@ class PostagemListState extends State<PostagemList> {
                   padding: const EdgeInsets.all(16.0),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, index) {
-                    var likeButton = snapshot.data![index].likes;
+                    //var likeButton = snapshot.data![index].likes;
                     var postagem = snapshot.data![index];
                     List<dynamic> respostas = snapshot.data![index].respostas;
                     comentarioController = controllerComments();
@@ -81,29 +83,32 @@ class PostagemListState extends State<PostagemList> {
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: //Padding(
-                        SingleChildScrollView(
+                          SingleChildScrollView(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.1,
-                              width: MediaQuery.of(context).size.width * 0.8,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
+                                width: MediaQuery.of(context).size.width * 0.8,
                                 child: Text(
                                   snapshot.data![index].content,
                                   style: const TextStyle(
                                     fontSize: 24.0,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                )
-                            ),
+                                )),
                             //ImageWidget(imageUrl: snapshot.data![index].arquivo),
-                            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1),
                             OptionsListWidget<String>(
                               options: respostas.cast<String>(),
                               isRadio: postagem.escolha_unica,
                               sendWidgetButton: listSendButtonStateBool[index],
-                              listSendButtonStateBoolNew: listSendButtonStateBool,
+                              listSendButtonStateBoolNew:
+                                  listSendButtonStateBool,
                               respostaIndex: index,
                             ),
                             const SizedBox(height: 16.0),
@@ -129,10 +134,11 @@ class PostagemListState extends State<PostagemList> {
                                 OutlinedButton.icon(
                                   onPressed: () {
                                     setState(() {
-                                      likeButton = likeButton + 1;
+                                      //likeButton = likeButton + 1;
                                       updateLikeDislike(
                                         'likes',
-                                        likeButton,
+                                        //likeButton,
+                                        snapshot.data![index].likes + 1,
                                         snapshot.data![index].id,
                                         snapshot.data![index].content,
                                         respostas,
@@ -140,11 +146,11 @@ class PostagemListState extends State<PostagemList> {
                                     });
                                   },
                                   icon: const Icon(Icons.thumb_up),
-                                  label: FutureBuilder<Postagem>(
+                                  label: FutureBuilder<int>(
                                     future: fetchLike(snapshot.data![index].id),
                                     builder: (context, snapshot) {
                                       return Text(
-                                          "Likes ${snapshot.data!.likes}");
+                                          "Likes ${snapshot.data!.toString()}");
                                     },
                                   ),
                                   style: OutlinedButton.styleFrom(
@@ -181,27 +187,28 @@ class PostagemListState extends State<PostagemList> {
                             ),
                             const SizedBox(height: 16.0),
                             SingleChildScrollView(
-                              child:  FutureBuilder<List<CommentsPostagem>>(
-                              future: fetchComments(postagem),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return ListView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, index) {
-                                      final item = snapshot.data![index].text;
-                                      return ListTile(
-                                        title: Text(item),
-                                        trailing: const Icon(Icons.arrow_right),
-                                      );
-                                    },
-                                  );
-                                }
-                                return Text('${snapshot.error}');
-                              },
-                            ),
+                              child: FutureBuilder<List<CommentsPostagem>>(
+                                future: fetchComments(postagem),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        final item = snapshot.data![index].text;
+                                        return ListTile(
+                                          title: Text(item),
+                                          trailing:
+                                              const Icon(Icons.arrow_right),
+                                        );
+                                      },
+                                    );
+                                  }
+                                  return Text('${snapshot.error}');
+                                },
+                              ),
                             ),
                             //FutureBuilder<List<CommentsPostagem>>(
                             //  future: fetchComments(postagem),
