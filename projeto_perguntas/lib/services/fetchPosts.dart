@@ -11,7 +11,7 @@ Future<List<postagem.Postagem>> fetchPostagem() async {
       //await http.get(Uri.parse('http://10.54.2.110:8000/api/postagemlist/'));
       await http.get(Uri.parse('http://localhost:8000/api/postagemlist/'));
 
-  
+  print(response.body);
   if (response.statusCode == 200) {
     var postagemMap =
         (jsonDecode(response.body) as List).cast<Map<String, dynamic>>(); 
@@ -20,7 +20,7 @@ Future<List<postagem.Postagem>> fetchPostagem() async {
         .map<postagem.Postagem>((json) => postagem.Postagem.fromJson(json))
         .toList();
 
-    //print(ppost);
+    print(ppost);
     return ppost;
   } else {
     throw Exception('Failed to load album');
