@@ -6,19 +6,19 @@ import 'dart:io';
 class Postagem {
   final int id;
   //final File? arquivo;
-  final String? arquivo_path;
+  final String? arquivo;
   final String content;
   final int likes;
   final int dislikes;
   final List<dynamic> respostas;
   final bool escolha_unica;
   
-  Postagem(this.id, /*this.arquivo*/ this.arquivo_path, this.content, this.likes, this.dislikes, this.respostas, this.escolha_unica);
+  Postagem(this.id, this.arquivo, this.content, this.likes, this.dislikes, this.respostas, this.escolha_unica);
 
   Postagem.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int,
         //arquivo = json['arquivo'] as File?,
-        arquivo_path = json['arquivo_path'] as String?,
+        arquivo = json['arquivo'] as String?,
         content = json['content'] as String,
         likes = json['likes'] as int,
         dislikes = json['dislikes'] as int,
@@ -28,7 +28,7 @@ class Postagem {
   Map<String, dynamic> toJson() => {
         'id': id,
         //'arquivo': arquivo,
-        'arquivo_path': arquivo_path,
+        'arquivo': arquivo,
         'content': content,
         'likes': likes,
         'dislikes': dislikes,

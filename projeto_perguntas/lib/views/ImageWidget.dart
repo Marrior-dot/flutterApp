@@ -6,14 +6,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageWidget extends StatelessWidget{
-  const ImageWidget({super.key, required this.imageUrl});
-  final File? imageUrl;
+  const ImageWidget({super.key, required this.imagePath});
+  final String? imagePath;
+  //final File? imagePath;
 
   @override
   Widget build(BuildContext context) {
-    if(imageUrl != null){
-      return Image.file(imageUrl!);
+    if(imagePath != null || imagePath != ""){
+      String image = "assets${imagePath}"; 
+      //print(image);
+      return Image(image: AssetImage(image));
     }
-    return Text("");
+    return EmptyWidget();
   }
 }

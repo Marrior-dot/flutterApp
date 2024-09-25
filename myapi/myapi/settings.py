@@ -42,17 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-#REST_FRAMEWORK = {
-#    'DEFAULT_AUTHENTICATION_CLASSES': (
-#        'rest_framework.authentication.TokenAuthentication',
-#    ),
-#    'DEFAULT_PERMISSION_CLASSES': [
-#        'rest_framework.permissions.IsAuthenticated',
-#    ],
-#}
-
-
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -84,7 +73,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'myapi.wsgi.application'
 ASGI_APPLICATION = 'myapi.asgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -94,7 +82,6 @@ DATABASES = {
         'NAME': 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -114,7 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -126,9 +112,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+
+#MEDIA_URL = '/media/'
+
+MEDIA_ROOT = '/home/mann/Desktop/projetos/appFlutter/projeto_perguntas/assets' #os.path.join(BASE_DIR,'media/')
 
 STATIC_URL = 'static/'
 

@@ -97,7 +97,7 @@ class PostagemListState extends State<PostagemList> {
                                   ),
                                 )
                             ),
-                            //ImageWidget(imageUrl: snapshot.data![index].arquivo),
+                            ImageWidget(imagePath: snapshot.data![index].arquivo),
                             SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                             OptionsListWidget<String>(
                               options: respostas.cast<String>(),
