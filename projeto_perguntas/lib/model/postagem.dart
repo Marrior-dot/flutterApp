@@ -28,6 +28,7 @@ class Postagem {
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        //'arquivo': arquivo,
         'arquivo': arquivo,
         'content': content,
         'likes': likes,

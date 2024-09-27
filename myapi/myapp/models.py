@@ -26,8 +26,7 @@ class Respostas(models.Model):
 
 
 class Postagem(models.Model):
-    #arquivo = models.FileField(blank= True,null=True, default="")
-    arquivo = models.ImageField(blank= True,null=True, default="", upload_to="images")
+    arquivo = models.ImageField(blank= True,null=True, default="", upload_to='images')
     content = models.CharField(max_length=500)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)

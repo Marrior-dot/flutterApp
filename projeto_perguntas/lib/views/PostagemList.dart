@@ -100,6 +100,7 @@ class PostagemListState extends State<PostagemList> {
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * 0.1),
+
                             OptionsListWidget<String>(
                               options: respostas.cast<String>(),
                               isRadio: postagem.escolha_unica,
