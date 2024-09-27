@@ -1,4 +1,4 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/services/updateResposta.dart';
@@ -11,17 +11,16 @@ class OptionsListWidget<T> extends StatefulWidget {
   final T? initialValue;
   int respostaIndex;
   List<dynamic> listSendButtonStateBoolNew;
-  bool? sendWidgetButton; 
+  bool? sendWidgetButton;
 
-  OptionsListWidget({
-    super.key,
-    required this.options,
-    required this.isRadio,
-    this.initialValue,
-    required this.respostaIndex,
-    required this.listSendButtonStateBoolNew,
-    this.sendWidgetButton
-  });
+  OptionsListWidget(
+      {super.key,
+      required this.options,
+      required this.isRadio,
+      this.initialValue,
+      required this.respostaIndex,
+      required this.listSendButtonStateBoolNew,
+      this.sendWidgetButton});
 
   @override
   _OptionsListWidgetState<T> createState() => _OptionsListWidgetState<T>();
@@ -32,7 +31,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
   List<bool?> checkBoxInitialValue = [];
   String? radioOption;
   List<String?>? checkBoxOption;
-  bool? sendButton; 
+  bool? sendButton;
 
   @override
   void initState() {
@@ -45,7 +44,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
     sendButton = widget.sendWidgetButton == true ? true : null;
   }
 
-  void saveButtonState(int index, List<dynamic> listSendButtonStateBool){
+  void saveButtonState(int index, List<dynamic> listSendButtonStateBool) {
     final box = GetStorage();
     listSendButtonStateBool[index] = null;
     box.write('listSendButtonStateBool', listSendButtonStateBool);
@@ -82,7 +81,8 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
             onPressed: sendButton == true
                 ? () {
                     updateResposta(radioOption);
-                    saveButtonState(widget.respostaIndex, widget.listSendButtonStateBoolNew);
+                    saveButtonState(widget.respostaIndex,
+                        widget.listSendButtonStateBoolNew);
                     setState(() {
                       sendButton = null;
                     });
@@ -120,7 +120,8 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                     for (var i = 0; i < checkBoxOption!.length; i++) {
                       updateResposta(checkBoxOption![i]);
                     }
-                    saveButtonState(widget.respostaIndex, widget.listSendButtonStateBoolNew);
+                    saveButtonState(widget.respostaIndex,
+                        widget.listSendButtonStateBoolNew);
                     setState(() {
                       sendButton = null;
                     });

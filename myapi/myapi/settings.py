@@ -51,8 +51,6 @@ INSTALLED_APPS = [
 #    ],
 #}
 
-
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -114,6 +112,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+MEDIA_URL = ""
+#MEDIA_URL = "../../projeto_perguntas/assets/media/"
+
+#MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+#MEDIA_ROOT = "/../media/"
+MEDIA_ROOT = os.path.join(Path(__file__).resolve().parent.parent.parent, "projeto_perguntas/assets/")
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
