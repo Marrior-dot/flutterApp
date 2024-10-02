@@ -31,6 +31,7 @@ class LoginPage extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           "/registrar": (context) => RegisterPage(),
           //"/user/${userName}/feed": (context) => PostagemList()
@@ -56,10 +57,6 @@ class LoginPage extends State<MyApp> {
                           height: MediaQuery.of(context).size.height * 0.25),
                       SizedBox(width: 1, height: 5),
                       Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              border:
-                                  Border.all(color: Colors.grey, width: 1.0)),
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: TextFormField(
                             decoration: const InputDecoration(
@@ -77,10 +74,6 @@ class LoginPage extends State<MyApp> {
                           )),
                       const SizedBox(height: 40.0),
                       Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              border:
-                                  Border.all(color: Colors.grey, width: 1.0)),
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: TextFormField(
                             decoration: const InputDecoration(

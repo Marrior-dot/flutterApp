@@ -61,12 +61,16 @@ class RegisterPageState extends State<RegisterPage>{
   @override
   Widget build(BuildContext context){  
     return Scaffold(
+      
       appBar: AppBar(
         centerTitle: true,
         title: Text('Cadastro', style: GoogleFonts.montserrat(fontSize:40, fontWeight: FontWeight.bold) ),
           ),
       body: Center(
-        child: Padding(
+
+        child: 
+        SingleChildScrollView(child:       
+         Padding(
           padding: const EdgeInsets.all(16.0),
           child: 
           Form(
@@ -77,9 +81,6 @@ class RegisterPageState extends State<RegisterPage>{
               SizedBox(child: Image.asset('assets/registro.png'), width: MediaQuery.of(context).size.width * 0.5 , height: MediaQuery.of(context).size.height * 0.25),
               SizedBox(width:1 , height: 5),
               Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          border: Border.all(color: Colors.grey, width: 1.0)),
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: TextFormField(
                   decoration: const InputDecoration(
@@ -95,9 +96,6 @@ class RegisterPageState extends State<RegisterPage>{
                   },)),
                   SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
                   Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          border: Border.all(color: Colors.grey, width: 1.0)),
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: TextFormField(
                 decoration: const InputDecoration(
@@ -125,9 +123,6 @@ class RegisterPageState extends State<RegisterPage>{
               )),                  
               SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
                   Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          border: Border.all(color: Colors.grey, width: 1.0)),
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: TextFormField(
                   decoration: const InputDecoration(
@@ -147,9 +142,6 @@ class RegisterPageState extends State<RegisterPage>{
                   controller: emailController,)),                 
                   SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
                   Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          border: Border.all(color: Colors.grey, width: 1.0)),
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: TextFormField(
                 decoration: const InputDecoration(
@@ -200,8 +192,11 @@ class RegisterPageState extends State<RegisterPage>{
                           child: Text('Cadastrar',style: GoogleFonts.openSans(fontSize:24, fontWeight: FontWeight.bold)),
                         )) ,
                       ))
+            
+                      
             ],
           ),
+          )  
         ),
       ),
     )

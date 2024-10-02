@@ -113,10 +113,10 @@ class PostagemListState extends State<PostagemList> {
                                         onPressed: () {
                                           updateLikeDislike(
                                             'dislikes',
-                                            snapshot.data![index].dislikes,
-                                            snapshot.data![index].id,
-                                            snapshot.data![index].content,
-                                            respostas,
+                                            //snapshot.data![index].dislikes,
+                                            snapshot.data![index].id
+                                            //snapshot.data![index].content,
+                                            //respostas,
                                           );
                                         },
                                         icon: Icon(Icons.thumb_down),
@@ -136,13 +136,13 @@ class PostagemListState extends State<PostagemList> {
                                       child: IconButton(
                                         onPressed: (){
                                           setState(() {
-                                            likeButton = likeButton + 1;
+                                            //likeButton = likeButton + 1;
                                              updateLikeDislike(
                                               'likes',
-                                              likeButton,
-                                              snapshot.data![index].id,
-                                              snapshot.data![index].content,
-                                              respostas,
+                                              //likeButton,
+                                              snapshot.data![index].id
+                                              //snapshot.data![index].content,
+                                              //respostas,
                                             );
 
                                           });

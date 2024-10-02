@@ -106,10 +106,13 @@ def postagensCreate(req):
 
     return Response(serializer.data)
 
-@api_view(["PUT"])
-def postagensUpdate(req, pk):
+@api_view(["PATCH"])
+def postagensUpdate(req, pk, likesOrDislikes):
     post = Postagem.objects.get(id=pk)
-    serializer = PostagemSerializer(instance=post, data=req.data)
+    #print(likesOrDislikes)
+    #print(post.__dict__[f"{likesOrDislikes}"])
+    post.__dict__[f"{likesOrDislikes}"] += 1
+    serializer = PostagemSerializer(instance=post, data=req.data, partial = True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
