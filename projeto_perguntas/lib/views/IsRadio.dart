@@ -33,6 +33,11 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
   List<String?>? checkBoxOption;
   bool? sendButton;
 
+  TextStyle sendResposta = const TextStyle(
+      fontSize: 12,);
+  TextStyle resposta = const TextStyle(
+      fontSize: 15,);
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +58,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
   @override
   Widget build(BuildContext context) {
     if (widget.options.isEmpty) {
-      return Text("");
+      return SizedBox.shrink();
     }
 
     if (widget.isRadio) {
@@ -65,7 +70,9 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
               final optionDecoded =
                   utf8.decode(widget.options[index].toString().codeUnits);
               return ListTile(
-                  title: Text(optionDecoded),
+                  title: Text(
+                    optionDecoded,
+                    style: resposta),
                   leading: Radio(
                     value: optionDecoded,
                     groupValue: _selectedValue,
@@ -88,7 +95,10 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                     });
                   }
                 : null,
-            child: Text("Enviar resposta"))
+            child: Text(
+              style: sendResposta,
+              "Enviar resposta",
+              ))
       ]);
     } else {
       return Column(children: [
@@ -99,7 +109,9 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
               final optionDecoded =
                   utf8.decode(widget.options[index].toString().codeUnits);
               return ListTile(
-                  title: Text(optionDecoded),
+                  title: Text(
+                    optionDecoded,
+                    style: resposta),
                   leading: Checkbox(
                     value: checkBoxInitialValue[index],
                     onChanged: (bool? value) {
@@ -127,7 +139,11 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                     });
                   }
                 : null,
-            child: Text("Enviar resposta"))
+            child: Text(
+              style: sendResposta,
+              "Enviar resposta",
+              )
+            )
       ]);
     }
   }

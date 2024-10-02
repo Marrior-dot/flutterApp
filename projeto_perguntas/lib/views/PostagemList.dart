@@ -21,6 +21,7 @@ class PostagemList extends StatefulWidget {
 
 class PostagemListState extends State<PostagemList> {
   late Future<List<Postagem>> futureFetch;
+  //late Future<int> futureFetchLike;
   late TextEditingController comentarioController;
   late List<dynamic> listSendButtonStateBool;
   late List<String> listSendButtonState;
@@ -99,29 +100,16 @@ class PostagemListState extends State<PostagemList> {
                                 imageUrl: snapshot.data![index].arquivo),
                             SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.1),
-
-                            OptionsListWidget<String>(
-                              options: respostas.cast<String>(),
-                              isRadio: postagem.escolha_unica,
-                              sendWidgetButton: listSendButtonStateBool[index],
-                              listSendButtonStateBoolNew:
-                                  listSendButtonStateBool,
-                              respostaIndex: index,
-                            ),
-                            const SizedBox(height: 50.0),
-                            Flex(
-                              direction: Axis.vertical,
-                              children: [
+                                    MediaQuery.of(context).size.height * 0.05,
+                                width: MediaQuery.of(context).size.width * 1,
+                                child:
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.start,
                                   children: [
                                     SizedBox(
-                                      height: 30,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      child: OutlinedButton.icon(
+                                      width: MediaQuery.of(context).size.width * 0.1,
+                                      child: IconButton(
                                         onPressed: () {
                                           updateLikeDislike(
                                             'dislikes',
@@ -131,50 +119,76 @@ class PostagemListState extends State<PostagemList> {
                                             respostas,
                                           );
                                         },
-                                        icon: const Icon(Icons.thumb_down),
-                                        label: const Text('Dislike'),
-                                        style: OutlinedButton.styleFrom(
-                                          foregroundColor: Colors.grey,
+                                        icon: Icon(Icons.thumb_down),
+                                        style: ButtonStyle(
+                                          foregroundColor: MaterialStateProperty.all(
+                                            Color.fromARGB(
+                                                200,105,105,105),
+                                          )
                                         ),
                                       ),
                                     ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
                                     SizedBox(
-                                      height: 30,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      child: OutlinedButton.icon(
-                                        onPressed: () {
+                                      width: MediaQuery.of(context).size.width * 0.1,
+                                      child: IconButton(
+                                        onPressed: (){
                                           setState(() {
                                             likeButton = likeButton + 1;
-                                            updateLikeDislike(
+                                             updateLikeDislike(
                                               'likes',
                                               likeButton,
                                               snapshot.data![index].id,
                                               snapshot.data![index].content,
                                               respostas,
                                             );
+
                                           });
                                         },
                                         icon: const Icon(Icons.thumb_up),
-                                        label: FutureBuilder<Postagem>(
-                                          future: fetchLike(
-                                              snapshot.data![index].id),
-                                          builder: (context, snapshot) {
-                                            return Text(
-                                                "Likes ${snapshot.data!.likes}");
-                                          },
-                                        ),
-                                        style: OutlinedButton.styleFrom(
-                                          foregroundColor: Colors.blue,
+                                        style: ButtonStyle(
+                                          foregroundColor: MaterialStateProperty.all(
+                                            Color.fromARGB(
+                                                200, 43, 142, 255),
+                                          )
                                         ),
                                       ),
-                                    )
+                                    ),
+                                  SizedBox(
+                                    height: 20,
+                                    width: MediaQuery.of(context).size.width * 0.4,
+                                    child:
+                                    FutureBuilder(
+                                      future: fetchLike(snapshot.data![index].id), 
+                                        builder: (context, snapshot) {
+                                          return  Text("${snapshot.data} likes") ;
+                                        })
+                                )],)
                                   ],
-                                ) //)
-                              ],
+                                ),
+                              ),
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05),
+                            OptionsListWidget<String>(
+                              options: respostas.cast<String>(),
+                              isRadio: postagem.escolha_unica,
+                              sendWidgetButton: listSendButtonStateBool[index],
+                              listSendButtonStateBoolNew:
+                                  listSendButtonStateBool,
+                              respostaIndex: index,
                             ),
-                            const SizedBox(height: 16.0),
-                            TextFormField(
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.08,
+                            ),
+                            Column(
+                              children: [
+                                TextFormField(
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
                               decoration: const InputDecoration(
                                 labelText: 'Escreva seu comentário',
                                 prefixIcon: Icon(Icons.comment),
@@ -184,20 +198,27 @@ class PostagemListState extends State<PostagemList> {
                               onChanged: (value) => commentText = value,
                             ),
                             SizedBox(
-                              height: 16.0,
-                              width: MediaQuery.sizeOf(context).width * 0.4,
+                              height: MediaQuery.of(context).size.height * 0.025,
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  createComment(
-                                    widget.user.username,
-                                    commentText,
-                                    postagem,
-                                  );
-                                });
-                              },
-                              child: const Text("Enviar comentário"),
+                            SizedBox(
+                              height: MediaQuery.sizeOf(context).width * 0.1,
+                              width: MediaQuery.sizeOf(context).width * 0.45,
+                              child: 
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      createComment(
+                                        widget.user.username,
+                                        commentText,
+                                        postagem,
+                                      );
+                                    });
+                                  },
+                                  child: const Text(
+                                    "Enviar comentário",
+                                    style: TextStyle(fontSize: 12.0)),
+                                  ),
+                                )],
                             ),
                             const SizedBox(height: 16.0),
                             SingleChildScrollView(
@@ -224,27 +245,6 @@ class PostagemListState extends State<PostagemList> {
                                 },
                               ),
                             ),
-                            //FutureBuilder<List<CommentsPostagem>>(
-                            //  future: fetchComments(postagem),
-                            //  builder: (context, snapshot) {
-                            //    if (snapshot.hasData) {
-                            //      return ListView.builder(
-                            //        shrinkWrap: true,
-                            //        physics:
-                            //            const NeverScrollableScrollPhysics(),
-                            //        itemCount: snapshot.data!.length,
-                            //        itemBuilder: (context, index) {
-                            //          final item = snapshot.data![index].text;
-                            //          return ListTile(
-                            //            title: Text(item),
-                            //            trailing: const Icon(Icons.arrow_right),
-                            //          );
-                            //        },
-                            //      );
-                            //    }
-                            //    return Text('${snapshot.error}');
-                            //  },
-                            //),
                           ],
                         ),
                       ),

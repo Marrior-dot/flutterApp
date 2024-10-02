@@ -4,7 +4,6 @@ from .views.views import *
 
 urlpatterns = [path("userHowTo/", usersOverview, name="users-overview"),
     path("userlist/", userList, name="users-list"),
-    #path("userdetail/<str:pk>/", userDetail, name="users-detail"),
     re_path(r"^userdetail/((?P<pk>\w+)||(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+))/$", userDetail, name="users-detail"),
     re_path(r'^userexists/((?P<pk>\w+)||(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+)||(?P<name>\w+))/', userExists, name="users-detail"),
     path("usercreate/", userCreate, name="users-create"),
