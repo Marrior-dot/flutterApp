@@ -2,12 +2,14 @@ from django.contrib import admin
 from .models import User, Postagem, CommentsPostagem, Respostas
 
 # Register your models here.
-admin.site.register(User)
-#admin.site.register(Postagem)
-@admin.register(Postagem, Respostas)
-class PostagemRespostas(admin.ModelAdmin):
-    
-    #Respostas.clean()
+
+class CommentsPostagemAdmin(admin.StackedInline):
+    list_display = ('username', 'postagem', 'text')
+    model = CommentsPostagem
     pass
-admin.site.register(CommentsPostagem)
-#admin.site.register(newUSer)
+
+admin.site.register(User)
+@admin.register(Postagem)
+class PostagemRespostas(admin.ModelAdmin):
+    inlines = [CommentsPostagemAdmin]
+    pass

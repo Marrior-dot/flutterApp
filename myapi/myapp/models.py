@@ -22,7 +22,7 @@ class Respostas(models.Model):
         ordering = ['respostaTexto']
     
     def __str__(self):
-        return self.respostaTexto
+        return f"{self.respostaTexto} || Respostas: {self.respondido}"
 
 
 class Postagem(models.Model):
@@ -37,7 +37,7 @@ class Postagem(models.Model):
         ordering = ['content']
     
     def __str__(self) -> str:
-        return self.content
+        return f"{self.content}"
     
 
 class CommentsPostagem(models.Model):

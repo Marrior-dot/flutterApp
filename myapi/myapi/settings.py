@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'myapp.apps.MyappConfig',
     'rest_framework',
     'daphne',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

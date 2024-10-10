@@ -70,7 +70,6 @@ class PostagemListState extends State<PostagemList> {
                   padding: const EdgeInsets.all(16.0),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, index) {
-                    var likeButton = snapshot.data![index].likes;
                     var postagem = snapshot.data![index];
                     List<dynamic> respostas = snapshot.data![index].respostas;
                     comentarioController = controllerComments();
@@ -113,10 +112,7 @@ class PostagemListState extends State<PostagemList> {
                                         onPressed: () {
                                           updateLikeDislike(
                                             'dislikes',
-                                            //snapshot.data![index].dislikes,
                                             snapshot.data![index].id
-                                            //snapshot.data![index].content,
-                                            //respostas,
                                           );
                                         },
                                         icon: Icon(Icons.thumb_down),
