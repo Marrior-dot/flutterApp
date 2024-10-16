@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:projeto_perguntas/services/userCreate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:projeto_perguntas/services/userLogin.dart';
 import 'package:projeto_perguntas/views/PostagemList.dart';
-import 'package:projeto_perguntas/services/checkUserExists.dart';
+import 'package:projeto_perguntas/api/user.dart';
 
 class RegisterPage extends StatefulWidget{
   const RegisterPage({super.key});

@@ -14,23 +14,12 @@ class User(models.Model):
     def __str__(self) -> str:
         return self.name
 
-class Respostas(models.Model):
-    respostaTexto = models.CharField(max_length=500 ,blank=True, null=True, default="")
-    respondido = models.IntegerField(default=0)
-
-    class Meta:
-        ordering = ['respostaTexto']
-    
-    def __str__(self):
-        return f"{self.respostaTexto} || Respostas: {self.respondido}"
-
 
 class Postagem(models.Model):
     arquivo = models.ImageField(blank= True,null=True, default="", upload_to='images')
     content = models.CharField(max_length=500)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
-    respostas = models.ManyToManyField(Respostas, blank=True, default="")
     escolha_unica = models.BooleanField(default=False)
 
     class Meta:
@@ -38,9 +27,20 @@ class Postagem(models.Model):
     
     def __str__(self) -> str:
         return f"{self.content}"
-    
 
-class CommentsPostagem(models.Model):
+
+class Respostas(models.Model):
+    respostaTexto = models.CharField(max_length=500 ,blank=True, null=True, default="")
+    respondido = models.IntegerField(default=0)
+    postagem = models.ForeignKey(Postagem, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['respostaTexto']
+    
+    def __str__(self):
+        return f"{self.respostaTexto} || Respostas: {self.respondido}"
+
+class Commentarios(models.Model):
     username = models.CharField(max_length=100)
     postagem=models.ForeignKey(Postagem, on_delete=models.CASCADE)
     text=models.CharField(max_length=500)

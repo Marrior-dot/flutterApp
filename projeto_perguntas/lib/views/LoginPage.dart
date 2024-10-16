@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/views/RegisterPage.dart';
-import 'package:projeto_perguntas/services/userLogin.dart';
+import 'package:projeto_perguntas/api/user.dart';
 import 'package:projeto_perguntas/views/PostagemList.dart';
 import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/main.dart';

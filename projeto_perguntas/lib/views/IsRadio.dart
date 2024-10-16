@@ -1,7 +1,7 @@
 //import 'dart:ffi';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_perguntas/services/updateResposta.dart';
+import 'package:projeto_perguntas/api/updateResposta.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:convert' show utf8;
 

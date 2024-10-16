@@ -1,20 +1,18 @@
-import 'dart:convert';
-//import 'dart:ffi';
+//import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:projeto_perguntas/model/respostas.dart';
 import 'dart:io';
 
-class Postagem {
+class Postagem{
   final int id;
-  //final File? arquivo;
   final String? arquivo;
   final String content;
   final int likes;
   final int dislikes;
-  final List<dynamic> respostas;
   final bool escolha_unica;
+  final List<Respostas>? respostas;
 
-  Postagem(this.id, this.arquivo, this.content, this.likes, this.dislikes,
-      this.respostas, this.escolha_unica);
+  Postagem(this.id, this.arquivo, this.content, this.likes, this.dislikes,this.escolha_unica, this.respostas);
 
   Postagem.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int,
@@ -23,8 +21,8 @@ class Postagem {
         content = json['content'] as String,
         likes = json['likes'] as int,
         dislikes = json['dislikes'] as int,
-        respostas = json['respostas'] as List<dynamic>,
-        escolha_unica = json['escolha_unica'] as bool;
+        escolha_unica = json['escolha_unica'] as bool,
+        respostas = json['respostas'] as List<Respostas>?;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -33,7 +31,7 @@ class Postagem {
         'content': content,
         'likes': likes,
         'dislikes': dislikes,
-        'respostas': respostas,
-        'escolha_unica': escolha_unica
+        'escolha_unica': escolha_unica,
+        'respostas':respostas
       };
 }

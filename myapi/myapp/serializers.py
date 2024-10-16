@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Postagem, CommentsPostagem, Respostas
+from .models import User, Postagem, Commentarios, Respostas
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,10 +15,10 @@ class PostagemSerializer(serializers.ModelSerializer):
 class RespostasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Respostas
-        fields = ["respostaTexto", "respondido"]
+        fields = ["respostaTexto", "respondido","postagem"]
         
 class CommentsPostagemSerializer(serializers.ModelSerializer):
     postagem = PostagemSerializer(read_only=True)
     class Meta:
-        model=CommentsPostagem
+        model=Commentarios
         fields=["username","postagem","text"]

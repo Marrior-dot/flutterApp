@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:projeto_perguntas/model/comments.dart';
+import 'package:projeto_perguntas/model/respostas.dart';
 import 'package:projeto_perguntas/model/user.dart';
-import 'package:projeto_perguntas/services/likeDislikeButton.dart';
-import 'package:projeto_perguntas/services/fetchPosts.dart';
-import 'package:projeto_perguntas/services/fetchComments.dart';
+import 'package:projeto_perguntas/api/postagem.dart';
+import 'package:projeto_perguntas/api/comments.dart';
+import 'package:projeto_perguntas/api/respostas.dart';
 import 'package:projeto_perguntas/views/IsRadio.dart';
 import 'dart:async';
-import 'package:projeto_perguntas/services/sendComments.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/views/ImageWidget.dart';
@@ -21,7 +21,6 @@ class PostagemList extends StatefulWidget {
 
 class PostagemListState extends State<PostagemList> {
   late Future<List<Postagem>> futureFetch;
-  //late Future<int> futureFetchLike;
   late TextEditingController comentarioController;
   late List<dynamic> listSendButtonStateBool;
   late List<String> listSendButtonState;
@@ -71,7 +70,7 @@ class PostagemListState extends State<PostagemList> {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, index) {
                     var postagem = snapshot.data![index];
-                    List<dynamic> respostas = snapshot.data![index].respostas;
+                    //List<dynamic> respostas = FutureBuilder<List<Respostas>>()
                     comentarioController = controllerComments();
                     return Card(
                       elevation: 4.0,
@@ -112,7 +111,8 @@ class PostagemListState extends State<PostagemList> {
                                         onPressed: () {
                                           updateLikeDislike(
                                             'dislikes',
-                                            snapshot.data![index].id
+                                            snapshot.data![index].id,
+                                            snapshot.data![index].dislikes
                                           );
                                         },
                                         icon: Icon(Icons.thumb_down),
@@ -132,13 +132,10 @@ class PostagemListState extends State<PostagemList> {
                                       child: IconButton(
                                         onPressed: (){
                                           setState(() {
-                                            //likeButton = likeButton + 1;
                                              updateLikeDislike(
                                               'likes',
-                                              //likeButton,
-                                              snapshot.data![index].id
-                                              //snapshot.data![index].content,
-                                              //respostas,
+                                              snapshot.data![index].id,
+                                              snapshot.data![index].likes
                                             );
 
                                           });
@@ -168,14 +165,14 @@ class PostagemListState extends State<PostagemList> {
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * 0.05),
-                            OptionsListWidget<String>(
-                              options: respostas.cast<String>(),
-                              isRadio: postagem.escolha_unica,
-                              sendWidgetButton: listSendButtonStateBool[index],
-                              listSendButtonStateBoolNew:
-                                  listSendButtonStateBool,
-                              respostaIndex: index,
-                            ),
+                            //OptionsListWidget<String>(
+                            //  options: respostas.cast<String>(),
+                            //  isRadio: postagem.escolha_unica,
+                            //  sendWidgetButton: listSendButtonStateBool[index],
+                            //  listSendButtonStateBoolNew:
+                            //      listSendButtonStateBool,
+                            //  respostaIndex: index,
+                            //),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.08,
                             ),
