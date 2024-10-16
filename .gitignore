@@ -1,2 +1,2 @@
-./appFlutter/myapi/db.sqlite3
-./backupBanco
+./myapi/db.sqlite3
+./backupBanco/db.sqlite3
