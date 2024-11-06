@@ -11,6 +11,8 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/views/ImageWidget.dart';
+import 'dart:convert' show utf8;
+
 
 class PostagemList extends StatefulWidget {
   final User user;
@@ -42,6 +44,9 @@ class PostagemListState extends State<PostagemList> {
     final box = GetStorage();
     listSendButtonStateBool = box.read('listSendButtonStateBool') ??
         List.generate(lgth, (index) => true);
+    if (listSendButtonStateBool.length < lgth) {
+      listSendButtonStateBool.add(true);
+    }
   }
 
   TextEditingController controllerComments() {
@@ -70,14 +75,13 @@ class PostagemListState extends State<PostagemList> {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, index) {
                     var postagem = snapshot.data![index];
-                    //List<dynamic> respostas = FutureBuilder<List<Respostas>>()
                     comentarioController = controllerComments();
                     return Card(
                       elevation: 4.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16.0),
                       ),
-                      child: //Padding(
+                      child: 
                           SingleChildScrollView(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
@@ -97,8 +101,6 @@ class PostagemListState extends State<PostagemList> {
                             ImageWidget(
                                 imageUrl: snapshot.data![index].arquivo),
                             SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
                                 width: MediaQuery.of(context).size.width * 1,
                                 child:
                                 Row(
@@ -130,14 +132,14 @@ class PostagemListState extends State<PostagemList> {
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width * 0.1,
                                       child: IconButton(
-                                        onPressed: (){
-                                          setState(() {
-                                             updateLikeDislike(
+                                        onPressed: ()async {
+                                          setState((){
+                                            updateLikeDislike(
                                               'likes',
                                               snapshot.data![index].id,
                                               snapshot.data![index].likes
                                             );
-
+                                            fetchLike(snapshot.data![index].id);
                                           });
                                         },
                                         icon: const Icon(Icons.thumb_up),
@@ -149,7 +151,7 @@ class PostagemListState extends State<PostagemList> {
                                         ),
                                       ),
                                     ),
-                                  SizedBox(
+                                    SizedBox(
                                     height: 20,
                                     width: MediaQuery.of(context).size.width * 0.4,
                                     child:
@@ -157,25 +159,30 @@ class PostagemListState extends State<PostagemList> {
                                       future: fetchLike(snapshot.data![index].id), 
                                         builder: (context, snapshot) {
                                           return  Text("${snapshot.data} likes") ;
-                                        })
-                                )],)
+                                        }))
+                                ],
+                                ),
                                   ],
                                 ),
                               ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05),
-                            //OptionsListWidget<String>(
-                            //  options: respostas.cast<String>(),
-                            //  isRadio: postagem.escolha_unica,
-                            //  sendWidgetButton: listSendButtonStateBool[index],
-                            //  listSendButtonStateBoolNew:
-                            //      listSendButtonStateBool,
-                            //  respostaIndex: index,
-                            //),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.08,
-                            ),
+                                  FutureBuilder(
+                                    future: fetchRespostas(snapshot.data![index].id), 
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData){
+                                          return OptionsListWidget<String>(                                         
+                                          options: snapshot.data!.map((e) => e.respostaTexto).toList(),
+                                          isRadio: postagem.escolha_unica,
+                                          sendWidgetButton: listSendButtonStateBool[index],
+                                          listSendButtonStateBoolNew:listSendButtonStateBool,
+                                          respostaIndex: index,
+                                          postagemId: postagem.id
+                                        );
+                                        }
+                                        else{
+                                          return SizedBox.shrink();
+                                        }
+                                      }),
+                            const SizedBox(height: 16.0),
                             Column(
                               children: [
                                 TextFormField(
@@ -190,12 +197,10 @@ class PostagemListState extends State<PostagemList> {
                               controller: comentarioController,
                               onChanged: (value) => commentText = value,
                             ),
+                            const SizedBox(height: 16.0),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.025,
-                            ),
-                            SizedBox(
-                              height: MediaQuery.sizeOf(context).width * 0.1,
-                              width: MediaQuery.sizeOf(context).width * 0.45,
+                              height: 40,
+                              width: 200,
                               child: 
                                 ElevatedButton(
                                   onPressed: () {
@@ -218,6 +223,7 @@ class PostagemListState extends State<PostagemList> {
                               child: FutureBuilder<List<CommentsPostagem>>(
                                 future: fetchComments(postagem),
                                 builder: (context, snapshot) {
+                                
                                   if (snapshot.hasData) {
                                     return ListView.builder(
                                       shrinkWrap: true,
@@ -225,16 +231,18 @@ class PostagemListState extends State<PostagemList> {
                                           const NeverScrollableScrollPhysics(),
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
-                                        final item = snapshot.data![index].text;
+                                        //final item = snapshot.data![index].text;
+                                        final item = utf8.decode(snapshot.data![index].text.toString().codeUnits);
+                                        final user = snapshot.data![index].username;
                                         return ListTile(
-                                          title: Text(item),
-                                          trailing:
-                                              const Icon(Icons.arrow_right),
+                                          title: Text("${user}:${item}")
+                                        
                                         );
                                       },
                                     );
                                   }
                                   return Text('${snapshot.error}');
+                                  
                                 },
                               ),
                             ),

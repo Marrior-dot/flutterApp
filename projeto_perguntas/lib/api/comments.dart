@@ -9,7 +9,8 @@ Future<List<CommentsPostagem>> fetchComments(
     Postagem postagem) async {
   final response =
       await http.get(
-          Uri.parse('http://10.54.2.110:8000/api/comentarios/${postagem.id}/'));
+          //Uri.parse('http://10.54.2.110:8000/api/comentarios/${postagem.id}/'));
+          Uri.parse('http://localhost:8000/api/comentarios/${postagem.id}/'));
   if (response.statusCode == 200) {
     var commentsMap =
         (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
@@ -27,9 +28,8 @@ Future<List<CommentsPostagem>> fetchComments(
 Future<CommentsPostagem> createComment(
     String username, String text, Postagem postagem) async {
   final response = await http.post(
-    Uri.parse('http://10.54.2.110:8000/api/comentarios/'),
-    //Uri.parse('http://10.54.2.110:8000/api/comentariocreate/'),
-    //Uri.parse('http://localhost:8000/api/comentariocreate/'),
+    //Uri.parse('http://10.54.2.110:8000/api/comentarios/'),
+    Uri.parse('http://localhost:8000/api/comentarios/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

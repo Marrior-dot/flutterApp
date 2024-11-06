@@ -7,10 +7,9 @@ class UserSerializer(serializers.ModelSerializer):
         fields=["name","password","email","username"]
 
 class PostagemSerializer(serializers.ModelSerializer):
-    respostas = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model=Postagem
-        fields=["id","content","arquivo","likes","dislikes","respostas","escolha_unica"]
+        fields=["id","content","arquivo","likes","dislikes","escolha_unica"]
 
 class RespostasSerializer(serializers.ModelSerializer):
     class Meta:

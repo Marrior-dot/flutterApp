@@ -1,7 +1,6 @@
-//import 'dart:ffi';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_perguntas/api/updateResposta.dart';
+import 'package:projeto_perguntas/api/respostas.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:convert' show utf8;
 
@@ -12,6 +11,7 @@ class OptionsListWidget<T> extends StatefulWidget {
   int respostaIndex;
   List<dynamic> listSendButtonStateBoolNew;
   bool? sendWidgetButton;
+  final int postagemId;
 
   OptionsListWidget(
       {super.key,
@@ -20,7 +20,9 @@ class OptionsListWidget<T> extends StatefulWidget {
       this.initialValue,
       required this.respostaIndex,
       required this.listSendButtonStateBoolNew,
-      this.sendWidgetButton});
+      this.sendWidgetButton,
+      required this.postagemId
+      });
 
   @override
   _OptionsListWidgetState<T> createState() => _OptionsListWidgetState<T>();
@@ -57,12 +59,13 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.options.isEmpty) {
-      return SizedBox.shrink();
-    }
-
     if (widget.isRadio) {
-      return Column(children: [
+      return 
+      SizedBox(
+        width: MediaQuery.of(context).size.width * 1,
+        height: MediaQuery.of(context).size.height * 0.2,
+        child:
+      Column(children: [
         ListView.builder(
             shrinkWrap: true,
             itemCount: widget.options.length,
@@ -87,7 +90,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
         ElevatedButton(
             onPressed: sendButton == true
                 ? () {
-                    updateResposta(radioOption);
+                    updateResposta(radioOption, widget.postagemId);
                     saveButtonState(widget.respostaIndex,
                         widget.listSendButtonStateBoolNew);
                     setState(() {
@@ -99,9 +102,14 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
               style: sendResposta,
               "Enviar resposta",
               ))
-      ]);
+      ]) );
     } else {
-      return Column(children: [
+      return 
+       SizedBox(
+        width: MediaQuery.of(context).size.width * 1,
+        height: MediaQuery.of(context).size.height * 0.2,
+        child:
+      Column(children: [
         ListView.builder(
             shrinkWrap: true,
             itemCount: widget.options.length,
@@ -130,7 +138,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
             onPressed: sendButton == true
                 ? () {
                     for (var i = 0; i < checkBoxOption!.length; i++) {
-                      updateResposta(checkBoxOption![i]);
+                      updateResposta(checkBoxOption![i], widget.postagemId);
                     }
                     saveButtonState(widget.respostaIndex,
                         widget.listSendButtonStateBoolNew);
@@ -144,7 +152,10 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
               "Enviar resposta",
               )
             )
-      ]);
+      ]
+      )
+       )
+      ;
     }
   }
 }
