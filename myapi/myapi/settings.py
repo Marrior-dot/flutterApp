@@ -31,10 +31,11 @@ ALLOWED_HOSTS = ['192.168.15.6','127.0.0.1','localhost','10.54.2.110','192.168.1
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'myapp.apps.MyappConfig',
     'rest_framework',
-    'daphne',
     'jazzmin',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
