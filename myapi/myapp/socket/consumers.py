@@ -27,9 +27,7 @@ class PostagemConsumer(AsyncWebsocketConsumer):
             postagens = await self.get_all_postagens()
             serializer = await self.get_data_to_serialize(postagens)
             data = await self.get_json_dump(serializer)
-            #print(data)
-            self.send(text_data=data)
-            #self.send(text_data=json.dumps({"data":data}))
+            await self.send(text_data=data)
         # Websocket messages not relevant for this implementation
 
     @database_sync_to_async 
