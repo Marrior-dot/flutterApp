@@ -1,32 +1,80 @@
+#ws://localhost:8000/ws/postagem/
 import json
-from channels.generic.websocket import WebsocketConsumer
-from channels.generic.websocket import JsonWebsocketConsumer
-from myapp.serializers import PostagemSerializer
+from channels.db import database_sync_to_async
+from channels.generic.websocket import AsyncWebsocketConsumer
+from django.db.models.signals import post_save
 from myapp.models import Postagem
+from myapp.serializers import PostagemSerializer
 
-class ChatConsumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
+class PostagemConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.group_name = 'postagem_updates'  # Group name for broadcasting updates
+        # Add self to the group to receive broadcast messages
 
-    def disconnect(self, close_code):
-        pass
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
 
-    def receive(self,text_data):
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        # Remove self from the group on disconnect
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
+
+    async def receive(self, text_data):
+        # Parse the incoming JSON data
         text_data_json = json.loads(text_data)
-        postagem = Postagem.objects.all()
-        serializer = PostagemSerializer(postagem, many=True)
-        message = serializer.data #text_data_json["message"]
-        #message = text_data_json["message"]
-        self.send(text_data=json.dumps({"message": "ola"}))
+        message = text_data_json['message']
+        if message == 'get_postagens':
+            postagens = await self.get_all_postagens()
+            serializer = await self.get_data_to_serialize(postagens)
+            data = await self.get_json_dump(serializer)
+            #print(data)
+            self.send(text_data=data)
+            #self.send(text_data=json.dumps({"data":data}))
+        # Websocket messages not relevant for this implementation
 
-class PostagemConsumer(JsonWebsocketConsumer):
-    def connect(self):
-        self.accept()
-        
+    @database_sync_to_async 
+    def get_all_postagens(self):
+        return Postagem.objects.all()
+    
+    @database_sync_to_async
+    def get_data_to_serialize(self, postagens):
+        return PostagemSerializer(postagens, many=True).data
+    
+    @database_sync_to_async
+    def get_json_dump(self, serialized_data):
+        return json.dumps(serialized_data)
 
-    def disconnect(self, close_code):
-        pass
+    @classmethod
+    def notify_postagem_update(cls, sender, instance, created, **kwargs):
+        """
+        Signal handler to broadcast serialized Postagem data upon save
+        """
+        serializer = PostagemSerializer(instance)
+        data = json.dumps({'postagem': serializer.data})
 
-    def receive_json(self,content=Postagem.objects.all()):
-        contentSerialized = PostagemSerializer(content, many=True)
-        self.send_json(content=contentSerialized)
+        # Broadcast update to all connected clients in the group
+        async def broadcast_update():
+            await cls.channel_layer.group_send(cls.group_name, {'type': 'postagem.update', 'message': data})
+
+        # Dispatch the update asynchronously
+        broadcast_update()
+
+# Connect the signal handler to Postagem model save
+post_save.connect(PostagemConsumer.notify_postagem_update, sender=Postagem)
+'''
+const socket = new WebSocket('ws://localhost:8000/ws/postagem/'); // Replace with your WebSocket endpoint
+
+socket.onopen = function(event) {
+  console.log('Connected to WebSocket server');
+  socket.send(JSON.stringify({'message': 'get_postagens'}));
+};
+
+socket.onmessage = function(event) {
+  const data = JSON.parse(event.data);
+  console.log('Received data:', data);
+};
+
+socket.onclose = function(event) {
+  console.log('WebSocket connection closed');
+};
+'''
