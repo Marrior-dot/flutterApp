@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 class ImageWidget extends StatelessWidget {
   const ImageWidget({super.key, required this.imageUrl});
-  //final File? imageUrl;
   final String? imageUrl;
   
   @override

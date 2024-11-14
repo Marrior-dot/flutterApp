@@ -4,14 +4,12 @@ from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db.models.signals import post_save
 from channels.layers import get_channel_layer
-#from django.dispatch import receiver
 from myapp.models import Postagem
 from myapp.serializers import PostagemSerializer
 
 class PostagemConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.group_name = 'postagem_updates'  # Group name for broadcasting updates
-        #self.channel_name = 'postagem'
         # Add self to the group to receive broadcast messages
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
@@ -46,22 +44,10 @@ class PostagemConsumer(AsyncWebsocketConsumer):
             except ValueError as e:            
                 print(e)
 
-        
-        #async def broadcast_update(self):
-        #    serializer = await self.get_data_to_serialize(instance)
-        #    print("serializador")
-        #    data = await self.get_json_dump(serializer) #json.dumps({'postagem': serializer})
-        #    print("data")
-        #    print("broadcast_update")
-        #    await self.send(data) #self.channel_layer.group_send(self.group_name, data)
-
-        # Dispatch the update asynchronously
-        #await broadcast_update()
-        
     async def postagem_updates(self, event):
             message = event["message"]
             # Send message to WebSocket
-            await self.send(text_data=json.dumps({"message": message}))
+            await self.send(text_data=message) #self.send(text_data=json.dumps({"message": message}))
 
     @database_sync_to_async 
     def get_all_postagens(self):

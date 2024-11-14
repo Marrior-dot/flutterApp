@@ -6,6 +6,10 @@ import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:projeto_perguntas/model/respostas.dart';
 import 'package:projeto_perguntas/api/respostas.dart';
 
+
+//WebSocketChannel channel = WebSocketChannel.connect(
+//  Uri.parse('ws://localhost:8000/ws/postagens/'),
+//);
 Future<List<Postagem>> fetchPostagem() async{
   final response =
       //await http.get(Uri.parse('http://10.54.2.110:8000/api/postagens/'));

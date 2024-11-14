@@ -7,7 +7,9 @@ import 'package:projeto_perguntas/api/postagem.dart';
 import 'package:projeto_perguntas/api/comments.dart';
 import 'package:projeto_perguntas/api/respostas.dart';
 import 'package:projeto_perguntas/views/IsRadio.dart';
+import 'package:web_socket_channel/io.dart';
 import 'dart:async';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/views/ImageWidget.dart';
@@ -26,12 +28,14 @@ class PostagemListState extends State<PostagemList> {
   late TextEditingController comentarioController;
   late List<dynamic> listSendButtonStateBool;
   late List<String> listSendButtonState;
+  WebSocketChannel channel = IOWebSocketChannel.connect(
+  'ws://localhost:8000/ws/postagem/'
+);
   String commentText = "";
-
   @override
   void initState() {
     super.initState();
-    futureFetch = fetchPostagem();
+      //futureFetch = fetchPostagem();
   }
 
   @override
@@ -65,9 +69,12 @@ class PostagemListState extends State<PostagemList> {
           title: const Text('Fetch Data Example'),
         ),
         body: Center(
-          child: FutureBuilder<List<Postagem>>(
-            future: futureFetch,
+          child: /*FutureBuilder<List<Postagem>>(
+            future: futureFetch*/
+            StreamBuilder(
+            stream: channel.stream,
             builder: (context, snapshot) {
+              //print(snapshot.data);
               if (snapshot.hasData) {
                 loadDataBool(snapshot.data!.length);
                 return ListView.builder(
@@ -231,7 +238,6 @@ class PostagemListState extends State<PostagemList> {
                                           const NeverScrollableScrollPhysics(),
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
-                                        //final item = snapshot.data![index].text;
                                         final item = utf8.decode(snapshot.data![index].text.toString().codeUnits);
                                         final user = snapshot.data![index].username;
                                         return ListTile(
