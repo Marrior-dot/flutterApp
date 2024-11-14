@@ -3,12 +3,15 @@ import json
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db.models.signals import post_save
+from channels.layers import get_channel_layer
+#from django.dispatch import receiver
 from myapp.models import Postagem
 from myapp.serializers import PostagemSerializer
 
 class PostagemConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.group_name = 'postagem_updates'  # Group name for broadcasting updates
+        #self.channel_name = 'postagem'
         # Add self to the group to receive broadcast messages
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
@@ -26,9 +29,39 @@ class PostagemConsumer(AsyncWebsocketConsumer):
         if message == 'get_postagens':
             postagens = await self.get_all_postagens()
             serializer = await self.get_data_to_serialize(postagens)
-            data = await self.get_json_dump(serializer)
-            await self.send(text_data=data)
+            message = await self.get_json_dump(serializer)
+            await self.send(text_data=message)
         # Websocket messages not relevant for this implementation
+
+    @classmethod
+    async def notify_postagem_update (self, sender, instance, created, **kwargs):#(self, cls, sender, instance, created, **kwargs):
+        """
+        Signal handler to broadcast serialized Postagem data upon save
+        """ 
+        if created:
+            serializer = PostagemSerializer(instance).data
+            data = json.dumps(serializer)
+            try:
+                await get_channel_layer().group_send('postagem_updates',{'type':'postagem_updates',"message":data})
+            except ValueError as e:            
+                print(e)
+
+        
+        #async def broadcast_update(self):
+        #    serializer = await self.get_data_to_serialize(instance)
+        #    print("serializador")
+        #    data = await self.get_json_dump(serializer) #json.dumps({'postagem': serializer})
+        #    print("data")
+        #    print("broadcast_update")
+        #    await self.send(data) #self.channel_layer.group_send(self.group_name, data)
+
+        # Dispatch the update asynchronously
+        #await broadcast_update()
+        
+    async def postagem_updates(self, event):
+            message = event["message"]
+            # Send message to WebSocket
+            await self.send(text_data=json.dumps({"message": message}))
 
     @database_sync_to_async 
     def get_all_postagens(self):
@@ -42,23 +75,9 @@ class PostagemConsumer(AsyncWebsocketConsumer):
     def get_json_dump(self, serialized_data):
         return json.dumps(serialized_data)
 
-    @classmethod
-    def notify_postagem_update(cls, sender, instance, created, **kwargs):
-        """
-        Signal handler to broadcast serialized Postagem data upon save
-        """
-        serializer = PostagemSerializer(instance)
-        data = json.dumps({'postagem': serializer.data})
-
-        # Broadcast update to all connected clients in the group
-        async def broadcast_update():
-            await cls.channel_layer.group_send(cls.group_name, {'type': 'postagem.update', 'message': data})
-
-        # Dispatch the update asynchronously
-        broadcast_update()
-
 # Connect the signal handler to Postagem model save
 post_save.connect(PostagemConsumer.notify_postagem_update, sender=Postagem)
+
 '''
 const socket = new WebSocket('ws://localhost:8000/ws/postagem/'); // Replace with your WebSocket endpoint
 
