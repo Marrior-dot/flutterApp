@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/io_client.dart';
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:projeto_perguntas/model/comments.dart';
 import 'package:projeto_perguntas/model/respostas.dart';
@@ -7,12 +8,13 @@ import 'package:projeto_perguntas/api/postagem.dart';
 import 'package:projeto_perguntas/api/comments.dart';
 import 'package:projeto_perguntas/api/respostas.dart';
 import 'package:projeto_perguntas/views/IsRadio.dart';
-import 'package:web_socket_channel/io.dart';
+//import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:async';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/views/ImageWidget.dart';
 import 'dart:convert' show jsonEncode, utf8, jsonDecode;
+
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class PostagemList extends StatefulWidget {
   final User user;
@@ -22,19 +24,18 @@ class PostagemList extends StatefulWidget {
 }
 
 class PostagemListState extends State<PostagemList> {
-  late Future<List<Postagem>> futureFetch;
+  //late Future<List<Postagem>> futureFetch;
   late TextEditingController comentarioController;
   late List<dynamic> listSendButtonStateBool;
   late List<String> listSendButtonState;
-  late PostagemSocket streamSocket;
+  WebSocketChannel streamSocket = WebSocketChannel.connect(Uri.parse('ws://localhost:8000/ws/postagem/'));  
+
 
   String commentText = "";
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    streamSocket = PostagemSocket();
-    connectWebSocket();
-    futureFetch = fetchPostagem();
+    connectWebSocket(streamSocket);
   }
 
   @override
@@ -43,27 +44,6 @@ class PostagemListState extends State<PostagemList> {
     super.dispose();
   }
 
-  void connectWebSocket() {
-    IO.Socket socket = IO.io('ws://localhost:8000/ws/postagem/',
-        IO.OptionBuilder().setTransports(['websocket']).build());
-
-    // Create a PostagemSocket instance
-    final streamSocket = PostagemSocket();
-
-    socket.onConnect((_) {
-      print('connected');
-      socket.emit('get_postagens');
-    });
-
-    socket.on('postagem_update', (data) {
-      // Use the function from PostagemSocket to add data
-      streamSocket
-          .addResponse(data['content']); // Assuming data contains 'content' key
-    });
-
-    socket.onDisconnect((_) => print('disconnected'));
-    socket.connect();
-  }
 
   void loadDataBool(int lgth) {
     final box = GetStorage();
@@ -90,16 +70,25 @@ class PostagemListState extends State<PostagemList> {
           title: const Text('Fetch Data Example'),
         ),
         body: Center(
-            child: StreamBuilder(
-                stream: streamSocket.getResponse,
-                builder: (context, AsyncSnapshot<String> snapshot) {
+            child: StreamBuilder<List<Postagem>>(
+                stream: getPostagemStreamController().stream,
+                builder: (context,  snapshot) {
                   if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
+                    print(snapshot.error);
+                    return 
+                    SizedBox(
+                      height: 30,
+                      width: MediaQuery.of(context).size.width,
+                      child:Text('${snapshot.error}'));
                   } else if (snapshot.hasData) {
                     return ListView.builder(
+                      padding: const EdgeInsets.all(16.0),
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          return Text(snapshot.data![index]);
+                          return SizedBox(
+                            height: 20,
+                            width: 50,
+                            child: Text("${snapshot.data![index].content}")); 
                         });
                   } else {
                     return SizedBox.shrink();

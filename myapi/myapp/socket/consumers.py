@@ -6,12 +6,11 @@ from django.db.models.signals import post_save
 from channels.layers import get_channel_layer
 from myapp.models import Postagem
 from myapp.serializers import PostagemSerializer
-
+import asyncio
 class PostagemConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.group_name = 'postagem_updates'  # Group name for broadcasting updates
         # Add self to the group to receive broadcast messages
-
         await self.channel_layer.group_add(self.group_name, self.channel_name)
 
         await self.accept()
@@ -32,11 +31,8 @@ class PostagemConsumer(AsyncWebsocketConsumer):
         # Websocket messages not relevant for this implementation
 
     @classmethod
-    async def notify_postagem_update (self, sender, instance, created, **kwargs):#(self, cls, sender, instance, created, **kwargs):
-        """
-        Signal handler to broadcast serialized Postagem data upon save
-        """ 
-        if created:
+    async def notify_postagem_update (self, sender, instance, created, **kwargs):
+        if created:    
             serializer = PostagemSerializer(instance).data
             data = json.dumps(serializer)
             try:
@@ -47,7 +43,7 @@ class PostagemConsumer(AsyncWebsocketConsumer):
     async def postagem_updates(self, event):
             message = event["message"]
             # Send message to WebSocket
-            await self.send(text_data=message) #self.send(text_data=json.dumps({"message": message}))
+            await self.send(text_data=message) 
 
     @database_sync_to_async 
     def get_all_postagens(self):

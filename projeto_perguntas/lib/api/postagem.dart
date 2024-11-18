@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
-Future<List<Postagem>> fetchPostagem() async {
+StreamController<List<Postagem>> postagemStreamController = StreamController<List<Postagem>>();
+
+Future<List<Postagem>> fetchPostagem() async{
   final response =
       //await http.get(Uri.parse('http://10.54.2.110:8000/api/postagens/'));
       await http.get(Uri.parse('http://localhost:8000/api/postagens/'));
@@ -21,44 +23,35 @@ Future<List<Postagem>> fetchPostagem() async {
   }
 }
 
-class PostagemSocket {
-  final _socketResponse = StreamController<String>(); // Stream of strings
+void connectWebSocket(WebSocketChannel streamSocket) async{
+  //final streamSocket = WebSocketChannel.connect(Uri.parse('ws://10.54.2.110:8000/ws/postagem/'));   
+  try{
+      await streamSocket.ready;
+      streamSocket.sink.add(jsonEncode({'message': 'get_postagens'}));
+      streamSocket.stream.listen((event) {
+        var postagemEvent = jsonDecode(event);
+        if (postagemEvent is List){
+          var postagem = postagemEvent.map<Postagem>((json) => Postagem.fromJson(json)).toList();
+          postagemStreamController.add(postagem);
+        }
+        else{
+          var postagem = Postagem.fromJson(postagemEvent);
+          postagemStreamController.add([postagem]);
+        }
 
-  // Function to add data to the stream
-  void addResponse(String data) {
-    _socketResponse.sink.add(data);
-  }
-
-  // Stream to listen for incoming data
-  Stream<String> get getResponse => _socketResponse.stream;
-
-  void dispose() {
-    _socketResponse.close();
-  }
+        //var postagemEvent = (jsonDecode(event) as List).cast<Map<String, dynamic>>();
+        //var postagem = postagemEvent.map<Postagem>((json) => Postagem.fromJson(json)).toList();
+        //postagemStreamController.add(postagem);
+      });
+    }
+    on WebSocketChannelException catch(e){
+      print(e);
+    }
 }
 
-//void connectWebSocket() {
-//  IO.Socket socket;
-//  socket = IO.io('http://localhost:8000/ws/postagem/',
-//      IO.OptionBuilder().setTransports(['websocket']).build());
-//
-//  socket.onConnect((_) {
-//    print('connected');
-//    socket.emit('get_postagens');
-//  });
-//
-//  socket.on('postagem_update', (data) {
-//    var postagemMap = (jsonDecode(data) as List).cast<Map<String, dynamic>>();
-//    var ppost =
-//        postagemMap.map<Postagem>((json) => Postagem.fromJson(json)).toList();
-//
-//    //setState(() {
-//    //  postagens.add(data['content']);
-//    //});
-//  });
-//  socket.onDisconnect((_) => print('disconnected'));
-//  socket.connect();
-//}
+StreamController<List<Postagem>> getPostagemStreamController(){
+  return postagemStreamController;
+}
 
 void removeNullInString(String response) {
   RegExp nullRemover = RegExp("null");
