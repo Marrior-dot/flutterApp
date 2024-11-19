@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:http/io_client.dart';
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:projeto_perguntas/model/comments.dart';
-import 'package:projeto_perguntas/model/respostas.dart';
 import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/api/postagem.dart';
 import 'package:projeto_perguntas/api/comments.dart';
 import 'package:projeto_perguntas/api/respostas.dart';
 import 'package:projeto_perguntas/views/IsRadio.dart';
-//import 'package:web_socket_channel/web_socket_channel.dart';
-import 'dart:async';
 import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/views/ImageWidget.dart';
-import 'dart:convert' show jsonEncode, utf8, jsonDecode;
-
+import 'package:projeto_perguntas/views/ContentWidget.dart';
+import 'package:projeto_perguntas/views/TitleWidget.dart';
+import 'package:projeto_perguntas/views/LikesDislikesWidget.dart';
+import 'dart:convert' show  utf8;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class PostagemList extends StatefulWidget {
@@ -29,7 +27,6 @@ class PostagemListState extends State<PostagemList> {
   late List<dynamic> listSendButtonStateBool;
   late List<String> listSendButtonState;
   WebSocketChannel streamSocket = WebSocketChannel.connect(Uri.parse('ws://localhost:8000/ws/postagem/'));  
-
 
   String commentText = "";
   @override
@@ -70,32 +67,9 @@ class PostagemListState extends State<PostagemList> {
           title: const Text('Fetch Data Example'),
         ),
         body: Center(
-            child: StreamBuilder<List<Postagem>>(
+            child:
+            StreamBuilder<List<Postagem>>(
                 stream: getPostagemStreamController().stream,
-                builder: (context,  snapshot) {
-                  if (snapshot.hasError) {
-                    print(snapshot.error);
-                    return 
-                    SizedBox(
-                      height: 30,
-                      width: MediaQuery.of(context).size.width,
-                      child:Text('${snapshot.error}'));
-                  } else if (snapshot.hasData) {
-                    return ListView.builder(
-                      padding: const EdgeInsets.all(16.0),
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          return SizedBox(
-                            height: 20,
-                            width: 50,
-                            child: Text("${snapshot.data![index].content}")); 
-                        });
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                })
-            /*FutureBuilder<List<Postagem>>(
-            future: futureFetch,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 loadDataBool(snapshot.data!.length);
@@ -115,108 +89,12 @@ class PostagemListState extends State<PostagemList> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 200,
-                              child: StreamBuilder(
-                                  stream: streamSocket.getResponse
-                                      .asBroadcastStream(),
-                                  builder: (context,
-                                      AsyncSnapshot<String> snapshot) {
-                                    if (snapshot.hasData) {
-                                      return ListView.builder(
-                                          itemCount: snapshot.data!.length,
-                                          itemBuilder: (context, index) {
-                                            return Text(snapshot.data![index]);
-                                          });
-                                    } else {
-                                      return SizedBox.shrink();
-                                    }
-                                  }),
-                            ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.1,
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                child: Text(
-                                  snapshot.data![index].content,
-                                  //snapshot.data![index],
-                                  style: const TextStyle(
-                                    fontSize: 24.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )),
+                            TitleWidget(title: snapshot.data![index].title),
+                            ContentWidget(content: snapshot.data![index].content),
                             ImageWidget(
                                 imageUrl: snapshot.data![index].arquivo),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 1,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.1,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        updateLikeDislike(
-                                            'dislikes',
-                                            snapshot.data![index].id,
-                                            snapshot.data![index].dislikes);
-                                      },
-                                      icon: Icon(Icons.thumb_down),
-                                      style: ButtonStyle(
-                                          foregroundColor:
-                                              MaterialStateProperty.all(
-                                        Color.fromARGB(200, 105, 105, 105),
-                                      )),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.1,
-                                        child: IconButton(
-                                          onPressed: () async {
-                                            setState(() {
-                                              updateLikeDislike(
-                                                  'likes',
-                                                  snapshot.data![index].id,
-                                                  snapshot.data![index].likes);
-                                              fetchLike(
-                                                  snapshot.data![index].id);
-                                            });
-                                          },
-                                          icon: const Icon(Icons.thumb_up),
-                                          style: ButtonStyle(
-                                              foregroundColor:
-                                                  MaterialStateProperty.all(
-                                            Color.fromARGB(200, 43, 142, 255),
-                                          )),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                          height: 20,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          child: FutureBuilder(
-                                              future: fetchLike(
-                                                  snapshot.data![index].id),
-                                              builder: (context, snapshot) {
-                                                return Text(
-                                                    "${snapshot.data} likes");
-                                              }))
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            FutureBuilder(
+                            LikesDislikesWidget(likes: snapshot.data![index].likes , dislikes: snapshot.data![index].dislikes, id: snapshot.data![index].id),
+                            /*FutureBuilder(
                                 future:
                                     fetchRespostas(snapshot.data![index].id),
                                 builder: (context, snapshot) {
@@ -235,7 +113,7 @@ class PostagemListState extends State<PostagemList> {
                                   } else {
                                     return SizedBox.shrink();
                                   }
-                                }),
+                                })*/
                             const SizedBox(height: 16.0),
                             Column(
                               children: [
@@ -307,7 +185,7 @@ class PostagemListState extends State<PostagemList> {
               }
               return Text('${snapshot.error}');
             },
-          ),*/
+          ),
             ),
       ),
     );

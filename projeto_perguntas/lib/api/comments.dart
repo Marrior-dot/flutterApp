@@ -33,7 +33,6 @@ Future<CommentsPostagem> createComment(
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-
     body: jsonEncode(<String, dynamic>{
       "username": username,
       "postagem": postagem,

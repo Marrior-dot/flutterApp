@@ -17,7 +17,8 @@ class User(models.Model):
 
 class Postagem(models.Model):
     arquivo = models.ImageField(blank= True,null=True, default="", upload_to='images')
-    content = models.CharField(max_length=500)
+    title = models.CharField(max_length=100, null= False, default="LoremIpsum")
+    content = models.CharField(max_length=500, blank=True)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
     escolha_unica = models.BooleanField(default=False)
@@ -28,6 +29,9 @@ class Postagem(models.Model):
     def __str__(self) -> str:
         return f"{self.content}"
 
+class PersistenciaUserPostagem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    postagem = models.ForeignKey(Postagem, on_delete=models.CASCADE)
 
 class Respostas(models.Model):
     respostaTexto = models.CharField(max_length=500 ,blank=True, null=True, default="")
@@ -39,6 +43,10 @@ class Respostas(models.Model):
     
     def __str__(self):
         return f"{self.respostaTexto} || Respostas: {self.respondido}"
+
+class PersistenciaUserResposta(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    resposta = models.ForeignKey(Respostas, on_delete=models.CASCADE)
 
 class Commentarios(models.Model):
     username = models.CharField(max_length=100)

@@ -47,7 +47,7 @@ class PostagemConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async 
     def get_all_postagens(self):
-        return Postagem.objects.all()
+        return Postagem.objects.all().order_by('-id')
     
     @database_sync_to_async
     def get_data_to_serialize(self, postagens):

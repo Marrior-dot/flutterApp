@@ -2,8 +2,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 import re
-from myapp.serializers import UserSerializer, PostagemSerializer, CommentsPostagemSerializer, RespostasSerializer 
-from myapp.models import User, Postagem, Commentarios, Respostas
+from myapp.serializers import UserSerializer, PostagemSerializer, CommentsPostagemSerializer, RespostasSerializer, PersistenciaUserPostagemSerializer, PersistenciaUserRespostaSerializer
+from myapp.models import User, Postagem, Commentarios, Respostas, PersistenciaUserPostagem, PersistenciaUserResposta
 
 #-----User------
 @api_view(["GET"])
@@ -58,7 +58,8 @@ def users_detail(req, pk=None, email=None):
         user = User.objects.get(id=pk)
         user.delete()
         return Response("Item successfully deleted!", status=status.HTTP_204_NO_CONTENT)
-
+    
+#-----Postagem------
 @api_view(["GET","POST"])
 def postagens_list(req):
     if req.method == 'GET':
@@ -90,23 +91,8 @@ def postagens_detail(req, pk=None):
         postagens = Postagem.objects.get(id=pk)
         postagens.delete()
         return Response("Item successfully deleted!", status=status.HTTP_204_NO_CONTENT)
-#-----User------
-
-#-----Postagem------
-@api_view(["GET"])
-def postagensOverview(req):
-    api_urls = {
-        "Postagem":"/postagemlist/",
-        "PostagemDetail":"/postagemdetail",
-        "PostagemCreate":"/postagemcreate",
-        "PostagemUpdate":"postagemupdate/<str:pk>",
-        "PostagemDelete":"/postagemdelete/<str:pk>"
-    }
-    return Response(api_urls)
-#-----Postagem------
 
 #-----Comentários------
-
 @api_view(["POST"])
 def comentarios_list(req):
     serializerComments = CommentsPostagemSerializer(data=req.data)
@@ -123,6 +109,7 @@ def comentarios_detail(req, pk=None):
     serializer = CommentsPostagemSerializer(comments, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+#-----Respostas------
 @api_view(["GET"])
 def respostas_list(req, postagem):
     respostas = Respostas.objects.filter(postagem=postagem)
@@ -140,3 +127,37 @@ def respostas_detail(req,postagem,respostaTexto):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#-----Persistência Usuário Postagem------
+@api_view(["GET","POST"])
+def persistencia_usuario_postagem_detail(req, user, postagem):
+    if req.method == 'GET':
+        persistencia = PersistenciaUserPostagem.objects.filter(user=user).get()
+        if persistencia != None:
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if req.method == 'POST':
+        serializer = PersistenciaUserPostagemSerializer(data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#-----Persistência Usuário Resposta------
+@api_view(["GET","POST"])
+def persistencia_usuario_resposta_detail(req, user, resposta):
+    if req.method == 'GET':
+        persistencia = PersistenciaUserResposta.objects.filter(user=user).get()
+        if persistencia != None:
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if req.method == 'POST':
+        serializer = PersistenciaUserRespostaSerializer(data=req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+

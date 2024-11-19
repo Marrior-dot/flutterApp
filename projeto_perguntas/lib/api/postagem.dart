@@ -5,26 +5,9 @@ import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 StreamController<List<Postagem>> postagemStreamController = StreamController<List<Postagem>>();
-
-Future<List<Postagem>> fetchPostagem() async{
-  final response =
-      //await http.get(Uri.parse('http://10.54.2.110:8000/api/postagens/'));
-      await http.get(Uri.parse('http://localhost:8000/api/postagens/'));
-
-  if (response.statusCode == 200) {
-    var postagemMap =
-        (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
-    var ppost =
-        postagemMap.map<Postagem>((json) => Postagem.fromJson(json)).toList();
-
-    return ppost;
-  } else {
-    throw Exception('Failed to load album');
-  }
-}
+List<Postagem> postagensStream = [];
 
 void connectWebSocket(WebSocketChannel streamSocket) async{
-  //final streamSocket = WebSocketChannel.connect(Uri.parse('ws://10.54.2.110:8000/ws/postagem/'));   
   try{
       await streamSocket.ready;
       streamSocket.sink.add(jsonEncode({'message': 'get_postagens'}));
@@ -32,16 +15,15 @@ void connectWebSocket(WebSocketChannel streamSocket) async{
         var postagemEvent = jsonDecode(event);
         if (postagemEvent is List){
           var postagem = postagemEvent.map<Postagem>((json) => Postagem.fromJson(json)).toList();
+          setPostagensStream(postagem);
           postagemStreamController.add(postagem);
+
         }
         else{
           var postagem = Postagem.fromJson(postagemEvent);
-          postagemStreamController.add([postagem]);
+          postagensStream.insert(0, postagem);
+          postagemStreamController.add(postagensStream);
         }
-
-        //var postagemEvent = (jsonDecode(event) as List).cast<Map<String, dynamic>>();
-        //var postagem = postagemEvent.map<Postagem>((json) => Postagem.fromJson(json)).toList();
-        //postagemStreamController.add(postagem);
       });
     }
     on WebSocketChannelException catch(e){
@@ -51,6 +33,12 @@ void connectWebSocket(WebSocketChannel streamSocket) async{
 
 StreamController<List<Postagem>> getPostagemStreamController(){
   return postagemStreamController;
+}
+
+void setPostagensStream(List<Postagem> postagem) {
+  for (var element in postagem) {
+    postagensStream.add(element);
+  }
 }
 
 void removeNullInString(String response) {
