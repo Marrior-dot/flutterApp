@@ -24,7 +24,7 @@ class PersistenciaUserPostagemSerializer(serializers.ModelSerializer):
 class PersistenciaUserRespostaSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersistenciaUserResposta
-        fields = ["user","resposta"]
+        fields = ["user","postagem"]
 
 class CommentsPostagemSerializer(serializers.ModelSerializer):
     postagem = PostagemSerializer(read_only=True)

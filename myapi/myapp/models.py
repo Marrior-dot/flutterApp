@@ -46,7 +46,7 @@ class Respostas(models.Model):
 
 class PersistenciaUserResposta(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    resposta = models.ForeignKey(Respostas, on_delete=models.CASCADE)
+    postagem = models.ForeignKey(Postagem, on_delete=models.CASCADE, null=True)
 
 class Commentarios(models.Model):
     username = models.CharField(max_length=100)

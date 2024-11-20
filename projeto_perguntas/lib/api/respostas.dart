@@ -6,7 +6,8 @@ import 'package:projeto_perguntas/model/respostas.dart';
 Future<List<Respostas>?> fetchRespostas(int postagem) async {
   final response =
       //await http.get(Uri.parse('http://10.54.2.110:8000/api/respostas/$postagem/'));
-      await http.get(Uri.parse('http://localhost:8000/api/respostas/$postagem/'));
+      await http
+          .get(Uri.parse('http://localhost:8000/api/respostas/$postagem/'));
 
   if (response.statusCode == 200) {
     var repostasDecode =
@@ -14,7 +15,7 @@ Future<List<Respostas>?> fetchRespostas(int postagem) async {
     var respostasMap = repostasDecode
         .map<Respostas>((json) => Respostas.fromJson(json))
         .toList();
-    
+
     return respostasMap;
   } else {
     throw Exception('Failed to load album');
@@ -23,8 +24,9 @@ Future<List<Respostas>?> fetchRespostas(int postagem) async {
 
 Future<Respostas> updateResposta(String? respostaTexto, int idPostagem) async {
   final response = await http.patch(
-        //Uri.parse('http://10.54.2.110:8000/api/respostas/${idPostagem}/${respostaTexto}/'),
-        Uri.parse('http://localhost:8000/api/respostas/${idPostagem}/${respostaTexto}/'),
+    //Uri.parse('http://10.54.2.110:8000/api/respostas/${idPostagem}/${respostaTexto}/'),
+    Uri.parse(
+        'http://localhost:8000/api/respostas/${idPostagem}/${respostaTexto}/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -40,4 +42,36 @@ Future<Respostas> updateResposta(String? respostaTexto, int idPostagem) async {
     // then throw an exception.
     throw Exception('Failed to update album.');
   }
+}
+
+Future<void> persistencaRespostas(String userName, int postagemID) async {
+  final response = await http.post(
+    //Uri.parse('http://10.54.2.110:8000/api/users/'),
+    Uri.parse(
+        'http://localhost:8000/api/respostas_persistencia/${userName}/${postagemID}/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      "user": userName,
+      "postagem": postagemID,
+    }),
+  );
+  if (response.statusCode == 201) {
+    return;
+  } else {
+    throw Exception('Falha ao salvar persistência');
+  }
+}
+
+Future<bool?> checkRespostas(String userName, int postagemID) async {
+  final response = await http.get(
+    //Uri.parse('http://10.54.2.110:8000/api/respostas_persistencia/${idUser}/'),
+    Uri.parse(
+        'http://localhost:8000/api/respostas_persistencia/${userName}/${postagemID}/'),
+  );
+  if (response.statusCode == 200) {
+    return null;
+  }
+  return true;
 }

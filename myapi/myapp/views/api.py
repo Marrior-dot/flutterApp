@@ -120,7 +120,13 @@ def respostas_list(req, postagem):
 
 @api_view(["PATCH"])
 def respostas_detail(req,postagem,respostaTexto):
-    resposta = Respostas.objects.filter(respostaTexto=respostaTexto).get()
+    #try:
+        #tryResposta = Respostas.objects.filter(respostaTexto=respostaTexto).get()
+    #except Respostas.MultipleObjectsReturned:
+        #tryResposta = Respostas.objects.filter(respostaTexto=respostaTexto)
+        #print(tryResposta)
+    tryResposta = Respostas.objects.filter(respostaTexto=respostaTexto, postagem=postagem).get()
+    resposta = tryResposta
     req.data["respondido"] = resposta.respondido + 1
     serializer = RespostasSerializer(instance=resposta, data=req.data, partial= True)
     if serializer.is_valid():
@@ -132,8 +138,8 @@ def respostas_detail(req,postagem,respostaTexto):
 @api_view(["GET","POST"])
 def persistencia_usuario_postagem_detail(req, user, postagem):
     if req.method == 'GET':
-        persistencia = PersistenciaUserPostagem.objects.filter(user=user).get()
-        if persistencia != None:
+        persistencia = PersistenciaUserPostagem.objects.filter(user=user, postagem=postagem).get()
+        if persistencia != []:
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
     
@@ -146,13 +152,14 @@ def persistencia_usuario_postagem_detail(req, user, postagem):
     
 #-----Persistência Usuário Resposta------
 @api_view(["GET","POST"])
-def persistencia_usuario_resposta_detail(req, user, resposta):
+def persistencia_usuario_resposta_detail(req, user, postagem):
     if req.method == 'GET':
-        persistencia = PersistenciaUserResposta.objects.filter(user=user).get()
-        if persistencia != None:
+        try:
+            persistencia = PersistenciaUserResposta.objects.get(user=user, postagem=postagem)
             return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
+        except PersistenciaUserResposta.DoesNotExist:
+            return Response(status=status.HTTP_204_NO_CONTENT)  
+   
     if req.method == 'POST':
         serializer = PersistenciaUserRespostaSerializer(data=req.data)
         if serializer.is_valid():

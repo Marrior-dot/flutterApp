@@ -9,9 +9,10 @@ import 'package:projeto_perguntas/views/IsRadio.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/views/ImageWidget.dart';
 import 'package:projeto_perguntas/views/ContentWidget.dart';
+import 'package:projeto_perguntas/views/RespostasWidget.dart';
 import 'package:projeto_perguntas/views/TitleWidget.dart';
 import 'package:projeto_perguntas/views/LikesDislikesWidget.dart';
-import 'dart:convert' show  utf8;
+import 'dart:convert' show utf8;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class PostagemList extends StatefulWidget {
@@ -22,15 +23,13 @@ class PostagemList extends StatefulWidget {
 }
 
 class PostagemListState extends State<PostagemList> {
-  //late Future<List<Postagem>> futureFetch;
   late TextEditingController comentarioController;
-  late List<dynamic> listSendButtonStateBool;
-  late List<String> listSendButtonState;
-  WebSocketChannel streamSocket = WebSocketChannel.connect(Uri.parse('ws://localhost:8000/ws/postagem/'));  
+  WebSocketChannel streamSocket =
+      WebSocketChannel.connect(Uri.parse('ws://localhost:8000/ws/postagem/'));
 
   String commentText = "";
   @override
-  void initState(){
+  void initState() {
     super.initState();
     connectWebSocket(streamSocket);
   }
@@ -39,16 +38,6 @@ class PostagemListState extends State<PostagemList> {
   void dispose() {
     comentarioController.dispose();
     super.dispose();
-  }
-
-
-  void loadDataBool(int lgth) {
-    final box = GetStorage();
-    listSendButtonStateBool = box.read('listSendButtonStateBool') ??
-        List.generate(lgth, (index) => true);
-    if (listSendButtonStateBool.length < lgth) {
-      listSendButtonStateBool.add(true);
-    }
   }
 
   TextEditingController controllerComments() {
@@ -67,12 +56,10 @@ class PostagemListState extends State<PostagemList> {
           title: const Text('Fetch Data Example'),
         ),
         body: Center(
-            child:
-            StreamBuilder<List<Postagem>>(
-                stream: getPostagemStreamController().stream,
+          child: StreamBuilder<List<Postagem>>(
+            stream: getPostagemStreamController().stream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                loadDataBool(snapshot.data!.length);
                 return ListView.builder(
                   padding: const EdgeInsets.all(16.0),
                   itemCount: snapshot.data!.length,
@@ -90,30 +77,20 @@ class PostagemListState extends State<PostagemList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TitleWidget(title: snapshot.data![index].title),
-                            ContentWidget(content: snapshot.data![index].content),
+                            ContentWidget(
+                                content: snapshot.data![index].content),
                             ImageWidget(
                                 imageUrl: snapshot.data![index].arquivo),
-                            LikesDislikesWidget(likes: snapshot.data![index].likes , dislikes: snapshot.data![index].dislikes, id: snapshot.data![index].id),
-                            /*FutureBuilder(
-                                future:
-                                    fetchRespostas(snapshot.data![index].id),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return OptionsListWidget<String>(
-                                        options: snapshot.data!
-                                            .map((e) => e.respostaTexto)
-                                            .toList(),
-                                        isRadio: postagem.escolha_unica,
-                                        sendWidgetButton:
-                                            listSendButtonStateBool[index],
-                                        listSendButtonStateBoolNew:
-                                            listSendButtonStateBool,
-                                        respostaIndex: index,
-                                        postagemId: postagem.id);
-                                  } else {
-                                    return SizedBox.shrink();
-                                  }
-                                })*/
+                            LikesDislikesWidget(
+                                likes: snapshot.data![index].likes,
+                                dislikes: snapshot.data![index].dislikes,
+                                id: snapshot.data![index].id),
+                            RespostasWidget(
+                                postagemid: snapshot.data![index].id,
+                                userid: widget.user.username,
+                                escolha_unica:
+                                    snapshot.data![index].escolha_unica,
+                                index: index),
                             const SizedBox(height: 16.0),
                             Column(
                               children: [
@@ -186,7 +163,7 @@ class PostagemListState extends State<PostagemList> {
               return Text('${snapshot.error}');
             },
           ),
-            ),
+        ),
       ),
     );
   }
