@@ -67,3 +67,34 @@ Future<User> userCreate(
     throw Exception('Failed to create album.');
   }
 }
+
+Future<User> userEdit(String username, String? senha, String? email) async{
+  Map<String, String> corpoRequisicao = {};
+  if (senha != null){
+    corpoRequisicao.addEntries([MapEntry('password', senha)]);
+  }
+
+  if (email != null){
+    corpoRequisicao.addEntries([MapEntry('email', email)]);
+  }
+  final response = await http.patch(
+    //Uri.parse('http://10.54.2.110:8000/api/users/${username}/'),
+    Uri.parse('http://localhost:8000/api/users/${username}/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(corpoRequisicao),
+  );
+  var usuarioMap = jsonDecode(response.body) as Map<String, dynamic>;
+  var uuser = User.fromJson(usuarioMap);
+
+  if (response.statusCode == 200){
+    return uuser; 
+  }
+  else{
+    throw Exception('Falha ao atualizar dados de usuário');
+
+  }
+
+
+}

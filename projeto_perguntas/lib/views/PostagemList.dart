@@ -4,9 +4,6 @@ import 'package:projeto_perguntas/model/comments.dart';
 import 'package:projeto_perguntas/model/user.dart';
 import 'package:projeto_perguntas/api/postagem.dart';
 import 'package:projeto_perguntas/api/comments.dart';
-import 'package:projeto_perguntas/api/respostas.dart';
-import 'package:projeto_perguntas/views/IsRadio.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:projeto_perguntas/views/ImageWidget.dart';
 import 'package:projeto_perguntas/views/ContentWidget.dart';
 import 'package:projeto_perguntas/views/RespostasWidget.dart';
@@ -14,6 +11,7 @@ import 'package:projeto_perguntas/views/TitleWidget.dart';
 import 'package:projeto_perguntas/views/LikesDislikesWidget.dart';
 import 'dart:convert' show utf8;
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:projeto_perguntas/views/UserSettingsWidget.dart';
 
 class PostagemList extends StatefulWidget {
   final User user;
@@ -48,17 +46,28 @@ class PostagemListState extends State<PostagemList> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fetch Data Example',
+      routes:{
+        '/configurar':(context) => UserSettingsWidget(user: widget.user)
+      },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Fetch Data Example'),
+          actions: [
+            IconButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(
+                                                  builder: (context) => UserSettingsWidget(
+                                                    user: widget.user,
+                                                  )));}, 
+            icon: Icon(Icons.tune))],
         ),
         body: Center(
           child: StreamBuilder<List<Postagem>>(
             stream: getPostagemStreamController().stream,
             builder: (context, snapshot) {
+              
               if (snapshot.hasData) {
                 return ListView.builder(
                   padding: const EdgeInsets.all(16.0),
@@ -77,14 +86,21 @@ class PostagemListState extends State<PostagemList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TitleWidget(title: snapshot.data![index].title),
-                            ContentWidget(
-                                content: snapshot.data![index].content),
                             ImageWidget(
                                 imageUrl: snapshot.data![index].arquivo),
-                            LikesDislikesWidget(
-                                likes: snapshot.data![index].likes,
-                                dislikes: snapshot.data![index].dislikes,
-                                id: snapshot.data![index].id),
+                                ContentWidget(
+                                content: snapshot.data![index].content),
+                            FutureBuilder(future: checkLike(widget.user.username, snapshot.data![index].id), 
+                            builder: (context, snapshot){
+                                return LikesDislikesWidget(
+                                  likes: postagem.likes,
+                                  dislikes: postagem.dislikes,
+                                  postagemId: postagem.id,
+                                  userName: widget.user.username,
+                                  sendButton: snapshot.data);
+                            }  
+                            )
+                                  ,
                             RespostasWidget(
                                 postagemid: snapshot.data![index].id,
                                 userid: widget.user.username,

@@ -9,8 +9,6 @@ class OptionsListWidget<T> extends StatefulWidget {
   final bool isRadio;
   final T? initialValue;
   int respostaIndex;
-  //List<dynamic> listSendButtonStateBoolNew;
-  //bool? sendWidgetButton;
   final int postagemId;
   final String userName;
 
@@ -58,7 +56,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
       return SizedBox(
           width: MediaQuery.of(context).size.width * 1,
           height: MediaQuery.of(context).size.height * 0.2,
-          child: Column(children: [
+          child: Column(children:[
             ListView.builder(
                 shrinkWrap: true,
                 itemCount: widget.options.length,
@@ -145,6 +143,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                                     widget.userName, widget.postagemId);
                                 permitirPersistencia = true;
                               }
+                              
                               setState(() {
                                 sendButton = null;
                               });

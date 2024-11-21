@@ -58,13 +58,11 @@ class RegisterPageState extends State<RegisterPage>{
   @override
   Widget build(BuildContext context){  
     return Scaffold(
-      
       appBar: AppBar(
         centerTitle: true,
         title: Text('Cadastro', style: GoogleFonts.montserrat(fontSize:40, fontWeight: FontWeight.bold) ),
           ),
       body: Center(
-
         child: 
         SingleChildScrollView(child:       
          Padding(

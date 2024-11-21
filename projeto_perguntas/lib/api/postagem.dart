@@ -78,3 +78,35 @@ Future<int> fetchLike(int id) async {
     throw Exception('Failed to load album');
   }
 }
+
+Future<void> persistencaLike(String userName, int postagemID) async {
+  final response = await http.post(
+    //Uri.parse('http://10.54.2.110:8000/api/users/'),
+    Uri.parse(
+        'http://localhost:8000/api/postagens_persistencia/${userName}/${postagemID}/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      "user": userName,
+      "postagem": postagemID,
+    }),
+  );
+  if (response.statusCode == 201) {
+    return;
+  } else {
+    throw Exception('Falha ao salvar persistência');
+  }
+}
+
+Future<bool?> checkLike(String userName, int postagemID) async {
+  final response = await http.get(
+    //Uri.parse('http://10.54.2.110:8000/api/respostas_persistencia/${idUser}/'),
+    Uri.parse(
+        'http://localhost:8000/api/postagens_persistencia/${userName}/${postagemID}/'),
+  );
+  if (response.statusCode == 200) {
+      return null;
+  }
+  return true;
+}

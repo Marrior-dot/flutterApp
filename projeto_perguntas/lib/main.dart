@@ -5,7 +5,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 void main() async {
-  await GetStorage.init();
   runApp(const MyApp());
 }
 

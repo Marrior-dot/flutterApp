@@ -46,8 +46,8 @@ def users_detail(req, pk=None, email=None):
 
     #Usuário poderá fazer alguma alteração nas suas próprias configurações
     if req.method == 'PATCH':
-        user = User.objects.get(id=pk)
-        serializer = UserSerializer(instance=user, data=req.data)
+        user = User.objects.get(pk=pk)
+        serializer = UserSerializer(user, data=req.data, partial=True)
         if serializer.is_valid():
            serializer.save()
            return Response(serializer.data)
@@ -55,7 +55,7 @@ def users_detail(req, pk=None, email=None):
     
     #Deletar usuário
     if req.method == 'DELETE':
-        user = User.objects.get(id=pk)
+        user = User.objects.get(pk=pk)
         user.delete()
         return Response("Item successfully deleted!", status=status.HTTP_204_NO_CONTENT)
     
@@ -120,11 +120,6 @@ def respostas_list(req, postagem):
 
 @api_view(["PATCH"])
 def respostas_detail(req,postagem,respostaTexto):
-    #try:
-        #tryResposta = Respostas.objects.filter(respostaTexto=respostaTexto).get()
-    #except Respostas.MultipleObjectsReturned:
-        #tryResposta = Respostas.objects.filter(respostaTexto=respostaTexto)
-        #print(tryResposta)
     tryResposta = Respostas.objects.filter(respostaTexto=respostaTexto, postagem=postagem).get()
     resposta = tryResposta
     req.data["respondido"] = resposta.respondido + 1
@@ -138,10 +133,11 @@ def respostas_detail(req,postagem,respostaTexto):
 @api_view(["GET","POST"])
 def persistencia_usuario_postagem_detail(req, user, postagem):
     if req.method == 'GET':
-        persistencia = PersistenciaUserPostagem.objects.filter(user=user, postagem=postagem).get()
-        if persistencia != []:
+        try:
+            persistencia = PersistenciaUserPostagem.objects.get(user=user, postagem=postagem)
             return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        except PersistenciaUserPostagem.DoesNotExist:
+            return Response(status=status.HTTP_204_NO_CONTENT)  
     
     if req.method == 'POST':
         serializer = PersistenciaUserPostagemSerializer(data=req.data)
