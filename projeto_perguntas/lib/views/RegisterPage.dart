@@ -19,6 +19,7 @@ class RegisterPageState extends State<RegisterPage>{
   String errorStringNome = "";
   String errorStringEmail = "";
   String errorStringUserName = "";
+  bool passWordVisibility = true;
   
   final formKey = GlobalKey<FormState>();
   final regexSenha = RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$');
@@ -89,13 +90,26 @@ class RegisterPageState extends State<RegisterPage>{
                     }
                     return errorStringNome != "" ? errorStringNome : null;
                   },)),
+
                   SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: TextFormField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Senha',
                   prefixIcon: Icon(Icons.password),
+                  suffixIcon: IconButton(
+                                icon: Icon(Icons.visibility),
+                                onPressed: () {
+                                  setState(() {
+                                    if (passWordVisibility == false) {
+                                      passWordVisibility = true;
+                                    } else {
+                                      passWordVisibility = !passWordVisibility!;
+                                    }
+                                  });
+                                },
+                              ),
                 ),
                 controller: passWordController,
                 validator: (value){
@@ -114,8 +128,9 @@ class RegisterPageState extends State<RegisterPage>{
 
                   return errorStringSenha != "" ? errorStringSenha : null;  
                 },
-                obscureText: true,
-              )),                  
+                obscureText: passWordVisibility,
+              )), 
+
               SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.8,
@@ -134,7 +149,8 @@ class RegisterPageState extends State<RegisterPage>{
 
                     return errorStringEmail != "" ? errorStringEmail : null;
                   },
-                  controller: emailController,)),                 
+                  controller: emailController,)),
+
                   SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.8,
@@ -150,7 +166,7 @@ class RegisterPageState extends State<RegisterPage>{
                   }
                   return errorStringUserName != "" ? errorStringUserName : null;
                 },
-              )),              
+              )),   
               const SizedBox(height: 20.0),
               const SizedBox(height: 20.0),
               Builder(
@@ -187,6 +203,7 @@ class RegisterPageState extends State<RegisterPage>{
                           child: Text('Cadastrar',style: GoogleFonts.openSans(fontSize:24, fontWeight: FontWeight.bold)),
                         )) ,
                       ))
+                      
             ],
           ),
           )  

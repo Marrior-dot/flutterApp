@@ -20,7 +20,8 @@ void connectWebSocket(WebSocketChannel streamSocket) async{
 
         }
         else{
-          var postagem = Postagem.fromJson(postagemEvent);
+          Postagem postagem = Postagem.fromJson(postagemEvent);
+          //print(postagem.likes);
           postagensStream.insert(0, postagem);
           postagemStreamController.add(postagensStream);
         }
@@ -69,7 +70,7 @@ Future<Postagem> updateLikeDislike(
 Future<int> fetchLike(int id) async {
   final response =
       //await http.get(Uri.parse('http://10.54.2.110:8000/api/postagens/$id/'));
-      await http.get(Uri.parse('http://localhost:8000/api/postagens/$id/'));
+      await http.get(Uri.parse('http://localhost:8000/api/postagens/${id}/'));
   if (response.statusCode == 200) {
     var postagemMap =
         Postagem.fromJson(jsonDecode(response.body) as Map<String, dynamic>);

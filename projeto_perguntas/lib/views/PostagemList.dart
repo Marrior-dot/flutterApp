@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_perguntas/main.dart';
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:projeto_perguntas/model/comments.dart';
 import 'package:projeto_perguntas/model/user.dart';
@@ -34,8 +35,8 @@ class PostagemListState extends State<PostagemList> {
 
   @override
   void dispose() {
-    comentarioController.dispose();
     super.dispose();
+    comentarioController.dispose();
   }
 
   TextEditingController controllerComments() {
@@ -47,7 +48,8 @@ class PostagemListState extends State<PostagemList> {
     return MaterialApp(
       title: 'Fetch Data Example',
       routes:{
-        '/configurar':(context) => UserSettingsWidget(user: widget.user)
+        '/configurar':(context) => UserSettingsWidget(user: widget.user, streamSocket: streamSocket),
+        '/login':(context) => MyApp(),
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -59,7 +61,7 @@ class PostagemListState extends State<PostagemList> {
             IconButton(onPressed: (){
               Navigator.push(context, MaterialPageRoute(
                                                   builder: (context) => UserSettingsWidget(
-                                                    user: widget.user,
+                                                    user: widget.user, streamSocket: streamSocket
                                                   )));}, 
             icon: Icon(Icons.tune))],
         ),
@@ -67,7 +69,6 @@ class PostagemListState extends State<PostagemList> {
           child: StreamBuilder<List<Postagem>>(
             stream: getPostagemStreamController().stream,
             builder: (context, snapshot) {
-              
               if (snapshot.hasData) {
                 return ListView.builder(
                   padding: const EdgeInsets.all(16.0),

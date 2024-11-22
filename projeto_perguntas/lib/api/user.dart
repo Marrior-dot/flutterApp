@@ -68,13 +68,13 @@ Future<User> userCreate(
   }
 }
 
-Future<User> userEdit(String username, String? senha, String? email) async{
+Future<User> userEdit(String username, String senha, String email) async{
   Map<String, String> corpoRequisicao = {};
-  if (senha != null){
+  if (senha != ""){
     corpoRequisicao.addEntries([MapEntry('password', senha)]);
   }
 
-  if (email != null){
+  if (email != ""){
     corpoRequisicao.addEntries([MapEntry('email', email)]);
   }
   final response = await http.patch(
@@ -95,6 +95,20 @@ Future<User> userEdit(String username, String? senha, String? email) async{
     throw Exception('Falha ao atualizar dados de usuário');
 
   }
+}
 
-
+Future<void> userDelete(String username) async{
+  final response = await http.delete(
+    //Uri.parse('http://10.54.2.110:8000/api/users/${username}/'),
+    Uri.parse('http://localhost:8000/api/users/${username}/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+  if (response.statusCode == 204) {
+    return;
+  }
+  else{
+    throw Exception('Falha ao deletar usuário');
+  }
 }

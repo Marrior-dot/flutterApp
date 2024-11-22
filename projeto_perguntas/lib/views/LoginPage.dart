@@ -11,6 +11,7 @@ class LoginPage extends State<MyApp> {
   final userNameController = TextEditingController();
   final passWordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool passWordVisibility = true;
 
   final elevatedButtonStyle = ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
@@ -34,7 +35,7 @@ class LoginPage extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         routes: {
           "/registrar": (context) => RegisterPage(),
-          //"/user/${userName}/feed": (context) => PostagemList()
+          "/login": (context) => MyApp(),
         },
         home: Scaffold(
             appBar: AppBar(
@@ -59,7 +60,7 @@ class LoginPage extends State<MyApp> {
                       Container(
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: TextFormField(
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText: 'Usuário',
                               prefixIcon: Icon(Icons.login),
                             ),
@@ -76,11 +77,23 @@ class LoginPage extends State<MyApp> {
                       Container(
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: TextFormField(
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText: 'Senha',
                               prefixIcon: Icon(Icons.lock),
+                              suffixIcon:  IconButton(
+                                icon: Icon(Icons.visibility),
+                                onPressed: () {
+                                  setState(() {
+                                    if (passWordVisibility == false) {
+                                      passWordVisibility = true;
+                                    } else {
+                                      passWordVisibility = !passWordVisibility;
+                                    }
+                                  });
+                                },
+                              ),
                             ),
-                            obscureText: true,
+                            obscureText: passWordVisibility,
                             controller: passWordController,
                             validator: (value) {
                               value = passWordController.text;

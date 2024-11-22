@@ -2,21 +2,27 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:projeto_perguntas/views/PostagemList.dart';
 import 'package:projeto_perguntas/api/user.dart';
 import 'package:projeto_perguntas/model/user.dart';
+import 'package:projeto_perguntas/main.dart';
+import 'package:projeto_perguntas/views/LoginPage.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class UserSettingsWidget extends StatefulWidget{
-  User user;
-  UserSettingsWidget({super.key, required this.user});
+  final User user;
+  final WebSocketChannel streamSocket;
+  UserSettingsWidget({super.key, required this.user, required this.streamSocket});
 
   UserSettingsWidgetState createState() => UserSettingsWidgetState();
 }
 
 class UserSettingsWidgetState extends State<UserSettingsWidget>{
+
   final emailController = TextEditingController();
   final passWordController = TextEditingController();
+
   String errorStringEmail = "";
+  bool passWordVisibility = false;
 
   late String? newPassword;
   late String? newEmail;
@@ -86,7 +92,6 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                               hintText: widget.user.name,
                               prefixIcon: Icon(Icons.login),
                             ),
-                            obscureText: true,
               )
                       ],
                     ),
@@ -106,7 +111,6 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                               hintText: widget.user.username,
                               prefixIcon: Icon(Icons.supervised_user_circle),
                             ),
-                            obscureText: true,
               )
                       ],
                     ),
@@ -121,16 +125,24 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                         Text("Senha"),
                         TextFormField(
                             decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.visibility),
+                                onPressed: () {
+                                  setState(() {
+                                    if (passWordVisibility == false) {
+                                      passWordVisibility = true;
+                                    } else {
+                                      passWordVisibility = !passWordVisibility!;
+                                    }
+                                  });
+                                },
+                              ),
                               hintText: newPassword,
                               prefixIcon: Icon(Icons.password),
                             ),
                             controller: passWordController,
                             validator: (value){
                               String errorStringSenha = "";
-                              //if(value == null || value.isEmpty){
-                              //  errorStringSenha += 'Por favor, digite sua senha\n';
-                              //}
-
                               if(value != "" && value!.length < 8){
                                 errorStringSenha += 'A senha deve conter no mínimo 8 caracteres\n';
                               }
@@ -141,7 +153,7 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
 
                               return errorStringSenha != "" ? errorStringSenha : null;  
                             },
-                            obscureText: true,
+                            obscureText: passWordVisibility,
               )
                       ],
                     ),
@@ -206,9 +218,11 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                                           ElevatedButton(onPressed: ()
                                                           {
                                                             userEdit(widget.user.username, passWordController.text, emailController.text);
-                                                            setState(() {
+                                                            setState((){
                                                               newPassword = passWordController.text != "" ? passWordController.text : widget.user.password ;
                                                               newEmail = emailController.text != "" ? emailController.text : widget.user.email;
+                                                              passWordController.text = "";
+                                                              emailController.text = "";
                                                           });
                                                           Navigator.of(context).pop();
                                                           }, 
@@ -224,13 +238,61 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                             child: Text('Alterar Dados',style: GoogleFonts.openSans(fontSize:20, fontWeight: FontWeight.bold)),
                           )) ,
                         )) ),
-                
-            ],
-          ),
-          )  
-        ),
-      ),
-    )
+                        Padding(
+                          padding:EdgeInsets.only(top: 10.0),
+                          child: Builder(
+                            builder: (context) => Center(
+                          child:
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            height: 50,
+                            child:TextButton(onPressed: () async{
+                              return showDialog(context: context,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12.0),
+                                                ),
+                                                elevation: 3.0,
+                                                backgroundColor: Colors.white,
+                                                child: Container(
+                                                  padding: EdgeInsets.all(5.0),
+                                                  child: Column(
+                                                    children: [
+                                                      Text("Os dados serão apagados permanentemente, tem certeza que deseja apagá-los?"),
+                                                      Row(
+                                                        children: [
+                                                          ElevatedButton(onPressed: ()
+                                                          {
+                                                          Navigator.of(context).pop();
+                                                          }, 
+                                                          child: Text("Cancelar")),
+                                                          ElevatedButton(onPressed: ()
+                                                          async {
+                                                          userDelete(widget.user.username);
+                                                          //Navigator.push(context, MaterialPageRoute(
+                                                          //  builder: (context) => MyApp()));
+                                                          await widget.streamSocket.sink.close();
+                                                          Navigator.pushNamed(
+                                                              context, '/login');                                                          
+                                                            }, 
+                                                          child: Text("Confirmar"))   
+                                                        ])
+                                                  ],)
+                                                ),
+                                              );
+                                            });
+                                      
+                                    },
+                                    child: const Text(
+                                        "Deletar Conta"))
+                              ))
+                  ))
+                          ]
+                          ))
+         )
+        )
+      )
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_perguntas/api/postagem.dart';
 
 class LikesDislikesWidget extends StatefulWidget {
-  final int likes;
+  int likes;
   final int dislikes;
   final int postagemId;
   final String userName;
@@ -14,12 +14,10 @@ class LikesDislikesWidget extends StatefulWidget {
 }
 
 class LikesDislikesState extends State<LikesDislikesWidget>{
-  late int likeText;
 
   @override
   void initState() {
     super.initState();
-    likeText = widget.likes;
   }
 
   @override
@@ -65,7 +63,8 @@ class LikesDislikesState extends State<LikesDislikesWidget>{
                                                       widget.likes);
                                                   persistencaLike(widget.userName, widget.postagemId);
                                                   widget.sendButton = null;
-                                                  likeText = likeText + 1;
+                                                  widget.likes += 1;
+                                                  //likeText = likeText + 1;
                                               });
                                             }: null,
                                               icon: const Icon(Icons.thumb_up),
@@ -75,8 +74,6 @@ class LikesDislikesState extends State<LikesDislikesWidget>{
                                                 Color.fromARGB(200, 43, 142, 255),
                                               )),
                                             )
-                                      //}
-                                    //)
                                   ),
                                   SizedBox(
                                       height: 20,
@@ -86,7 +83,7 @@ class LikesDislikesState extends State<LikesDislikesWidget>{
                                           0.4,
                                       child: 
                                             Text(
-                                                "${likeText} likes"
+                                                "${widget.likes} likes"
                                                 )
                                           )
                                 ],
