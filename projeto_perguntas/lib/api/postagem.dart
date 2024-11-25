@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-StreamController<List<Postagem>> postagemStreamController = StreamController<List<Postagem>>();
+StreamController<List<Postagem>> postagemStreamController = StreamController<List<Postagem>>.broadcast();
 List<Postagem> postagensStream = [];
 
 void connectWebSocket(WebSocketChannel streamSocket) async{

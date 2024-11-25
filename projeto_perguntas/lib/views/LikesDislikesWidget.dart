@@ -15,6 +15,9 @@ class LikesDislikesWidget extends StatefulWidget {
 
 class LikesDislikesState extends State<LikesDislikesWidget>{
 
+  int likeOpacity = 200;
+  int dislikeOpacity = 200;
+
   @override
   void initState() {
     super.initState();
@@ -31,17 +34,21 @@ class LikesDislikesState extends State<LikesDislikesWidget>{
                                 width:
                                     MediaQuery.of(context).size.width * 0.1,
                                 child: IconButton(
-                                  onPressed: () {
-                                    updateLikeDislike(
+                                  
+                                  onPressed: () async {
+                                    await updateLikeDislike(
                                         'dislikes',
                                         widget.postagemId,
                                         widget.dislikes);
+                                        setState((){
+                                          dislikeOpacity = 100;
+                                        });
                                   },
                                   icon: Icon(Icons.thumb_down),
                                   style: ButtonStyle(
                                       foregroundColor:
                                           MaterialStateProperty.all(
-                                    Color.fromARGB(200, 105, 105, 105),
+                                    Color.fromARGB(dislikeOpacity, 105, 105, 105),
                                   )),
                                 ),
                               ),
@@ -55,23 +62,24 @@ class LikesDislikesState extends State<LikesDislikesWidget>{
                                             0.1,
                                     child:
                                           IconButton(
-                                            onPressed: widget.sendButton == true?(){
-                                              setState((){
-                                                updateLikeDislike(
+                                            onPressed: widget.sendButton == true?() async{
+                                              await updateLikeDislike(
                                                       'likes',
                                                       widget.postagemId,
                                                       widget.likes);
-                                                  persistencaLike(widget.userName, widget.postagemId);
+                                              await  persistencaLike(widget.userName, widget.postagemId);
+                                              setState((){
                                                   widget.sendButton = null;
                                                   widget.likes += 1;
-                                                  //likeText = likeText + 1;
+                                                  likeOpacity = 100;
                                               });
                                             }: null,
                                               icon: const Icon(Icons.thumb_up),
                                               style: ButtonStyle(
+                                                  
                                                   foregroundColor:
                                                       MaterialStateProperty.all(
-                                                Color.fromARGB(200, 43, 142, 255),
+                                                Color.fromARGB(likeOpacity, 43, 142, 255),
                                               )),
                                             )
                                   ),

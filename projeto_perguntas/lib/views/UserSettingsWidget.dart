@@ -198,17 +198,22 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                             context: context,
                                             builder: (BuildContext context) {
                                               return Dialog(
+                                                
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(12.0),
                                                 ),
                                                 elevation: 3.0,
                                                 backgroundColor: Colors.white,
                                                 child: Container(
-                                                  padding: EdgeInsets.all(5.0),
+                                                  width: MediaQuery.of(context).size.width * 0.6,
+                                                  height: MediaQuery.of(context).size.width * 0.3,
+                                                  padding: EdgeInsets.all(20.0),
                                                   child: Column(
                                                     children: [
+                                                        Icon(Icons.edit_document ,color: Colors.purple, size: 40),
                                                       Text("Os dados serão modificados permanentemente, tem certeza que deseja alterá-los?"),
                                                       Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
                                                         children: [
                                                           ElevatedButton(onPressed: ()
                                                           {
@@ -216,8 +221,8 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                                           }, 
                                                           child: Text("Cancelar")),
                                                           ElevatedButton(onPressed: ()
-                                                          {
-                                                            userEdit(widget.user.username, passWordController.text, emailController.text);
+                                                          async{
+                                                            await userEdit(widget.user.username, passWordController.text, emailController.text);
                                                             setState((){
                                                               newPassword = passWordController.text != "" ? passWordController.text : widget.user.password ;
                                                               newEmail = emailController.text != "" ? emailController.text : widget.user.email;
@@ -251,28 +256,32 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                             builder: (BuildContext context) {
                                               return Dialog(
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12.0),
+                                                  borderRadius: BorderRadius.circular(8.0),
                                                 ),
                                                 elevation: 3.0,
                                                 backgroundColor: Colors.white,
                                                 child: Container(
-                                                  padding: EdgeInsets.all(5.0),
+                                                  width: MediaQuery.of(context).size.width * 0.6,
+                                                  height: MediaQuery.of(context).size.width * 0.3,
+                                                  padding: EdgeInsets.all(20.0),
                                                   child: Column(
                                                     children: [
+                                                      Icon(Icons.dangerous ,color: Colors.red, size: 40),
                                                       Text("Os dados serão apagados permanentemente, tem certeza que deseja apagá-los?"),
                                                       Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
                                                         children: [
                                                           ElevatedButton(onPressed: ()
                                                           {
                                                           Navigator.of(context).pop();
                                                           }, 
                                                           child: Text("Cancelar")),
-                                                          ElevatedButton(onPressed: ()
+                                                          ElevatedButton(
+  
+                                                          onPressed: ()
                                                           async {
-                                                          userDelete(widget.user.username);
-                                                          //Navigator.push(context, MaterialPageRoute(
-                                                          //  builder: (context) => MyApp()));
-                                                          await widget.streamSocket.sink.close();
+                                                          await userDelete(widget.user.username);
+                                                          widget.streamSocket.sink.close();
                                                           Navigator.pushNamed(
                                                               context, '/login');                                                          
                                                             }, 
@@ -280,7 +289,7 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                                         ])
                                                   ],)
                                                 ),
-                                              );
+                                                );
                                             });
                                       
                                     },

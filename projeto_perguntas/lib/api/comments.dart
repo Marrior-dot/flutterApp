@@ -16,8 +16,8 @@ Future<List<CommentsPostagem>> fetchComments(
         (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
 
     var ccoment = commentsMap
-        .map<CommentsPostagem>((json) => CommentsPostagem.fromJson(json))
-        .toList();
+        .map<CommentsPostagem>((json) => CommentsPostagem.fromJson(json)).
+        toList().reversed.toList();
 
     return ccoment;
   } else {

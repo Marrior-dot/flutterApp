@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/retry.dart';
 import 'package:projeto_perguntas/api/respostas.dart';
-import 'package:get_storage/get_storage.dart';
 import 'dart:convert' show utf8;
 
 class OptionsListWidget<T> extends StatefulWidget {
@@ -82,10 +80,13 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                   sendButton = snapshot.data;
                   return ElevatedButton(
                       onPressed: sendButton == true
-                          ? () {
-                              updateResposta(radioOption, widget.postagemId);
-                              persistencaRespostas(
-                                  widget.userName, widget.postagemId);
+                          ? () async {
+                              bool permitirPersistencia = false;
+                              await updateResposta(radioOption, widget.postagemId);
+                                if (permitirPersistencia == false) {    
+                                  await  persistencaRespostas(
+                                          widget.userName, widget.postagemId);
+                                }
                               setState(() {
                                 sendButton = null;
                               });
@@ -130,16 +131,16 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                   sendButton = snapshot.data;
                   return ElevatedButton(
                       onPressed: sendButton == true
-                          ? () {
+                          ? () async{
                               bool permitirPersistencia = false;
 
                               for (var i = 0; i < checkBoxOption!.length; i++) {
-                                updateResposta(
+                               await updateResposta(
                                     checkBoxOption![i], widget.postagemId);
                               }
 
                               if (permitirPersistencia == false) {
-                                persistencaRespostas(
+                               await persistencaRespostas(
                                     widget.userName, widget.postagemId);
                                 permitirPersistencia = true;
                               }
