@@ -14,7 +14,6 @@ class User(models.Model):
     def __str__(self) -> str:
         return self.name
 
-
 class Postagem(models.Model):
     arquivo = models.ImageField(blank= True,null=True, default="", upload_to='images')
     title = models.CharField(max_length=100, null= False, default="LoremIpsum")
@@ -27,11 +26,13 @@ class Postagem(models.Model):
         ordering = ['content']
     
     def __str__(self) -> str:
-        return f"{self.content}"
+        return f"{self.title}"
 
 class PersistenciaUserPostagem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     postagem = models.ForeignKey(Postagem, on_delete=models.CASCADE)
+    tipoBotao = models.BooleanField(null=True)
+    habilitado = models.BooleanField(null=True, default=True)
 
 class Respostas(models.Model):
     respostaTexto = models.CharField(max_length=500 ,blank=True, null=True, default="")

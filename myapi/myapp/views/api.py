@@ -130,7 +130,7 @@ def respostas_detail(req,postagem,respostaTexto):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #-----Persistência Usuário Postagem------
-@api_view(["GET","POST"])
+@api_view(["GET","POST","PATCH"])
 def persistencia_usuario_postagem_detail(req, user, postagem):
     if req.method == 'GET':
         try:
@@ -145,7 +145,7 @@ def persistencia_usuario_postagem_detail(req, user, postagem):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+        
 #-----Persistência Usuário Resposta------
 @api_view(["GET","POST"])
 def persistencia_usuario_resposta_detail(req, user, postagem):

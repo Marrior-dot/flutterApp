@@ -4,35 +4,34 @@ import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-StreamController<List<Postagem>> postagemStreamController = StreamController<List<Postagem>>.broadcast();
+StreamController<List<Postagem>> postagemStreamController =
+    StreamController<List<Postagem>>.broadcast();
 List<Postagem> postagensStream = [];
 
-void connectWebSocket(WebSocketChannel streamSocket) async{
-  try{
-      await streamSocket.ready;
-      streamSocket.sink.add(jsonEncode({'message': 'get_postagens'}));
-      streamSocket.stream.listen((event) {
-        var postagemEvent = jsonDecode(event);
-        if (postagemEvent is List){
-          var postagem = postagemEvent.map<Postagem>((json) => Postagem.fromJson(json)).toList();
-          setPostagensStream(postagem);
-          postagemStreamController.add(postagem);
-
-        }
-        else{
-          Postagem postagem = Postagem.fromJson(postagemEvent);
-          //print(postagem.likes);
-          postagensStream.insert(0, postagem);
-          postagemStreamController.add(postagensStream);
-        }
-      });
-    }
-    on WebSocketChannelException catch(e){
-      print(e);
-    }
+void connectWebSocket(WebSocketChannel streamSocket) async {
+  try {
+    await streamSocket.ready;
+    streamSocket.sink.add(jsonEncode({'message': 'get_postagens'}));
+    streamSocket.stream.listen((event) {
+      var postagemEvent = jsonDecode(event);
+      if (postagemEvent is List) {
+        var postagem = postagemEvent
+            .map<Postagem>((json) => Postagem.fromJson(json))
+            .toList();
+        setPostagensStream(postagem);
+        postagemStreamController.add(postagem);
+      } else {
+        Postagem postagem = Postagem.fromJson(postagemEvent);
+        postagensStream.insert(0, postagem);
+        postagemStreamController.add(postagensStream);
+      }
+    });
+  } on WebSocketChannelException catch (e) {
+    print(e);
+  }
 }
 
-StreamController<List<Postagem>> getPostagemStreamController(){
+StreamController<List<Postagem>> getPostagemStreamController() {
   return postagemStreamController;
 }
 
@@ -80,7 +79,8 @@ Future<int> fetchLike(int id) async {
   }
 }
 
-Future<void> persistencaLike(String userName, int postagemID) async {
+Future<void> persistencaLikeDislike(
+    String userName, int postagemID, bool tipo) async {
   final response = await http.post(
     //Uri.parse('http://10.54.2.110:8000/api/users/'),
     Uri.parse(
@@ -91,6 +91,8 @@ Future<void> persistencaLike(String userName, int postagemID) async {
     body: jsonEncode(<String, dynamic>{
       "user": userName,
       "postagem": postagemID,
+      "like": tipo,
+      "dislike": tipo
     }),
   );
   if (response.statusCode == 201) {
@@ -101,13 +103,14 @@ Future<void> persistencaLike(String userName, int postagemID) async {
 }
 
 Future<bool?> checkLike(String userName, int postagemID) async {
+  List<bool> listLikeDislike = [];
   final response = await http.get(
     //Uri.parse('http://10.54.2.110:8000/api/respostas_persistencia/${idUser}/'),
     Uri.parse(
         'http://localhost:8000/api/postagens_persistencia/${userName}/${postagemID}/'),
   );
   if (response.statusCode == 200) {
-      return null;
+    return null;
   }
   return true;
 }
