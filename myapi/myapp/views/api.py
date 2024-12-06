@@ -134,8 +134,9 @@ def respostas_detail(req,postagem,respostaTexto):
 def persistencia_usuario_postagem_detail(req, user, postagem):
     if req.method == 'GET':
         try:
-            persistencia = PersistenciaUserPostagem.objects.get(user=user, postagem=postagem)
-            return Response(status=status.HTTP_200_OK)
+            persistencia = PersistenciaUserPostagem.objects.filter(user=user, postagem=postagem)
+            serializer = PersistenciaUserPostagemSerializer(persistencia, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except PersistenciaUserPostagem.DoesNotExist:
             return Response(status=status.HTTP_204_NO_CONTENT)  
     

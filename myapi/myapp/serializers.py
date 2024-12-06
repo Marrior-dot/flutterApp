@@ -19,7 +19,7 @@ class RespostasSerializer(serializers.ModelSerializer):
 class PersistenciaUserPostagemSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersistenciaUserPostagem
-        fields = ["user","postagem","tipo","habilitado"]
+        fields = ["user","postagem","tipoBotao","habilitado"]
 
 class PersistenciaUserRespostaSerializer(serializers.ModelSerializer):
     class Meta:

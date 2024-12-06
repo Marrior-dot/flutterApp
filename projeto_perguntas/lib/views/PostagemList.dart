@@ -81,16 +81,10 @@ class PostagemListState extends State<PostagemList> {
                                 imageUrl: snapshot.data![index].arquivo),
                                 ContentWidget(
                                 content: snapshot.data![index].content),
-                            FutureBuilder(future: checkLike(widget.user.username, snapshot.data![index].id), 
-                            builder: (context, snapshot){
-                                return LikesDislikesWidget(
-                                  likes: postagem.likes,
-                                  dislikes: postagem.dislikes,
-                                  postagemId: postagem.id,
-                                  userName: widget.user.username,
-                                  sendButton: snapshot.data);
-                            }  
-                            )
+                            LikesDislikesWidget(likes: snapshot.data![index].likes, 
+                                                dislikes: snapshot.data![index].dislikes, 
+                                                postagemId: snapshot.data![index].id, 
+                                                userName: widget.user.username)
                                   ,
                             RespostasWidget(
                                 postagemid: snapshot.data![index].id,
@@ -98,7 +92,6 @@ class PostagemListState extends State<PostagemList> {
                                 escolha_unica:
                                     snapshot.data![index].escolha_unica,
                                 index: index),
-                            const SizedBox(height: 16.0),
                             ComentariosWidget(postagem: postagem, user: widget.user)
                           ],
                         ),

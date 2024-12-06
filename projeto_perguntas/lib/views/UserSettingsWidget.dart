@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,7 +32,7 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
   final regexSenha = RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$');
   final regexEmail = RegExp(r'[\w.%+-]+@[A-Za-z0-9.-].[a-zA-Z]+');
 
-  final cadastrarButtonStyle = ElevatedButton.styleFrom(
+  final alterarDadosButtonStyle = ElevatedButton.styleFrom(
     shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(5.0),
     ),
@@ -67,9 +68,9 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
       body: Center(
         child: 
         SingleChildScrollView(child:       
-         Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: 
+         //Padding(
+          //padding: const EdgeInsets.all(5.0),
+          //child: 
           Form(
             key: formKey,
             child: Column(
@@ -83,7 +84,7 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                     alignment: Alignment.centerRight,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children:[
                         Text("Nome"),
                         TextFormField(
                           readOnly: true,
@@ -186,10 +187,10 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                     builder: (context) => Center(
                           child:
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.6,
+                            width: MediaQuery.of(context).size.width * 0.8,
                             height: 50,
                             child:ElevatedButton(
-                            style: cadastrarButtonStyle,
+                            style: alterarDadosButtonStyle,
                             onPressed: () async{
                               errorStringEmail = "";
                               await checUserExistsIteration();
@@ -198,41 +199,43 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                             context: context,
                                             builder: (BuildContext context) {
                                               return Dialog(
-                                                
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(12.0),
                                                 ),
                                                 elevation: 3.0,
                                                 backgroundColor: Colors.white,
-                                                child: Container(
-                                                  width: MediaQuery.of(context).size.width * 0.6,
-                                                  height: MediaQuery.of(context).size.width * 0.3,
-                                                  padding: EdgeInsets.all(20.0),
+                                                child: Container(                                          
+                                                  width: MediaQuery.of(context).size.width * 1,
+                                                  height: MediaQuery.of(context).size.height * 0.3,
+                                                  padding: EdgeInsets.all(10.0),
                                                   child: Column(
                                                     children: [
                                                         Icon(Icons.edit_document ,color: Colors.purple, size: 40),
                                                       Text("Os dados serão modificados permanentemente, tem certeza que deseja alterá-los?"),
-                                                      Row(
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        children: [
-                                                          ElevatedButton(onPressed: ()
-                                                          {
-                                                          Navigator.of(context).pop();
-                                                          }, 
-                                                          child: Text("Cancelar")),
-                                                          ElevatedButton(onPressed: ()
-                                                          async{
-                                                            await userEdit(widget.user.username, passWordController.text, emailController.text);
-                                                            setState((){
-                                                              newPassword = passWordController.text != "" ? passWordController.text : widget.user.password ;
-                                                              newEmail = emailController.text != "" ? emailController.text : widget.user.email;
-                                                              passWordController.text = "";
-                                                              emailController.text = "";
-                                                          });
-                                                          Navigator.of(context).pop();
-                                                          }, 
-                                                          child: Text("Confirmar"))   
-                                                        ])
+                                                      Padding(padding: EdgeInsets.only(top: 10.0),    
+                                                      child:  Row(
+                                                          mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
+                                                          children: [
+                                                            ElevatedButton(onPressed: ()
+                                                            {
+                                                            Navigator.of(context).pop();
+                                                            }, 
+                                                            child: Text("Cancelar")),
+                                                            ElevatedButton(onPressed: ()
+                                                            async{
+                                                              await userEdit(widget.user.username, passWordController.text, emailController.text);
+                                                              setState((){
+                                                                newPassword = passWordController.text != "" ? passWordController.text : widget.user.password ;
+                                                                newEmail = emailController.text != "" ? emailController.text : widget.user.email;
+                                                                passWordController.text = "";
+                                                                emailController.text = "";
+                                                            });
+                                                            Navigator.of(context).pop();
+                                                            }, 
+                                                            child: Text("Confirmar"))   
+                                                          ]))
+                                                      ,
+                                                       
                                                   ],)
                                                 ),
                                               );
@@ -249,7 +252,7 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                             builder: (context) => Center(
                           child:
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.6,
+                            width: MediaQuery.of(context).size.width * 0.5,
                             height: 50,
                             child:TextButton(onPressed: () async{
                               return showDialog(context: context,
@@ -261,32 +264,54 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                                 elevation: 3.0,
                                                 backgroundColor: Colors.white,
                                                 child: Container(
-                                                  width: MediaQuery.of(context).size.width * 0.6,
-                                                  height: MediaQuery.of(context).size.width * 0.3,
-                                                  padding: EdgeInsets.all(20.0),
+                                                  width: MediaQuery.of(context).size.width * 1,
+                                                  height: MediaQuery.of(context).size.height * 0.2,
+                                                  padding: EdgeInsets.all(10.0),
                                                   child: Column(
                                                     children: [
                                                       Icon(Icons.dangerous ,color: Colors.red, size: 40),
                                                       Text("Os dados serão apagados permanentemente, tem certeza que deseja apagá-los?"),
-                                                      Row(
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        children: [
-                                                          ElevatedButton(onPressed: ()
-                                                          {
-                                                          Navigator.of(context).pop();
-                                                          }, 
-                                                          child: Text("Cancelar")),
-                                                          ElevatedButton(
-  
-                                                          onPressed: ()
-                                                          async {
-                                                          await userDelete(widget.user.username);
-                                                          widget.streamSocket.sink.close();
-                                                          Navigator.pushNamed(
-                                                              context, '/login');                                                          
+                                                      Padding(padding: EdgeInsets.only(top: 10.0),
+                                                      child:
+                                                        Row(
+                                                          mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
+                                                          children: [
+                                                            SizedBox(
+                                                              width: MediaQuery.of(context).size.width * 0.3,
+                                                              height: 30,
+                                                              child: ElevatedButton(
+                                                              style: ElevatedButton.styleFrom(
+                                                                shape: RoundedRectangleBorder(
+                                                                  side: BorderSide(color: Colors.deepPurple, width: 1.0),
+                                                                  borderRadius: BorderRadius.circular(8.0),                                                  
+                                                                ),
+                                                              ),
+                                                              onPressed: ()
+                                                            {
+                                                            Navigator.of(context).pop();
                                                             }, 
-                                                          child: Text("Confirmar"))   
-                                                        ])
+                                                            child: Text("Cancelar")))
+                                                            ,
+                                                            ElevatedButton(
+                                                            style: ElevatedButton.styleFrom(
+                                                                backgroundColor: Colors.redAccent,
+                                                                shape: RoundedRectangleBorder(
+                                                                  side: BorderSide(
+                                                                    color: const Color.fromARGB(255, 141, 47, 47),
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius: BorderRadius.circular(8.0),                                                  
+                                                                ),
+                                                              ),
+                                                            onPressed: ()
+                                                            async {
+                                                            await userDelete(widget.user.username);
+                                                            widget.streamSocket.sink.close();
+                                                            Navigator.pushNamed(
+                                                                context, '/login');                                                          
+                                                              }, 
+                                                            child: Text("Confirmar", style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),))   
+                                                          ]))
                                                   ],)
                                                 ),
                                                 );
@@ -299,7 +324,7 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                   ))
                           ]
                           ))
-         )
+         //)
         )
       )
     );

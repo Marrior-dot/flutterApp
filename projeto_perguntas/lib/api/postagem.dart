@@ -66,21 +66,8 @@ Future<Postagem> updateLikeDislike(
   }
 }
 
-Future<int> fetchLike(int id) async {
-  final response =
-      //await http.get(Uri.parse('http://10.54.2.110:8000/api/postagens/$id/'));
-      await http.get(Uri.parse('http://localhost:8000/api/postagens/${id}/'));
-  if (response.statusCode == 200) {
-    var postagemMap =
-        Postagem.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-    return postagemMap.likes;
-  } else {
-    throw Exception('Failed to load album');
-  }
-}
-
 Future<void> persistencaLikeDislike(
-    String userName, int postagemID, bool tipo) async {
+    String userName, int postagemID, bool tipoBotao, bool? habilitado) async {
   final response = await http.post(
     //Uri.parse('http://10.54.2.110:8000/api/users/'),
     Uri.parse(
@@ -91,8 +78,8 @@ Future<void> persistencaLikeDislike(
     body: jsonEncode(<String, dynamic>{
       "user": userName,
       "postagem": postagemID,
-      "like": tipo,
-      "dislike": tipo
+      "tipoBotao": tipoBotao,
+      "habilitado": habilitado
     }),
   );
   if (response.statusCode == 201) {
@@ -102,15 +89,49 @@ Future<void> persistencaLikeDislike(
   }
 }
 
-Future<bool?> checkLike(String userName, int postagemID) async {
-  List<bool> listLikeDislike = [];
+Future<List<bool?>> checkLike(String userName, int postagemID) async{
+  List<bool?> listLikeDislike = [true, true];
   final response = await http.get(
     //Uri.parse('http://10.54.2.110:8000/api/respostas_persistencia/${idUser}/'),
     Uri.parse(
         'http://localhost:8000/api/postagens_persistencia/${userName}/${postagemID}/'),
   );
-  if (response.statusCode == 200) {
-    return null;
+  if (response.statusCode == 200){
+    var decodeBody = (jsonDecode(response.body) as List);
+    //print(decodeBody);
+    for (var element in decodeBody) {
+      if (element['tipoBotao'] == false) {
+        listLikeDislike[0] = element['habilitado'];
+      } 
+
+      if (element['tipoBotao'] == true) {
+        listLikeDislike[1] = element['habilitado'];
+      }
+    }
+  return listLikeDislike;
   }
-  return true;
+  else{
+
+    return listLikeDislike;
+  }
+  
+
+  //else{
+  //  return [true, true];
+  //}
 }
+
+//Future<bool?> checkLike(String userName, int postagemID) async {
+//  List<bool> listLikeDislike = [];
+//  final response = await http.get(
+//    //Uri.parse('http://10.54.2.110:8000/api/respostas_persistencia/${idUser}/'),
+//    Uri.parse(
+//        'http://localhost:8000/api/postagens_persistencia/${userName}/${postagemID}/'),
+//  );
+//
+//  if (response.statusCode == 200){
+//    
+//    return null;
+//  }
+//  return true;
+//}

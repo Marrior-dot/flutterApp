@@ -6,22 +6,19 @@ class LikesDislikesWidget extends StatefulWidget {
   final int dislikes;
   final int postagemId;
   final String userName;
-  bool? sendButton;
   LikesDislikesWidget(
-      {required this.likes,
+      {super.key,
+      required this.likes,
       required this.dislikes,
       required this.postagemId,
       required this.userName,
-      required this.sendButton});
+      });
 
   @override
   LikesDislikesState createState() => LikesDislikesState();
 }
 
 class LikesDislikesState extends State<LikesDislikesWidget> {
-  int likeOpacity = 200;
-  int dislikeOpacity = 200;
-
   @override
   void initState() {
     super.initState();
@@ -29,6 +26,13 @@ class LikesDislikesState extends State<LikesDislikesWidget> {
 
   @override
   Widget build(BuildContext context) {
+    return
+    FutureBuilder(future: checkLike(widget.userName, widget.postagemId), 
+    builder: (context, snapshot){
+    List<bool?> sendButton =  snapshot.data ?? [true,true] ;
+    int likeOpacity = sendButton[1] == true ? 200 : 100;
+    int dislikeOpacity = sendButton[0] == true ? 200 : 100;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 1,
       child: Row(
@@ -37,15 +41,16 @@ class LikesDislikesState extends State<LikesDislikesWidget> {
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.1,
             child: IconButton(
-              onPressed: () async {
+              onPressed: sendButton[0] == true ? () async {
                 await updateLikeDislike(
                     'dislikes', widget.postagemId, widget.dislikes);
                 await persistencaLikeDislike(
-                    widget.userName, widget.postagemId, false);
+                    widget.userName, widget.postagemId, false, null);
                 setState(() {
+                  sendButton[0] == null;
                   dislikeOpacity = 100;
                 });
-              },
+              }: null,
               icon: Icon(Icons.thumb_down),
               style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all(
@@ -59,14 +64,14 @@ class LikesDislikesState extends State<LikesDislikesWidget> {
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.1,
                   child: IconButton(
-                    onPressed: widget.sendButton == true
+                    onPressed: sendButton[1] == true
                         ? () async {
                             await updateLikeDislike(
                                 'likes', widget.postagemId, widget.likes);
                             await persistencaLikeDislike(
-                                widget.userName, widget.postagemId, true);
+                                widget.userName, widget.postagemId, true,null);
                             setState(() {
-                              widget.sendButton = null;
+                              sendButton[1] = null;
                               widget.likes += 1;
                               likeOpacity = 100;
                             });
@@ -87,5 +92,6 @@ class LikesDislikesState extends State<LikesDislikesWidget> {
         ],
       ),
     );
-  }
-}
+    }
+    );
+  }}
