@@ -53,7 +53,7 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
     if (widget.isRadio) {
       return SizedBox(
           width: MediaQuery.of(context).size.width * 1,
-          height: MediaQuery.of(context).size.height * 0.2,
+          //height: MediaQuery.of(context).size.height * 0.2,
           child: Column(children:[
             ListView.builder(
                 shrinkWrap: true,
@@ -78,7 +78,10 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                 future: checkRespostas(widget.userName, widget.postagemId),
                 builder: ((context, snapshot) {
                   sendButton = snapshot.data;
-                  return ElevatedButton(
+                  return 
+                  Padding(padding: const EdgeInsets.only(top: 8, bottom: 12),
+                  child:
+                  ElevatedButton(
                       onPressed: sendButton == true
                           ? () async {
                               bool permitirPersistencia = false;
@@ -92,10 +95,13 @@ class _OptionsListWidgetState<T> extends State<OptionsListWidget<T>> {
                               });
                             }
                           : null,
-                      child: Text(
+                      child: 
+                          Text(
                         style: sendResposta,
                         "Enviar resposta",
-                      ));
+                      ),
+                      )
+                );
                 }))
           ]));
     } else {

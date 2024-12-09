@@ -47,7 +47,12 @@ class PostagemListState extends State<PostagemList> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Fetch Data Example'),  
-
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+            },
+          ),
           actions: [
             IconButton(onPressed: (){
               Navigator.push(context, MaterialPageRoute(

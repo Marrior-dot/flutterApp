@@ -4,25 +4,51 @@ import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+//Variável global para o WebSocket, controla a stream de postagens que vai ser enviada ao usuário
 StreamController<List<Postagem>> postagemStreamController =
     StreamController<List<Postagem>>.broadcast();
+
+//Lista de postagens que será enviada ao usuário
 List<Postagem> postagensStream = [];
 
+//Conexão com o WebSocket, recebe uma variável do tipo WebSocketChannel
 void connectWebSocket(WebSocketChannel streamSocket) async {
   try {
+    //Aguarda a conexão com o WebSocket
     await streamSocket.ready;
+
+    //Envia uma mensagem para o servidor para obter as postagens
     streamSocket.sink.add(jsonEncode({'message': 'get_postagens'}));
+
+    //Aguarda a resposta do servidor
     streamSocket.stream.listen((event) {
+      //Decodifica a mensagem recebida do servidor
       var postagemEvent = jsonDecode(event);
+
+      /*Verifica se a mensagem recebida é uma lista de postagens ou uma postagem
+      usada para mandar postagens no login do usuário.*/
       if (postagemEvent is List) {
+
+        //Converte a lista de postagens recebida do servidor em uma lista de objetos Postagem
         var postagem = postagemEvent
             .map<Postagem>((json) => Postagem.fromJson(json))
             .toList();
+
+        //Adiciona as postagens recebidas na lista de postagens global
         setPostagensStream(postagem);
+
+        //Adiciona a lista de postagens na strema a ser enviada ao usuário
         postagemStreamController.add(postagem);
-      } else {
+      } 
+      /*Atualiza com uma postagem nova caso o servidor envie uma postagem nova*/
+      else {
+        //Converte a postagem recebida do servidor em um objeto Postagem
         Postagem postagem = Postagem.fromJson(postagemEvent);
+
+        //Insere na lista de postagens a postagem recebida do servidor
         postagensStream.insert(0, postagem);
+
+        //Adiciona a lista de postagens na strema a ser enviada ao usuário
         postagemStreamController.add(postagensStream);
       }
     });
@@ -31,43 +57,47 @@ void connectWebSocket(WebSocketChannel streamSocket) async {
   }
 }
 
+//Retorna a stream de postagens
 StreamController<List<Postagem>> getPostagemStreamController() {
   return postagemStreamController;
 }
 
+//Adiciona uma postagem na lista de postagens
 void setPostagensStream(List<Postagem> postagem) {
   for (var element in postagem) {
     postagensStream.add(element);
   }
 }
 
-void removeNullInString(String response) {
-  RegExp nullRemover = RegExp("null");
-  if (nullRemover.hasMatch(response)) {
-    response = response.replaceAll(nullRemover, "hello");
-  }
-}
-
+/*Future utilizado para atualizar a quantidade de likes em uma postagem, toma como argumentos uma String e 2 inteiros
+o atributo 'button', pode assumir os valores de 'like' o 'dislike'*/
 Future<Postagem> updateLikeDislike(
     String likeOrDislike, int id, int button) async {
+  //parsing da url e requisição http em patch      
   final response = await http.patch(
     Uri.parse('http://localhost:8000/api/postagens/$id/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
+    //codificação dos dados para envio
     body: jsonEncode(<String, dynamic>{
+      //atualiza o atributo like ou dislike
       likeOrDislike: button + 1,
     }),
   );
+  //resposta do servidor
   if (response.statusCode == 200) {
+    //retorno da função em um objeto do tipo Postagem
     return Postagem.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   } else {
-    throw Exception('Failed to update album.');
+    throw Exception('Não foi possível atualizar a quantidade de ${button}');
   }
 }
 
+//Future utilizado para salvar a persistência de likes e dislikes em uma postagem, recebe argumentos do tipo String, int, bool e bool?
 Future<void> persistencaLikeDislike(
     String userName, int postagemID, bool tipoBotao, bool? habilitado) async {
+  //parsing da url e requisição http em post
   final response = await http.post(
     //Uri.parse('http://10.54.2.110:8000/api/users/'),
     Uri.parse(
@@ -75,6 +105,8 @@ Future<void> persistencaLikeDislike(
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
+
+    //codificação dos dados para envio
     body: jsonEncode(<String, dynamic>{
       "user": userName,
       "postagem": postagemID,
@@ -82,24 +114,34 @@ Future<void> persistencaLikeDislike(
       "habilitado": habilitado
     }),
   );
+  //resposta do servidor
   if (response.statusCode == 201) {
+    //retorna um void
     return;
   } else {
     throw Exception('Falha ao salvar persistência');
   }
 }
 
+/*Função para verificar se o usuário já deu like ou dislike em uma postagem, retorna uma lista de booleanos com os valores true e null
+sendo true para botão não clicado e null para botão já clicado, recebe como argumentos uma String e um inteiro*/
 Future<List<bool?>> checkLike(String userName, int postagemID) async{
+
+  //Inicialmente a lista de booleanos recebe true para ambos os botões, pois ambos ainda não foram clicados
   List<bool?> listLikeDislike = [true, true];
+
+  //parsing da url e requisição http em get
   final response = await http.get(
     //Uri.parse('http://10.54.2.110:8000/api/respostas_persistencia/${idUser}/'),
     Uri.parse(
         'http://localhost:8000/api/postagens_persistencia/${userName}/${postagemID}/'),
   );
+  //resposta do servidor
   if (response.statusCode == 200){
+    //decodificação da resposta do servidor em em JSON e depois conversão para uma lista de objetos
     var decodeBody = (jsonDecode(response.body) as List);
-    //print(decodeBody);
     for (var element in decodeBody) {
+      //Verifica se o botão de dislike está ou não habilidade 
       if (element['tipoBotao'] == false) {
         listLikeDislike[0] = element['habilitado'];
       } 
@@ -113,25 +155,4 @@ Future<List<bool?>> checkLike(String userName, int postagemID) async{
   else{
 
     return listLikeDislike;
-  }
-  
-
-  //else{
-  //  return [true, true];
-  //}
-}
-
-//Future<bool?> checkLike(String userName, int postagemID) async {
-//  List<bool> listLikeDislike = [];
-//  final response = await http.get(
-//    //Uri.parse('http://10.54.2.110:8000/api/respostas_persistencia/${idUser}/'),
-//    Uri.parse(
-//        'http://localhost:8000/api/postagens_persistencia/${userName}/${postagemID}/'),
-//  );
-//
-//  if (response.statusCode == 200){
-//    
-//    return null;
-//  }
-//  return true;
-//}
+  }}

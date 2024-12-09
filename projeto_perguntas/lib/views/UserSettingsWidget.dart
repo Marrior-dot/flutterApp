@@ -43,6 +43,25 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
     backgroundColor: Colors.white
   );
 
+  final botaoCancelarStyle = ElevatedButton.styleFrom(
+  shape: RoundedRectangleBorder(
+    side: BorderSide(color: Colors.deepPurple, width: 1.0),
+    borderRadius: BorderRadius.circular(8.0),                                                  
+  ),
+);
+
+  final botaoConfirmarStyle = ElevatedButton.styleFrom(
+    backgroundColor: Colors.redAccent,
+    shape: RoundedRectangleBorder(
+      side: BorderSide(
+        color: const Color.fromARGB(255, 141, 47, 47),
+        width: 0.8,
+      ),
+      borderRadius: BorderRadius.circular(8.0),                                                  
+    ),
+  );
+
+
   dynamic checUserExistsIteration() async{
     await  checkUserExists(emailController.text.toString()).then((value){
         if(value == 200){
@@ -206,7 +225,7 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                                 backgroundColor: Colors.white,
                                                 child: Container(                                          
                                                   width: MediaQuery.of(context).size.width * 1,
-                                                  height: MediaQuery.of(context).size.height * 0.3,
+                                                  height: MediaQuery.of(context).size.height * 0.2,
                                                   padding: EdgeInsets.all(10.0),
                                                   child: Column(
                                                     children: [
@@ -220,8 +239,12 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                                             {
                                                             Navigator.of(context).pop();
                                                             }, 
-                                                            child: Text("Cancelar")),
-                                                            ElevatedButton(onPressed: ()
+                                                            child: Text("Cancelar")
+                                                            ,
+                                                            style: botaoCancelarStyle,),
+                                                            ElevatedButton(
+                                                              style:  botaoConfirmarStyle,
+                                                              onPressed: ()
                                                             async{
                                                               await userEdit(widget.user.username, passWordController.text, emailController.text);
                                                               setState((){
@@ -232,7 +255,8 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                                             });
                                                             Navigator.of(context).pop();
                                                             }, 
-                                                            child: Text("Confirmar"))   
+                                                            child: Text("Confirmar")),
+                                                            
                                                           ]))
                                                       ,
                                                        
@@ -276,33 +300,20 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
                                                         Row(
                                                           mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
                                                           children: [
-                                                            SizedBox(
-                                                              width: MediaQuery.of(context).size.width * 0.3,
-                                                              height: 30,
-                                                              child: ElevatedButton(
-                                                              style: ElevatedButton.styleFrom(
-                                                                shape: RoundedRectangleBorder(
-                                                                  side: BorderSide(color: Colors.deepPurple, width: 1.0),
-                                                                  borderRadius: BorderRadius.circular(8.0),                                                  
-                                                                ),
-                                                              ),
+                                                            ///SizedBox(
+                                                             // width: MediaQuery.of(context).size.width * 0.3,
+                                                             // height: 30,
+                                                             //child: 
+                                                              ElevatedButton(
+                                                              style: botaoCancelarStyle,
                                                               onPressed: ()
                                                             {
                                                             Navigator.of(context).pop();
                                                             }, 
-                                                            child: Text("Cancelar")))
+                                                            child: Text("Cancelar"))//)
                                                             ,
                                                             ElevatedButton(
-                                                            style: ElevatedButton.styleFrom(
-                                                                backgroundColor: Colors.redAccent,
-                                                                shape: RoundedRectangleBorder(
-                                                                  side: BorderSide(
-                                                                    color: const Color.fromARGB(255, 141, 47, 47),
-                                                                    width: 1.0,
-                                                                  ),
-                                                                  borderRadius: BorderRadius.circular(8.0),                                                  
-                                                                ),
-                                                              ),
+                                                            style:  botaoConfirmarStyle,
                                                             onPressed: ()
                                                             async {
                                                             await userDelete(widget.user.username);
