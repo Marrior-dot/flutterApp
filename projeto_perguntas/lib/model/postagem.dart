@@ -1,20 +1,18 @@
-//import 'dart:convert';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:projeto_perguntas/model/respostas.dart';
-import 'dart:io';
-
 class Postagem{
   final int id;
+  //Arquivo pode ser nulo
   final String? arquivo;
+  //Conteudo da postagem pode ser nulo
   final String? content;
   final String title;
   final int likes;
   final int dislikes;
   final bool escolha_unica;
-  //final List<Respostas>? respostas;
 
+  //Construtor
   Postagem(this.id, this.arquivo, this.content, this.likes, this.dislikes,this.escolha_unica, this.title);
 
+  //Serializa e converte um json em objeto Postagem
   Postagem.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int,
         arquivo = json['arquivo'] as String?,
@@ -24,6 +22,7 @@ class Postagem{
         dislikes = json['dislikes'] as int,
         escolha_unica = json['escolha_unica'] as bool;
 
+  //Serializa e converte um objeto Postagem em Json
   Map<String, dynamic> toJson() =>{
         'id': id,
         'arquivo': arquivo,

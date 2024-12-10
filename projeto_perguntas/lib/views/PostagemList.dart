@@ -96,7 +96,7 @@ class PostagemListState extends State<PostagemList> {
                                 userid: widget.user.username,
                                 escolha_unica:
                                     snapshot.data![index].escolha_unica,
-                                index: index),
+                                ),
                             ComentariosWidget(postagem: postagem, user: widget.user)
                           ],
                         ),

@@ -141,18 +141,20 @@ Future<List<bool?>> checkLike(String userName, int postagemID) async{
     //decodificação da resposta do servidor em em JSON e depois conversão para uma lista de objetos
     var decodeBody = (jsonDecode(response.body) as List);
     for (var element in decodeBody) {
-      //Verifica se o botão de dislike está ou não habilidade 
+      //Verifica se o botão de dislike está ou não habilitado 
       if (element['tipoBotao'] == false) {
         listLikeDislike[0] = element['habilitado'];
       } 
-
+      //Verifica se o botão de like está ou não habilitado 
       if (element['tipoBotao'] == true) {
         listLikeDislike[1] = element['habilitado'];
       }
     }
+  //retorna a lista de booleanos, sendo listLikeDislike[0] para o botão de dislike e listLikeDislike[1] para o botão de like
+  //caso tenha uma resposta do servidor igual a 200 
   return listLikeDislike;
   }
   else{
-
+  //retorna a lista de booleanos como [true, true]
     return listLikeDislike;
   }}

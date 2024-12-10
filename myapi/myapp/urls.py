@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from .views.api import * 
-from .views.views import *
+#from .views.views import *
 
 urlpatterns = [path("userHowTo/", usersOverview, name="users-overview"),
     #CRUD usuário

@@ -12,11 +12,10 @@ class RespostasWidget extends StatelessWidget {
       required this.postagemid,
       required this.userid,
       required this.escolha_unica,
-      required this.index});
+      });
   final int postagemid;
   final String userid;
   final bool escolha_unica;
-  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,6 @@ class RespostasWidget extends StatelessWidget {
             return OptionsListWidget<String>(
                 options: snapshot.data!.map((e) => e.respostaTexto).toList(),
                 isRadio: escolha_unica,
-                respostaIndex: index,
                 postagemId: postagemid,
                 userName: userid);
           } else {
