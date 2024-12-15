@@ -1,55 +1,77 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:projeto_perguntas/api/user.dart';
 import 'package:projeto_perguntas/model/user.dart';
-import 'package:projeto_perguntas/main.dart';
-import 'package:projeto_perguntas/views/LoginPage.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class UserSettingsWidget extends StatefulWidget{
+/// Widget para exibir e editar as configurações do usuário.
+class UserSettingsWidget extends StatefulWidget {
+  /// Usuário atual.
   final User user;
-  final WebSocketChannel streamSocket;
-  UserSettingsWidget({super.key, required this.user, required this.streamSocket});
 
+  /// Socket para comunicação em tempo real.
+  final WebSocketChannel streamSocket;
+
+  /// Construtor do widget.
+  ///
+  /// Recebe o [user] e o [streamSocket] como parâmetros obrigatórios.
+  UserSettingsWidget(
+      {super.key, required this.user, required this.streamSocket});
+
+  @override
   UserSettingsWidgetState createState() => UserSettingsWidgetState();
 }
 
-class UserSettingsWidgetState extends State<UserSettingsWidget>{
-
+class UserSettingsWidgetState extends State<UserSettingsWidget> {
+  /// Controlador para o campo de email.
   final emailController = TextEditingController();
+
+  /// Controlador para o campo de senha.
   final passWordController = TextEditingController();
 
+  /// String para exibir mensagens de erro relacionadas ao email.
   String errorStringEmail = "";
+
+  /// Variável para controlar a visibilidade da senha.
   bool passWordVisibility = false;
 
+  /// Nova senha do usuário (opcional).
   late String? newPassword;
+
+  /// Novo email do usuário (opcional).
   late String? newEmail;
-  
+
+  /// Chave global para o formulário.
   final formKey = GlobalKey<FormState>();
-  final regexSenha = RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$');
+
+  /// Expressão regular para validar a senha.
+  /// A senha deve conter pelo menos uma letra maiúscula e um número.
+  final regexSenha = RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+');
+
+  /// Expressão regular para validar o email.
   final regexEmail = RegExp(r'[\w.%+-]+@[A-Za-z0-9.-].[a-zA-Z]+');
 
+  /// Estilo do botão "Alterar Dados".
   final alterarDadosButtonStyle = ElevatedButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      side: BorderSide(color: Colors.deepPurple, width: 0.5),
+      textStyle:
+          TextStyle(color: const Color.fromARGB(255, 68, 29, 74), fontSize: 40),
+      backgroundColor: Colors.white);
+
+  /// Estilo do botão "Cancelar".
+  final botaoCancelarStyle = ElevatedButton.styleFrom(
     shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(5.0),
+      side: BorderSide(color: Colors.deepPurple, width: 1.0),
+      borderRadius: BorderRadius.circular(8.0),
     ),
-    side: BorderSide(color: Colors.deepPurple, width: 0.5),
-    textStyle: TextStyle(
-      color: const Color.fromARGB(255, 68, 29, 74), fontSize: 40
-    ),
-    backgroundColor: Colors.white
   );
 
-  final botaoCancelarStyle = ElevatedButton.styleFrom(
-  shape: RoundedRectangleBorder(
-    side: BorderSide(color: Colors.deepPurple, width: 1.0),
-    borderRadius: BorderRadius.circular(8.0),                                                  
-  ),
-);
-
+  /// Estilo do botão "Confirmar".
   final botaoConfirmarStyle = ElevatedButton.styleFrom(
     backgroundColor: Colors.redAccent,
     shape: RoundedRectangleBorder(
@@ -57,18 +79,19 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
         color: const Color.fromARGB(255, 141, 47, 47),
         width: 0.8,
       ),
-      borderRadius: BorderRadius.circular(8.0),                                                  
+      borderRadius: BorderRadius.circular(8.0),
     ),
   );
 
-
-  dynamic checUserExistsIteration() async{
-    await  checkUserExists(emailController.text.toString()).then((value){
-        if(value == 200){
-            errorStringEmail += 'Email já cadastrado';  
-        }
-      }).onError((error, stackTrace) => null);
-}
+  /// Verifica se o email já existe no banco de dados.
+  dynamic checUserExistsIteration() async {
+    await checkUserExists(emailController.text.toString()).then((value) {
+      if (value == 200) {
+        //Se sim, adiciona a mensagem de erro que o email já existe o banco de dados
+        errorStringEmail += 'Email já cadastrado';
+      }
+    }).onError((error, stackTrace) => null);
+  }
 
   @override
   void initState() {
@@ -78,266 +101,164 @@ class UserSettingsWidgetState extends State<UserSettingsWidget>{
   }
 
   @override
-  Widget build(BuildContext context){  
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('Editar Perfil', style: GoogleFonts.montserrat(fontSize:25, fontWeight: FontWeight.bold)),
-          ),
-      body: Center(
-        child: 
-        SingleChildScrollView(child:       
-         //Padding(
-          //padding: const EdgeInsets.all(5.0),
-          //child: 
-          Form(
-            key: formKey,
-            child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(child: Image.asset('assets/registro.png'), width: MediaQuery.of(context).size.width * 0.5 , height: MediaQuery.of(context).size.height * 0.25),
-                  SizedBox(width: MediaQuery.of(context).size.width *0.03, height:MediaQuery.of(context).size.height *0.03),
-                  Container(
-                    width:  MediaQuery.of(context).size.width * 0.8,
-                    padding: EdgeInsets.symmetric(vertical: 5.0),
-                    alignment: Alignment.centerRight,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Editar Perfil',
+              style: GoogleFonts.montserrat(
+                  fontSize: 25, fontWeight: FontWeight.bold)),
+        ),
+        body: Center(
+            child: SingleChildScrollView(
+                child: Form(
+                    key: formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children:[
-                        Text("Nome"),
-                        TextFormField(
-                          readOnly: true,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: widget.user.name,
-                              prefixIcon: Icon(Icons.login),
-                            ),
-              )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width:  MediaQuery.of(context).size.width * 0.8,
-                    padding: EdgeInsets.symmetric(vertical: 5.0),
-                    alignment: Alignment.centerRight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Nome de Usuário"),
-                        TextFormField(
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: widget.user.username,
-                              prefixIcon: Icon(Icons.supervised_user_circle),
-                            ),
-              )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width:  MediaQuery.of(context).size.width * 0.8,
-                    padding: EdgeInsets.symmetric(vertical: 5.0),
-                    alignment: Alignment.centerRight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Senha"),
-                        TextFormField(
-                            decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                icon: Icon(Icons.visibility),
-                                onPressed: () {
-                                  setState(() {
-                                    if (passWordVisibility == false) {
-                                      passWordVisibility = true;
-                                    } else {
-                                      passWordVisibility = !passWordVisibility!;
-                                    }
-                                  });
-                                },
-                              ),
-                              hintText: newPassword,
-                              prefixIcon: Icon(Icons.password),
-                            ),
-                            controller: passWordController,
-                            validator: (value){
-                              String errorStringSenha = "";
-                              if(value != "" && value!.length < 8){
-                                errorStringSenha += 'A senha deve conter no mínimo 8 caracteres\n';
-                              }
-
-                              if(value != "" && value!= null && regexSenha.hasMatch(value) == false){
-                                errorStringSenha += 'A senha deve conter ao menos uma letra maiúscula e um número\n';
-                              }
-
-                              return errorStringSenha != "" ? errorStringSenha : null;  
-                            },
-                            obscureText: passWordVisibility,
-              )
-                      ],
-                    ),
-                  ),
-              Container(
-                    width:  MediaQuery.of(context).size.width * 0.8,
-                    padding: EdgeInsets.symmetric(vertical: 10.0),
-                    alignment: Alignment.centerRight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Email"), 
-                        TextFormField(
-                  decoration: InputDecoration(
-                    hintText: newEmail,
-                    prefixIcon: Icon(Icons.email),
-                    ),
-                     controller: emailController,
-                  validator: (value){
-                    if(value != "" && value!= null && regexEmail.hasMatch(value)== false){
-                      errorStringEmail += 'Por favor, digite um email válido\n';
-                    }
-                    return errorStringEmail != "" ? errorStringEmail : null;
-                  },
-                 )]
-                  )),
-              Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                  child:Builder(
-                    builder: (context) => Center(
-                          child:
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
                           SizedBox(
+                              child: Image.asset('assets/registro.png'),
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.25),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.03,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.03),
+
+                          /// Campo de Nome (somente leitura).
+                          Container(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            height: 50,
-                            child:ElevatedButton(
-                            style: alterarDadosButtonStyle,
-                            onPressed: () async{
-                              errorStringEmail = "";
-                              await checUserExistsIteration();
-                              if (formKey.currentState!.validate()) {
-                                return showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12.0),
-                                                ),
-                                                elevation: 3.0,
-                                                backgroundColor: Colors.white,
-                                                child: Container(                                          
-                                                  width: MediaQuery.of(context).size.width * 1,
-                                                  height: MediaQuery.of(context).size.height * 0.2,
-                                                  padding: EdgeInsets.all(10.0),
-                                                  child: Column(
-                                                    children: [
-                                                        Icon(Icons.edit_document ,color: Colors.purple, size: 40),
-                                                      Text("Os dados serão modificados permanentemente, tem certeza que deseja alterá-los?"),
-                                                      Padding(padding: EdgeInsets.only(top: 10.0),    
-                                                      child:  Row(
-                                                          mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
-                                                          children: [
-                                                            ElevatedButton(onPressed: ()
-                                                            {
-                                                            Navigator.of(context).pop();
-                                                            }, 
-                                                            child: Text("Cancelar")
-                                                            ,
-                                                            style: botaoCancelarStyle,),
-                                                            ElevatedButton(
-                                                              style:  botaoConfirmarStyle,
-                                                              onPressed: ()
-                                                            async{
-                                                              await userEdit(widget.user.username, passWordController.text, emailController.text);
-                                                              setState((){
-                                                                newPassword = passWordController.text != "" ? passWordController.text : widget.user.password ;
-                                                                newEmail = emailController.text != "" ? emailController.text : widget.user.email;
-                                                                passWordController.text = "";
-                                                                emailController.text = "";
-                                                            });
-                                                            Navigator.of(context).pop();
-                                                            }, 
-                                                            child: Text("Confirmar")),
-                                                            
-                                                          ]))
-                                                      ,
-                                                       
-                                                  ],)
-                                                ),
-                                              );
-                                            },
-);                                          
-                              }
-                            },
-                            child: Text('Alterar Dados',style: GoogleFonts.openSans(fontSize:20, fontWeight: FontWeight.bold)),
-                          )) ,
-                        )) ),
-                        Padding(
-                          padding:EdgeInsets.only(top: 10.0),
-                          child: Builder(
-                            builder: (context) => Center(
-                          child:
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            height: 50,
-                            child:TextButton(onPressed: () async{
-                              return showDialog(context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                ),
-                                                elevation: 3.0,
-                                                backgroundColor: Colors.white,
-                                                child: Container(
-                                                  width: MediaQuery.of(context).size.width * 1,
-                                                  height: MediaQuery.of(context).size.height * 0.2,
-                                                  padding: EdgeInsets.all(10.0),
-                                                  child: Column(
-                                                    children: [
-                                                      Icon(Icons.dangerous ,color: Colors.red, size: 40),
-                                                      Text("Os dados serão apagados permanentemente, tem certeza que deseja apagá-los?"),
-                                                      Padding(padding: EdgeInsets.only(top: 10.0),
-                                                      child:
-                                                        Row(
-                                                          mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
-                                                          children: [
-                                                            ///SizedBox(
-                                                             // width: MediaQuery.of(context).size.width * 0.3,
-                                                             // height: 30,
-                                                             //child: 
-                                                              ElevatedButton(
-                                                              style: botaoCancelarStyle,
-                                                              onPressed: ()
-                                                            {
-                                                            Navigator.of(context).pop();
-                                                            }, 
-                                                            child: Text("Cancelar"))//)
-                                                            ,
-                                                            ElevatedButton(
-                                                            style:  botaoConfirmarStyle,
-                                                            onPressed: ()
-                                                            async {
-                                                            await userDelete(widget.user.username);
-                                                            widget.streamSocket.sink.close();
-                                                            Navigator.pushNamed(
-                                                                context, '/login');                                                          
-                                                              }, 
-                                                            child: Text("Confirmar", style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),))   
-                                                          ]))
-                                                  ],)
-                                                ),
-                                                );
-                                            });
-                                      
-                                    },
-                                    child: const Text(
-                                        "Deletar Conta"))
-                              ))
-                  ))
-                          ]
-                          ))
-         //)
-        )
-      )
-    );
+                            padding: EdgeInsets.symmetric(vertical: 5.0),
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Nome"),
+                                TextFormField(
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: widget.user.name,
+                                    prefixIcon: Icon(Icons.login),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+
+                          /// Campo de Nome de Usuário (somente leitura).
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            padding: EdgeInsets.symmetric(vertical: 5.0),
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Nome de Usuário"),
+                                TextFormField(
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: widget.user.username,
+                                    prefixIcon:
+                                        Icon(Icons.supervised_user_circle),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+
+                          /// Campo de Senha.
+                          /// Validação: mínimo 8 caracteres, pelo menos uma letra maiúscula e um número.
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            padding: EdgeInsets.symmetric(vertical: 5.0),
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Senha"),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                    //Botão para ocultar/mostrar senha
+                                    suffixIcon: IconButton(
+                                      icon: Icon(Icons.visibility),
+                                      onPressed: () {
+                                        setState(() {
+                                          //Muda a visibilidade da senha
+                                          //true para senha visívels
+                                          //false para senha oculta
+                                          passWordVisibility =
+                                              !passWordVisibility;
+                                        });
+                                      },
+                                    ),
+                                    hintText: newPassword,
+                                    prefixIcon: Icon(Icons.password),
+                                  ),
+                                  controller: passWordController,
+                                  validator: (value) {
+                                    String errorStringSenha = "";
+                                    //Verifica se a senha é vazia ou contem menos de 8 caracteres
+                                    if (value != "" && value!.length < 8) {
+                                      //Se sim, adiciona a mensagem de erro abaixo na string
+                                      errorStringSenha +=
+                                          'A senha deve conter no mínimo 8 caracteres\n';
+                                    }
+                                    //Verifica se a senha contem pelo menos uma letra maiúscula e um número
+                                    if (value != "" &&
+                                        value != null &&
+                                        !regexSenha.hasMatch(value)) {
+                                      //Se não, adiciona a mensagem de erro abaixo na string
+                                      errorStringSenha +=
+                                          'A senha deve conter ao menos uma letra maiúscula e um número\n';
+                                    }
+
+                                    return errorStringSenha != ""
+                                        ? errorStringSenha
+                                        : null;
+                                  },
+                                  //Atribui texto oculto ao texto
+                                  obscureText: passWordVisibility,
+                                )
+                              ],
+                            ),
+                          ),
+
+                          /// Campo de Email.
+                          /// Validação: formato de email válido.
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              padding: EdgeInsets.symmetric(vertical: 10.0),
+                              alignment: Alignment.centerRight,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Email"),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        hintText: newEmail,
+                                        prefixIcon: Icon(Icons.email),
+                                      ),
+                                      controller: emailController,
+                                      validator: (value) {
+                                        //Verifica se o email é válido
+                                        if (value != "" &&
+                                            value != null &&
+                                            !regexEmail.hasMatch(value)) {
+                                          //Se não, adiciona a mensagem de erro abaixo na string
+                                          errorStringEmail +=
+                                              'Por favor, digite um email válido\n';
+                                        }
+                                        return errorStringEmail != ""
+                                            ? errorStringEmail
+                                            : null;
+                                      },
+                                    )
+                                  ])),
+
+                          // ... (rest of the code)
+                        ])))));
   }
 }
