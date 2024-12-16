@@ -19,7 +19,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 
+#Urls para a api e o admin
 urlpatterns = [
+    #Url para a api
     re_path('api/', include("myapp.urls")),
+    #Url para o admin
     path('admin/', admin.site.urls),
 ]

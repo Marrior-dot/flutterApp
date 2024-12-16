@@ -25,10 +25,9 @@ SECRET_KEY = 'django-insecure-%*^1bcwhx=r=se3xhz+34-7xrznfzyh@jdyjwli^t8d1*m3akm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.15.6','127.0.0.1','localhost','10.54.2.110','192.168.15.7', '10.113.160.36']
+ALLOWED_HOSTS = ['localhost','10.54.2.110']
 
 # Application definition
-
 INSTALLED_APPS = [
     'daphne',
     'myapp.apps.MyappConfig',
@@ -85,6 +84,7 @@ DATABASES = {
     }
 }
 
+#usando canal local para o websocket
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
@@ -110,14 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 MEDIA_URL = ""
-#MEDIA_URL = "../../projeto_perguntas/assets/media/"
 
-#MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
-#MEDIA_ROOT = "/../media/"
 MEDIA_ROOT = os.path.join(Path(__file__).resolve().parent.parent.parent, "projeto_perguntas/assets/")
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'pt-br'
 
@@ -129,8 +123,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-#MEDIA_URL = '/media/'
 
 MEDIA_ROOT = '/home/mann/Desktop/projetos/appFlutter/projeto_perguntas/assets' #os.path.join(BASE_DIR,'media/')
 

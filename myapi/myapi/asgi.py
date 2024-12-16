@@ -15,12 +15,14 @@ from django.core.asgi import get_asgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myapi.settings')
 django_asgi_app = get_asgi_application()
 
+# Importe as rotas do websocket
 import myapp.socket.routing
 
 application = ProtocolTypeRouter({
-    'http':django_asgi_app, 
-    "websocket": #AllowedHostsOriginValidator(
+    #Requisições http
+    'http':django_asgi_app,
+    #Requisições websocket
+    "websocket": 
             AuthMiddlewareStack(
                 URLRouter(myapp.socket.routing.websocket_urlpatterns))
-        #)
 })
