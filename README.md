@@ -8,14 +8,14 @@ projeto que manda postagens para alunos ingressados na rede
   * Flutter 3.19.3
 
 ## Bibliotecas e dependências
-no diretório `myapi` , executar o comando para instalar as bibliotecas em `requirements.txt` 
-`cd myapi/
-pip install -r /path/to/requirements.txt
-`
-no diretório `projeto_perguntas`, executar o seguinte comando para instalar as dependências em flutter
-`cd projeto_perguntas/
-flutter pub get
-`
+* no diretório `myapi` , executar o comando para instalar as bibliotecas em `requirements.txt` 
+  `cd myapi/
+   pip install -r /path/to/requirements.txt
+  `
+* no diretório `projeto_perguntas`, executar o seguinte comando para instalar as dependências em flutter
+  `cd projeto_perguntas/
+   flutter pub get
+  `
 ## Execução do código
 No momento o projeto se encontra localmente
 
