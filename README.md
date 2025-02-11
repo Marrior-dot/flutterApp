@@ -19,6 +19,14 @@ projeto que manda postagens para alunos ingressados na rede
   `cd projeto_perguntas/`
   <br>
   `flutter pub`
+
+## Subindo banco de dados no Docker
+todos as operaeções a seguir deverão ser feitas dentro do diretóro `myapi/`
+* Criar arquivo SQLite: `touch initial-db.sqlite`
+* Build presente no Dockerfile: `sudo docker build -t <nome_de_usuario_docker>/sqlite_db`
+* Criar diretório para o banco de dados: `mkdir database && mv initial-db.sqlite ./database`
+* Executar docker-compose.yaml: `docker-compose up -d --build`
+
 ## Execução do código
 No momento o projeto se encontra localmente
 
