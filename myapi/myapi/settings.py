@@ -80,7 +80,8 @@ ASGI_APPLICATION = 'myapi.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+        #'NAME': 'db.sqlite3',
+        'NAME': f"{BASE_DIR}/database/initial-db.sqlite3"
     }
 }
 

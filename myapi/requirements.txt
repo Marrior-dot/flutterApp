@@ -1,4 +1,0 @@
-daphne
-djangorestframework
-django-jazzmin
-django-channels
