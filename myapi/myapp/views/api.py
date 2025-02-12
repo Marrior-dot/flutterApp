@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from myapp.serializers import UserSerializer, PostagemSerializer, CommentsPostagemSerializer, RespostasSerializer, PersistenciaUserPostagemSerializer, PersistenciaUserRespostaSerializer
 from myapp.models import User, Postagem, Commentarios, Respostas, PersistenciaUserPostagem, PersistenciaUserResposta
+from minio import Minio
+import re
 
 #-----User------
 @api_view(["GET"])
@@ -93,13 +95,13 @@ def users_detail(req, pk=None, email=None):
         # Busca o usuário pelo pk
         user = User.objects.get(pk=pk)
         # Serializa os dados de usuário no corpo da requisição
-        serializer = UserSerializer(user, data=req.data, partial=True)
+        serializer = UserSerializer(instance=user, data=req.data, partial=True)
         # Valida os dados serializados
         if serializer.is_valid():
            # Salva o usuário no banco de dados
            serializer.save()
            # Retorna os dados do usuário atualizado e o status HTTP 200 (OK)
-           return Response(serializer.data)
+           return Response(serializer.data, status=status.HTTP_200_OK)
         # Se os dados não forem válidos, retorna os erros de validação e o status HTTP 400 (Bad Request)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -127,11 +129,30 @@ def postagens_list(req):
         Retorna os dados da nova postagem criada.
     """
     if req.method == 'GET':
+        client = Minio("play.min.io", "yvuhnPGjd5Jj0UxDFQnw", "tewvjxadJ60v6PH7Mqg053RQ8Tg9yoE3WxSRH5wB")
+     
         # Busca todas as postagens no banco de dados
         postagens = Postagem.objects.all()
         # Serializa as postagens usando o PostagemSerializer
         serializer = PostagemSerializer(postagens, many=True)
         # Retorna os dados serializados e o status HTTP 200 (OK)
+        for postagem in serializer.data:
+            if postagem["arquivo"] != None:
+                postagem_sub =  re.sub(r'^/', '', postagem["arquivo"])
+                postagem["arquivo"] = postagem_sub 
+                # Get data of an object.
+                #try:
+                #    response = client.get_object("python-test-bucket", postagem_sub)
+                #    postagem["arquivo"] = re.sub(r"^b||\'","",f'{response.data}')
+                    
+                    #print(postagem["arquivo"])
+                    #response.close()
+                    #response.release_conn()
+                #/except:
+                #    print("errpr")
+                    #response.close()
+                    #response.release_conn()
+                    
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif req.method == 'POST':
@@ -139,7 +160,8 @@ def postagens_list(req):
         serializer = PostagemSerializer(data=req.data)
         # Valida os dados serializados
         if serializer.is_valid():
-            # Salva a postagem no banco de dados
+            # Create a client with the MinIO server playground, its access key
+    # and secret key.
             serializer.save()
         # Retorna os dados da nova postagem criada e o status HTTP 201 (Created)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -1,4 +1,8 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from minio import Minio
+import os
 
 #Para todos os modelos que não possuem class Meta
 #A ordenação na página de administrador é feita a partir do campo 'id', ou da chave primária
@@ -39,6 +43,42 @@ class Postagem(models.Model):
 
     def __str__(self) -> str:
         return f"{self.title}"
+    
+@receiver(post_save, sender=Postagem)
+def create_postagem(sender, created,instance, **kwargs):
+            # Create a client with the MinIO server playground, its access key
+            # and secret key.
+            if created:
+                client = Minio("play.min.io",
+                    access_key="yvuhnPGjd5Jj0UxDFQnw",
+                    secret_key="tewvjxadJ60v6PH7Mqg053RQ8Tg9yoE3WxSRH5wB",
+                )
+    
+                # The file to upload, change this path if needed
+                source_file = f"{instance.arquivo}"
+                
+                # The destination bucket and filename on the MinIO server
+                bucket_name = "python-test-bucket"
+                destination_file = f"{instance.arquivo}"
+    
+                # Make the bucket if it doesn't exist.
+                found = client.bucket_exists(bucket_name)
+                if not found:
+                    client.make_bucket(bucket_name)
+                    print("Created bucket", bucket_name)
+                else:
+                    print("Bucket", bucket_name, "already exists")
+    
+                # Upload the file, renaming it in the process
+                client.fput_object(
+                    bucket_name, destination_file, source_file,
+                )
+                print(
+                    source_file, "successfully uploaded as object",
+                    destination_file, "to bucket", bucket_name,
+                )
+                os.remove(f"../{source_file}")
+                
 
 
 class PersistenciaUserPostagem(models.Model):

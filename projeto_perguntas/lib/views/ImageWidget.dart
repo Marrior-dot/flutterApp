@@ -14,6 +14,7 @@ class ImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     /// Constrói o caminho completo da imagem.
     String image = './assets${imageUrl}';
+    //String image = '${imageUrl}';
 
     /// Verifica se o caminho da imagem é válido (diferente de './assetsnull').
     if (image != './assetsnull') {

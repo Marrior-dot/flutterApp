@@ -11,6 +11,8 @@ import 'package:projeto_perguntas/views/LikesDislikesWidget.dart';
 import 'package:projeto_perguntas/views/ComentariosWidget.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:projeto_perguntas/views/UserSettingsWidget.dart';
+import 'dart:io';
+import 'dart:async';
 
 /// Widget que exibe uma lista de postagens.
 ///
@@ -40,6 +42,19 @@ class PostagemListState extends State<PostagemList> {
 
   /// Texto do comentário sendo digitado.
   String commentText = "";
+
+  Future<void> clearAssetsDirectory() async {
+    //Abrindo o diretório assets/images
+    final directory = Directory('assets/images');
+    if (directory.existsSync()) {
+      directory.listSync().forEach((file) {
+        if (file is File) {
+          file.deleteSync();
+        }
+      });
+    }
+  }
+
 
   @override
   void initState() {
@@ -76,6 +91,7 @@ class PostagemListState extends State<PostagemList> {
             icon: Icon(Icons.arrow_back),
             onPressed: () {
               //Logout do usuário
+              clearAssetsDirectory();
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => MyApp()));
             },

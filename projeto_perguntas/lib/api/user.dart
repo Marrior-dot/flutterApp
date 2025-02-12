@@ -110,6 +110,7 @@ Future<User> userEdit(String username, String senha, String email) async {
 
   //Se o servidor retornar uma resposta 200 OK, então retorna o objeto User.
   if (response.statusCode == 200) {
+    print(uuser.password);
     return uuser;
   } 
   //Se o servidor não retornar uma resposta 200 OK, então lança uma exceção.

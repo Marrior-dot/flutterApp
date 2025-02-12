@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:projeto_perguntas/model/postagem.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:minio_flutter/minio.dart';
 
 //Variável global para o WebSocket, controla a stream de postagens que vai ser enviada ao usuário
 StreamController<List<Postagem>> postagemStreamController =
@@ -13,6 +15,8 @@ List<Postagem> postagensStream = [];
 
 //Conexão com o WebSocket, recebe uma variável do tipo WebSocketChannel
 void connectWebSocket(WebSocketChannel streamSocket) async {
+  await Minio.init(endPoint: "play.min.io", accessKey: "yvuhnPGjd5Jj0UxDFQnw", secretKey: "tewvjxadJ60v6PH7Mqg053RQ8Tg9yoE3WxSRH5wB");
+  
   try {
     //Aguarda a conexão com o WebSocket
     await streamSocket.ready;
@@ -21,7 +25,7 @@ void connectWebSocket(WebSocketChannel streamSocket) async {
     streamSocket.sink.add(jsonEncode({'message': 'get_postagens'}));
 
     //Aguarda a resposta do servidor
-    streamSocket.stream.listen((event) {
+    streamSocket.stream.listen((event) async {
       //Decodifica a mensagem recebida do servidor
       var postagemEvent = jsonDecode(event);
 
@@ -34,11 +38,24 @@ void connectWebSocket(WebSocketChannel streamSocket) async {
             .map<Postagem>((json) => Postagem.fromJson(json))
             .toList();
 
+        for (var i = 0; i < postagem.length; i++) {
+          if(postagem[i].arquivo != null){
+            //Salva a imagem no minio
+            //print(postagem[i].arquivo);
+            String arquivoFinal = postagem[i].arquivo!.replaceFirst(r'^/', '');
+            final arquivo = await Minio.shared.getObject("python-test-bucket", arquivoFinal);
+            print(arquivo);
+            //await arquivo.pipe(File('assets/images/arquivo.png').openWrite());
+            await arquivo.pipe(File('assets/${arquivoFinal}').openWrite());
+            
+          }
+        }
         //Adiciona as postagens recebidas na lista de postagens global
         setPostagensStream(postagem);
 
         //Adiciona a lista de postagens na strema a ser enviada ao usuário
         postagemStreamController.add(postagem);
+        //Adiciona a lista de postage
       } 
       /*Atualiza com uma postagem nova caso o servidor envie uma postagem nova*/
       else {

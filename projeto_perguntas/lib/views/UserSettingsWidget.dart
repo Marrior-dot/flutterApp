@@ -38,10 +38,10 @@ class UserSettingsWidgetState extends State<UserSettingsWidget> {
   bool passWordVisibility = false;
 
   /// Nova senha do usuário (opcional).
-  late String? newPassword;
+  String newPassword = "";
 
   /// Novo email do usuário (opcional).
-  late String? newEmail;
+  String newEmail = "";
 
   /// Chave global para o formulário.
   final formKey = GlobalKey<FormState>();
@@ -257,8 +257,68 @@ class UserSettingsWidgetState extends State<UserSettingsWidget> {
                                       },
                                     )
                                   ])),
+                          ElevatedButton(
+                            style: alterarDadosButtonStyle,
+                            // Modify the onPressed callback in the "Salvar Alterações" button:
+                            onPressed: () async {
+                              if (formKey.currentState!.validate()) {
+                                // Show confirmation dialog
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Confirmar alterações'),
+                                      content:
+                                          Text('Deseja salvar as alterações?'),
+                                      actions: [
+                                        TextButton(
+                                          style: botaoCancelarStyle,
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Close dialog
+                                          },
+                                          child: Text('Cancelar'),
+                                        ),
+                                        TextButton(
+                                          style: botaoConfirmarStyle,
+                                          onPressed: () {
+                                            // Update user data
+                                            if (emailController
+                                                .text.isNotEmpty) {
+                                                  setState(() {
+                                                    newEmail = emailController.text;    
+                                                  });
+                                                
+                                            }
+                                            if (passWordController
+                                                .text.isNotEmpty) {
+                                                  setState(() {
+                                                  newPassword = passWordController.text;      
+                                                  });
+                                            }          
+                                            userEdit(widget.user.username,
+                                                 newPassword, newEmail);
+                                            Navigator.of(context)
+                                                .pop(); // Close dialog
+                                          },
+                                          child: Text('Sim'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
 
-                          // ... (rest of the code)
+                            child: Text(
+                              'Salvar Alterações',
+                              style: TextStyle(
+                                color: Colors.deepPurple,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
                         ])))));
   }
 }

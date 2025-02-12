@@ -266,14 +266,14 @@ class RegisterPageState extends State<RegisterPage> {
                             /// Valida o formulário.
                             if (formKey.currentState!.validate()) {
                               /// Cria o usuário.
-                              userCreate(
+                              await userCreate(
                                 userNameController.text.toString(),
                                 emailController.text.toString(),
                                 passWordController.text.toString(),
                                 nameController.text.toString(),
-                              ).then((value) {
+                              ).then((value) async {
                                 /// Faz o login do usuário após a criação.
-                                userLogin(
+                                await userLogin(
                                   userNameController.text,
                                   passWordController.text,
                                 ).then((value) {

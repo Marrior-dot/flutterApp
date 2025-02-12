@@ -1,7 +1,7 @@
 class Postagem{
   final int id;
   //Arquivo pode ser nulo
-  final String? arquivo;
+  String? arquivo;
   //Conteudo da postagem pode ser nulo
   final String? content;
   final String title;
