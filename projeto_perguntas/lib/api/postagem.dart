@@ -61,7 +61,16 @@ void connectWebSocket(WebSocketChannel streamSocket) async {
       else {
         //Converte a postagem recebida do servidor em um objeto Postagem
         Postagem postagem = Postagem.fromJson(postagemEvent);
-
+            if(postagem.arquivo != null){
+            //Salva a imagem no minio
+            //print(postagem[i].arquivo);
+            String arquivoFinal = postagem.arquivo!.replaceFirst(r'^/', '');
+            final arquivo = await Minio.shared.getObject("python-test-bucket", arquivoFinal);
+            print(arquivo);
+            //await arquivo.pipe(File('assets/images/arquivo.png').openWrite());
+            await arquivo.pipe(File('assets/${arquivoFinal}').openWrite());
+            
+          }
         //Insere na lista de postagens a postagem recebida do servidor
         postagensStream.insert(0, postagem);
 

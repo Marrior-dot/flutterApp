@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:projeto_perguntas/api/user.dart';
 import 'package:projeto_perguntas/model/user.dart';
+import 'package:projeto_perguntas/main.dart';
+import 'package:projeto_perguntas/views/PostagemList.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 /// Widget para exibir e editar as configurações do usuário.
@@ -285,19 +287,19 @@ class UserSettingsWidgetState extends State<UserSettingsWidget> {
                                             // Update user data
                                             if (emailController
                                                 .text.isNotEmpty) {
-                                                  setState(() {
-                                                    newEmail = emailController.text;    
-                                                  });
-                                                
+                                              setState(() {
+                                                newEmail = emailController.text;
+                                              });
                                             }
                                             if (passWordController
                                                 .text.isNotEmpty) {
-                                                  setState(() {
-                                                  newPassword = passWordController.text;      
-                                                  });
-                                            }          
+                                              setState(() {
+                                                newPassword =
+                                                    passWordController.text;
+                                              });
+                                            }
                                             userEdit(widget.user.username,
-                                                 newPassword, newEmail);
+                                                newPassword, newEmail);
                                             Navigator.of(context)
                                                 .pop(); // Close dialog
                                           },
@@ -314,6 +316,57 @@ class UserSettingsWidgetState extends State<UserSettingsWidget> {
                               'Salvar Alterações',
                               style: TextStyle(
                                 color: Colors.deepPurple,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.deepPurple,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Alert Title'),
+                                    content: Text('Alert message here'),
+                                    actions: [
+                                      TextButton(
+                                        style: botaoCancelarStyle,
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        style: botaoConfirmarStyle,
+                                        onPressed: () async {
+                                          // Add confirmation action here
+                                          await userDelete(widget.user.username);
+                                          //Navigator.of(context).pop();
+                                        //  Navigator.push(
+                                        //      context,
+                                        //      MaterialPageRoute(
+                                        //          builder: (context) =>
+                                        //              MyApp()));
+                                          
+                                          Navigator.pushNamed(context, '/login');
+                                        },
+                                        child: Text('Confirm'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Text(
+                              'Button Text',
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
