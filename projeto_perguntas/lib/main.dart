@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_perguntas/model/postagem.dart' as postagem;
+import 'package:projeto_perguntas/views/LoginPage.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({
+    super.key,
+  });
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    List<String> perguntas = ["pergunas1", "pergunta2"];
-    return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(title: Text("Perguntas")),
-            body: Column(children: [
-              Text("Olá FLutter"),
-              Text("Olá FLutter2"),
-              Text("Olá FLutter3"),
-              ElevatedButton(onPressed: null, child: Text("Resposta 1"))
-            ])));
-  }
+  State<MyApp> createState() => LoginPage();
 }
